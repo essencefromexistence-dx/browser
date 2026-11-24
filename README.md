@@ -37,8 +37,8 @@ Ladybird is **pre-alpha**, built from source, with a first alpha targeted for
 On Windows, **WSL2 is the supported path**; the native Windows build is
 experimental and has known issues
 ([build instructions](https://github.com/LadybirdBrowser/ladybird/blob/master/Documentation/BuildInstructionsLadybird.md)).
-This repository is an experimental Dx fork that adds its own shell and tooling
-on top of that fresh engine. It is not a shipping release.
+This repository is an experimental Dx fork built on top of that fresh engine.
+It is not a shipping release.
 
 ## Contributing
 
