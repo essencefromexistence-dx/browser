@@ -1,7 +1,5 @@
 # Dx Browser
 
-Welcome to a truly calmer internet.
-
 **Dx Browser** is a Ladybird-based browser with the aim of pushing your
 productivity to a new level. It is built on a browser engine written from
 scratch — not a fork of Blink, WebKit or Gecko.
