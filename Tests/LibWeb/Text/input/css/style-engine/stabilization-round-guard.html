@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    .container {
+        container-type: inline-size;
+        width: 100px;
+    }
+    #root { width: 300px }
+    #target { color: black }
+    @container (min-width: 200px) {
+        .container { width: 300px }
+        #target { color: green }
+    }
+</style>
+<div id="root" class="container"></div>
+<script>
+    function printStabilization(title) {
+        println(title);
+        for (const line of internals.takeRenderingTrace().split("\n")) {
+            if (/^(style stabilization|provisional style pass|exact stabilization pass)/.test(line))
+                println(`  ${line}`);
+        }
+    }
+
+    test(() => {
+        let parent = root;
+        for (let i = 0; i < 30; ++i) {
+            const child = document.createElement("div");
+            child.className = "container";
+            parent.appendChild(child);
+            parent = child;
+        }
+
+        const target = document.createElement("div");
+        target.id = "target";
+        parent.appendChild(target);
+
+        internals.beginRenderingTrace();
+        target.getBoundingClientRect();
+        printStabilization("nested container query feedback:");
+        println(`stable nested query result: ${getComputedStyle(target).color}`);
+    });
+</script>

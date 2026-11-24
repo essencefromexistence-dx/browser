@@ -1,0 +1,40 @@
+PASS: display transition block -> -webkit-box
+PASS: display transition block -> -webkit-inline-box
+PASS: display transition block -> table-row-group
+PASS: display transition block -> table-header-group
+PASS: display transition block -> table-footer-group
+PASS: display transition block -> table-row
+PASS: display transition block -> table-cell
+PASS: display transition block -> table-column-group
+PASS: display transition inline-flex -> flow-root
+PASS: display transition inline-flex -> inline-block
+PASS: display transition inline-flex -> run-in
+PASS: display transition inline-flex -> list-item
+PASS: display transition inline-flex -> inline list-item
+PASS: display transition inline-flex -> flex
+PASS: display transition inline-flex -> grid
+PASS: display transition table-row-group -> block flex
+PASS: display transition table-row-group -> inline flex
+PASS: display transition table-row-group -> block grid
+PASS: display transition table-row-group -> inline grid
+PASS: display transition table-row-group -> block table
+PASS: display transition table-row-group -> inline table
+PASS: display transition table-row-group -> block flow list-item
+PASS: display transition table-row-group -> inline flow list-item
+PASS: display transition block flow -> table-row-group
+PASS: display transition block flow -> table-header-group
+PASS: display transition block flow -> table-footer-group
+PASS: display transition block flow -> table-row
+PASS: display transition block flow -> table-cell
+PASS: display transition block flow -> table-column-group
+PASS: display transition block flow -> table-column
+PASS: display transition block flow -> table-caption
+PASS: display transition block table -> run-in
+PASS: display transition block table -> list-item
+PASS: display transition block table -> inline list-item
+PASS: display transition block table -> flex
+PASS: display transition block table -> inline-flex
+PASS: display transition block table -> grid
+PASS: display transition block table -> inline-grid
+PASS: display transition block table -> table
+39 cases; 39 matched; 0 mismatched

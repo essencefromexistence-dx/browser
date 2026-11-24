@@ -1,0 +1,5 @@
+disable transition: 0s
+disable color: rgb(0, 128, 0)
+restore transition: 1s
+restore color: rgb(0, 128, 0)
+restored transition interpolates: 0.5

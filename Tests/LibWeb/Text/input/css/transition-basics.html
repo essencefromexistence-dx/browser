@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<script src="../include.js"></script>
+<style>
+    #box {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+        position: absolute;
+        left: 0;
+        top: 0;
+
+        transition: left 1s linear;
+    }
+
+    #box.move {
+        left: 200px;
+    }
+</style>
+<div id="box"></div>
+<script>
+    test(() => {
+        let box = document.getElementById("box");
+        println(`left starts at: ${getComputedStyle(box).left}`);
+        box.classList.add("move");
+
+        const transition = box.getAnimations()[0];
+        transition.pause();
+        for (const time of [0, 500, 950]) {
+            transition.currentTime = time;
+            println(`left ${time}ms into the transition: ${Math.round(parseFloat(getComputedStyle(box).left))}px`);
+        }
+
+        transition.finish();
+        println(`after the transition, left is: ${getComputedStyle(box).left}`);
+    });
+</script>
+</html>

@@ -1,0 +1,51 @@
+$0e115d44 try-catch-finally-register.js:1:1
+  Registers: 9
+  Blocks:    7
+  Locals:    e~0
+  Constants:
+    [0] = Undefined
+    [1] = Int32(1)
+    [2] = Int32(0)
+    [3] = <Empty>
+    [4] = Int32(2)
+    [5] = Int32(3)
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] Mov dst:reg5, src:Undefined
+
+block1:
+  [   7] Mov dst:reg5, src:Int32(1)
+  [   a] Mov dst:reg6, src:Int32(0)
+  [   d] Jump target:block4
+
+block2:
+  [  12] Catch value_feedback:0, dst:reg8
+  [  16] Mov dst:reg5, src:Undefined
+  [  19] Mov dst:e~0, src:<Empty>
+  [  1c] Mov dst:e~0, src:reg8
+  [  1f] Mov dst:reg5, src:Int32(2)
+  [  22] Mov dst:reg6, src:Int32(0)
+  [  25] Jump target:block4
+
+block3:
+  [  2a] Catch value_feedback:1, dst:reg7
+  [  2e] Mov dst:reg6, src:Int32(1)
+
+block4:
+  [  31] Mov dst:reg8, src:reg5
+  [  34] Mov dst:reg5, src:Undefined
+  [  37] Mov dst:reg5, src:Int32(3)
+  [  3a] Mov dst:reg5, src:reg8
+  [  3d] JumpStrictlyEqualsRhsInt32 arith_feedback:0, lhs:reg6, rhs:0, true_target:block6, false_target:block5
+
+block5:
+  [  4d] Throw src:reg7
+
+block6:
+  [  4f] End value:reg5
+
+Exception handlers:
+  [   7 ..   12] => handler block2
+  [  12 ..   2a] => handler block3

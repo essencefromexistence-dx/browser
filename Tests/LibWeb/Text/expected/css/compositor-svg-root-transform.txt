@@ -1,0 +1,5 @@
+outer SVG uses compositor:
+  transform svg#spinner
+main-thread samples: []
+main-thread frame requests: []
+rotation uses CSS box center: true

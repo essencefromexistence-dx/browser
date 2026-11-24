@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<style>
+    #popover { color: rgb(1, 2, 3); }
+    #popover:popover-open { color: rgb(4, 5, 6); }
+</style>
+<div id="popover" popover="manual"></div>
+<script>
+    test(() => {
+        const popover = document.getElementById("popover");
+        const output = [];
+        const restyledNames = work => `[${work.restyled().map(shortStyleName).join(", ")}]`;
+        let color;
+        const readColor = () => styleWork(() => color = getComputedStyle(popover).color, internals, { flush: false });
+
+        output.push(`shown restyled: ${restyledNames(styleWork(() => popover.showPopover()))}`);
+        const shownRead = readColor();
+        output.push("shown color: " + color);
+        output.push(`shown read restyled: ${restyledNames(shownRead)}`);
+
+        output.push(`hidden restyled: ${restyledNames(styleWork(() => popover.hidePopover()))}`);
+        const hiddenRead = readColor();
+        output.push("hidden color: " + color);
+        output.push(`hidden read restyled: ${restyledNames(hiddenRead)}`);
+        for (const line of output)
+            println(line);
+    });
+</script>

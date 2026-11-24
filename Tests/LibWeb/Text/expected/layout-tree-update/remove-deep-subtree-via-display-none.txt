@@ -1,0 +1,2 @@
+incremental tree matches full rebuild after hiding: true
+incremental tree matches full rebuild after showing: true

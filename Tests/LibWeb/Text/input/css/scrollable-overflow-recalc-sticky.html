@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<div id="scroller" style="overflow: scroll; width: 100px; height: 100px;">
+    <div id="sticky" style="position: sticky; top: 0; height: 20px;"></div>
+    <div style="height: 60px;"></div>
+    <div id="mover" style="height: 10px;"></div>
+</div>
+<script>
+    // Sticky constraints capture the scroll ancestor's scrollable overflow size, so growing the
+    // overflow via a transform must refresh them: the sticky box has to keep sticking while
+    // scrolling through the newly grown range.
+    test(() => {
+        const scroller = document.getElementById("scroller");
+        const sticky = document.getElementById("sticky");
+        const mover = document.getElementById("mover");
+        const scrollerTop = scroller.getBoundingClientRect().top;
+        let heightAfterChange;
+        let scrollTopInGrownRange;
+        let stickyTop;
+        const work = layoutWork(() => {
+            mover.style.transform = "translateY(400px)";
+            heightAfterChange = scroller.scrollHeight;
+            scroller.scrollTop = 300;
+            scrollTopInGrownRange = scroller.scrollTop;
+            stickyTop = sticky.getBoundingClientRect().top;
+        });
+        println(`scrollHeight after transform change: ${heightAfterChange}`);
+        println(`scrollTop in grown range: ${scrollTopInGrownRange}`);
+        println(`sticky box sticks to scrollport top: ${stickyTop === scrollerTop}`);
+        println(`layout passes: ${work.passes().join(" | ") || "(no layout)"}`);
+    });
+</script>

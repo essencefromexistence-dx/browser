@@ -1,0 +1,119 @@
+$44cef8db switch-completion-value.js:1:1
+  Registers: 10
+  Blocks:    1
+  Constants:
+    [0] = Undefined
+    [1] = String("switch(1) { case 1: 'hello'; let x = 1; }")
+    [2] = String("switch(1) { case 1: 'first'; 'second'; }")
+    [3] = String("switch(1) { case 1: 'matched'; break; default: 'default'; }")
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] DynamicGetBinding value_feedback:0, dst:reg6, `console`
+  [   c] GetById dst:reg7, base:reg6, `log`
+  [  13] DynamicGetCalleeAndThisFromEnvironment value_feedback:1, callee:reg8, this_value:reg9, `eval`
+  [  1c] CallDirectEval call_feedback:0, dst:reg8, callee:reg8, this_value:reg9, arguments:[String("switch(1) { case 1: 'hello'; let x = 1; }")]
+  [  24] Call call_feedback:1, dst:reg5, callee:reg7, this_value:reg6, arguments:[reg8]
+  [  2c] DynamicGetBinding value_feedback:2, dst:reg6, `console`
+  [  34] GetById dst:reg7, base:reg6, `log`
+  [  3b] DynamicGetCalleeAndThisFromEnvironment value_feedback:3, callee:reg8, this_value:reg9, `eval`
+  [  44] CallDirectEval call_feedback:2, dst:reg8, callee:reg8, this_value:reg9, arguments:[String("switch(1) { case 1: 'first'; 'second'; }")]
+  [  4c] Call call_feedback:3, dst:reg5, callee:reg7, this_value:reg6, arguments:[reg8]
+  [  54] DynamicGetBinding value_feedback:4, dst:reg6, `console`
+  [  5c] GetById dst:reg7, base:reg6, `log`
+  [  63] DynamicGetCalleeAndThisFromEnvironment value_feedback:5, callee:reg8, this_value:reg9, `eval`
+  [  6c] CallDirectEval call_feedback:4, dst:reg8, callee:reg8, this_value:reg9, arguments:[String("switch(1) { case 1: 'matched'; break; default: 'default'; }")]
+  [  74] Call call_feedback:5, dst:reg5, callee:reg7, this_value:reg6, arguments:[reg8]
+  [  7c] End value:reg5
+
+
+eval$0aae64f5 line 1, column 8
+  Registers: 8
+  Blocks:    4
+  Locals:    x~0
+  Constants:
+    [0] = Undefined
+    [1] = Int32(1)
+    [2] = <Empty>
+    [3] = String("hello")
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] Mov dst:reg6, src:Int32(1)
+  [   7] Mov dst:reg5, src:Undefined
+  [   a] Mov dst:x~0, src:<Empty>
+  [   d] JumpStrictlyEquals arith_feedback:0, lhs:Int32(1), rhs:reg6, true_target:block2, false_target:block1
+
+block1:
+  [  1a] Jump target:block3
+
+block2:
+  [  1f] Mov dst:reg5, src:String("hello")
+  [  22] Mov dst:x~0, src:Int32(1)
+
+block3:
+  [  25] End value:reg5
+
+
+eval$5adaa406 line 1, column 8
+  Registers: 8
+  Blocks:    4
+  Constants:
+    [0] = Undefined
+    [1] = Int32(1)
+    [2] = String("first")
+    [3] = String("second")
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] Mov dst:reg6, src:Int32(1)
+  [   7] Mov dst:reg5, src:Undefined
+  [   a] JumpStrictlyEquals arith_feedback:0, lhs:Int32(1), rhs:reg6, true_target:block2, false_target:block1
+
+block1:
+  [  17] Jump target:block3
+
+block2:
+  [  1c] Mov dst:reg5, src:String("first")
+  [  1f] Mov dst:reg5, src:String("second")
+
+block3:
+  [  22] End value:reg5
+
+
+eval$ebb7df5b line 1, column 8
+  Registers: 8
+  Blocks:    5
+  Constants:
+    [0] = Undefined
+    [1] = Int32(1)
+    [2] = String("matched")
+    [3] = String("default")
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] Mov dst:reg6, src:Int32(1)
+  [   7] Mov dst:reg5, src:Undefined
+  [   a] JumpStrictlyEquals arith_feedback:0, lhs:Int32(1), rhs:reg6, true_target:block2, false_target:block1
+
+block1:
+  [  17] Jump target:block3
+
+block2:
+  [  1c] Mov dst:reg5, src:String("matched")
+  [  1f] Jump target:block4
+
+block3:
+  [  24] Mov dst:reg5, src:String("default")
+
+block4:
+  [  27] End value:reg5
+
+
+"hello"
+"second"
+"matched"

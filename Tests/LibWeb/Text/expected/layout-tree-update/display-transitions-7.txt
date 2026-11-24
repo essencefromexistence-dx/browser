@@ -1,0 +1,33 @@
+PASS: display transition run-in -> inline-flex
+PASS: display transition run-in -> grid
+PASS: display transition run-in -> inline-grid
+PASS: display transition run-in -> table
+PASS: display transition run-in -> inline-table
+PASS: display transition run-in -> math
+PASS: display transition run-in -> -webkit-box
+PASS: display transition run-in -> -webkit-inline-box
+PASS: display transition inline-table -> block flow list-item
+PASS: display transition inline-table -> inline flow list-item
+PASS: display transition inline-table -> none
+PASS: display transition inline-table -> contents
+PASS: display transition inline-table -> block
+PASS: display transition inline-table -> inline
+PASS: display transition inline-table -> flow-root
+PASS: display transition inline-table -> inline-block
+PASS: display transition table-cell -> table-column
+PASS: display transition table-cell -> table-caption
+PASS: display transition table-cell -> block flow
+PASS: display transition table-cell -> inline flow
+PASS: display transition table-cell -> block flow-root
+PASS: display transition table-cell -> inline flow-root
+PASS: display transition table-cell -> block flex
+PASS: display transition table-cell -> inline flex
+PASS: display transition block flex -> inline-grid
+PASS: display transition block flex -> table
+PASS: display transition block flex -> inline-table
+PASS: display transition block flex -> math
+PASS: display transition block flex -> -webkit-box
+PASS: display transition block flex -> -webkit-inline-box
+PASS: display transition block flex -> table-row-group
+PASS: display transition block flex -> table-header-group
+32 cases; 32 matched; 0 mismatched

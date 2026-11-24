@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<div
+    id="target"
+    style="
+        width: 100px;
+        height: 50px;
+        background-image: url('../wpt-import/images/anim-gr.gif');
+    "
+></div>
+<script>
+    const imageURL = new URL("../wpt-import/images/anim-gr.gif", document.baseURI).href;
+
+    promiseTest(async () => {
+        await new Promise(resolve => window.addEventListener("load", resolve));
+
+        internals.dumpLayoutTree(document);
+        const isAnimatingBeforeBaseChange = internals.imageAnimationStateForURL(imageURL).isAnimating;
+        println(
+            `timer active before base change: ${isAnimatingBeforeBaseChange}`
+        );
+
+        const base = document.createElement("base");
+        base.href = "../";
+        document.head.append(base);
+
+        target.remove();
+        internals.dumpLayoutTree(document);
+        const isAnimatingAfterRemoval = internals.imageAnimationStateForURL(imageURL).isAnimating;
+        println(`timer active after removal: ${isAnimatingAfterRemoval}`);
+    });
+</script>

@@ -1,0 +1,13 @@
+Harness status: OK
+
+Found 8 tests
+
+8 Pass
+Pass	sibling-index() in @container width query initially not matching
+Pass	sibling-count() in @container width query initially not matching
+Pass	sibling-index() in @container style() query initially not matching
+Pass	sibling-count() in @container style() query initially not matching
+Pass	sibling-index() in @container width query matching after removal
+Pass	sibling-count() in @container width query matching after removal
+Pass	sibling-index() in @container style() query matching after removal
+Pass	sibling-count() in @container style() query matching after removal

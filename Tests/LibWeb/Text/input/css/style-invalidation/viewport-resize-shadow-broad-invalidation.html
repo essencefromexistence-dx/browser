@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<script>
+    function animationFrame() {
+        return new Promise(resolve => requestAnimationFrame(resolve));
+    }
+
+    function summarizeStyleTrace(text) {
+        const events = parseStyleTrace(text, { stylePassesOnly: true });
+        const passes = events.filter(event => event.event === "pass").map(event => event.kind);
+        const restyled = [...new Set(events.filter(event => event.event === "restyle" && event.outcome !== "kept").map(event => shortStyleName(event.element)))];
+        return `passes [${passes.join(", ")}], restyled [${restyled.join(", ")}]`;
+    }
+
+    async function resizeIframe(iframe, child, width) {
+        iframe.style.width = `${width}px`;
+        document.body.offsetWidth;
+        await animationFrame();
+        child.document.body.offsetWidth;
+        child.internals.updateStyle();
+    }
+
+    promiseTest(async () => {
+        const iframe = document.createElement("iframe");
+        iframe.style.border = "0";
+        iframe.style.width = "300px";
+        iframe.style.height = "200px";
+
+        const loaded = new Promise(resolve => iframe.addEventListener("load", resolve, { once: true }));
+        iframe.srcdoc = `
+            <!DOCTYPE html>
+            <x-property-host id="host">host</x-property-host>
+        `;
+        document.body.appendChild(iframe);
+        await loaded;
+
+        const child = iframe.contentWindow;
+        const host = child.document.getElementById("host");
+        const shadowRoot = host.attachShadow({ mode: "open" });
+        const sheet = new child.CSSStyleSheet();
+        sheet.replaceSync(`
+            :host {
+                color: rgb(255, 0, 0);
+            }
+
+            @media (min-width: 400px) {
+                @property --shadow-media-broad {
+                    syntax: '<color>';
+                    inherits: false;
+                    initial-value: rgb(0, 128, 0);
+                }
+            }
+        `);
+        shadowRoot.adoptedStyleSheets = [sheet];
+        shadowRoot.appendChild(child.document.createElement("slot"));
+
+        child.internals.updateStyle();
+        println(`initial shadow host color: ${child.getComputedStyle(host).color}`);
+
+        // A media query flip in the shadow tree's sheet that only changes what an @property rule
+        // registers styles at most the host.
+        child.internals.beginStyleTrace();
+        await resizeIframe(iframe, child, 500);
+        const resized = summarizeStyleTrace(child.internals.takeStyleTrace());
+        println(`resized shadow host color: ${child.getComputedStyle(host).color}`);
+        println(`resized: ${resized}`);
+
+        child.internals.beginStyleTrace();
+        await resizeIframe(iframe, child, 300);
+        const resizedBack = summarizeStyleTrace(child.internals.takeStyleTrace());
+        println(`resized back shadow host color: ${child.getComputedStyle(host).color}`);
+        println(`resized back: ${resizedBack}`);
+    });
+</script>

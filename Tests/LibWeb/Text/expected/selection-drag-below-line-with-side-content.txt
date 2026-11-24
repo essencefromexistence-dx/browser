@@ -1,0 +1,3 @@
+selected previous text: false
+selected rest of line: false
+selected sidebar text: false

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<div id="fixture"></div>
+<script>
+    function createRow(label) {
+        const row = document.createElement("tr");
+        for (let column = 0; column < 2; ++column) {
+            const cell = document.createElement("td");
+            cell.id = `${label}-${column}`;
+            cell.textContent = `${label}-${column}`;
+            row.appendChild(cell);
+        }
+        return row;
+    }
+
+    function runPreservationCase(name, insert, groupTag = "tbody") {
+        const fixture = document.getElementById("fixture");
+        fixture.replaceChildren();
+        const table = document.createElement("table");
+        const body = document.createElement(groupTag);
+        body.append(createRow("before"), createRow("middle"), createRow("after"));
+        table.appendChild(body);
+        fixture.appendChild(table);
+
+        const firstRow = body.rows[0];
+        const firstCell = firstRow.cells[0];
+        body.id = "tracked-row-group";
+        firstRow.id = "tracked-existing-row";
+
+        const insertedRow = createRow("inserted");
+        const work = layoutTreeBuildWork(() => insert(body, insertedRow), { tracked: [body, firstRow, firstCell, insertedRow] });
+        const [bodyTransition, firstRowTransition, firstCellTransition, insertedRowTransition] = work.transitions();
+
+        println(`${bodyTransition === "PRESERVED" ? "PASS" : "FAIL"}: ${name} | row group ${bodyTransition}`);
+        println(`${firstRowTransition === "PRESERVED" ? "PASS" : "FAIL"}: ${name} | existing row ${firstRowTransition}`);
+        println(`${firstCellTransition === "PRESERVED" ? "PASS" : "FAIL"}: ${name} | existing cell ${firstCellTransition}`);
+        println(`${insertedRowTransition === "CREATED" ? "PASS" : "FAIL"}: ${name} | inserted row ${insertedRowTransition}`);
+        const measured = [...new Set(work.events.filter(event => event.event === "measure" && event.cache === "miss").map(event => event.box))].join(", ");
+        const onlyInsertedCellsMeasured = measured === "BlockContainer<TD>#inserted-0, BlockContainer<TD>#inserted-1";
+        println(`${onlyInsertedCellsMeasured ? "PASS" : "FAIL"}: ${name} | measure only the inserted cells${onlyInsertedCellsMeasured ? "" : ` (measured ${measured})`}`);
+        println(`${internals.compareLayoutTreeWithFullRebuild().matches ? "PASS" : "FAIL"}: ${name} | incremental tree matches full rebuild`);
+    }
+
+    function runFallbackCase() {
+        const fixture = document.getElementById("fixture");
+        fixture.replaceChildren();
+        const table = document.createElement("table");
+        const body = document.createElement("tbody");
+        body.append(createRow("before"), createRow("after"));
+        table.appendChild(body);
+        fixture.appendChild(table);
+        body.id = "tracked-row-group";
+
+        const row = createRow("inserted");
+        row.style.display = "block";
+        const [bodyTransition] = layoutTreeBuildWork(() => body.appendChild(row), { tracked: [body] }).transitions();
+
+        println(`${bodyTransition === "PRESERVED" ? "PASS" : "FAIL"}: non-row insertion | row group ${bodyTransition}`);
+        println(`${internals.compareLayoutTreeWithFullRebuild().matches ? "PASS" : "FAIL"}: non-row insertion | incremental tree matches full rebuild`);
+    }
+
+    function createBoundaryNodes(kind) {
+        switch (kind) {
+        case "whitespace":
+            return [document.createTextNode("  \n")];
+        case "multiple whitespace nodes":
+            return [document.createTextNode(" "), document.createTextNode("\n"), document.createTextNode("\t")];
+        case "whitespace around comment":
+            return [document.createTextNode(" "), document.createComment("boundary"), document.createTextNode("\n")];
+        case "whitespace around hidden element": {
+            const hidden = document.createElement("span");
+            hidden.style.display = "none";
+            return [document.createTextNode(" "), hidden, document.createTextNode("\n")];
+        }
+        }
+    }
+
+    function runWhitespaceBoundaryCase(groupTag, direction, boundaryKind, insertionPosition) {
+        const fixture = document.getElementById("fixture");
+        fixture.replaceChildren();
+        const table = document.createElement("table");
+        const body = document.createElement(groupTag);
+        const existingRow = createRow("existing");
+        const boundaryNodes = createBoundaryNodes(boundaryKind);
+        if (direction === "prepend")
+            body.append(...boundaryNodes, existingRow);
+        else
+            body.append(existingRow, ...boundaryNodes);
+        table.appendChild(body);
+        fixture.appendChild(table);
+        body.id = "tracked-row-group";
+
+        const insertedRow = createRow("inserted");
+        const [bodyTransition] = layoutTreeBuildWork(() => {
+            if (insertionPosition === "outside") {
+                if (direction === "prepend")
+                    body.prepend(insertedRow);
+                else
+                    body.append(insertedRow);
+            } else if (insertionPosition === "inside") {
+                if (direction === "prepend")
+                    body.insertBefore(insertedRow, existingRow);
+                else
+                    body.insertBefore(insertedRow, boundaryNodes[0]);
+            } else if (direction === "prepend") {
+                body.append(insertedRow);
+            } else {
+                body.prepend(insertedRow);
+            }
+        }, { tracked: [body] }).transitions();
+
+        // White space in a row group renders nothing and has no box, so no row inserted around it makes it interior.
+        const name = `${groupTag} ${direction} ${insertionPosition} ${boundaryKind}`;
+        println(`${bodyTransition === "PRESERVED" ? "PASS" : "FAIL"}: ${name} | row group ${bodyTransition}`);
+        println(`${internals.compareLayoutTreeWithFullRebuild().matches ? "PASS" : "FAIL"}: ${name} | incremental tree matches full rebuild`);
+    }
+
+    function runRowInsertionCase(name, createInsertedRows, insert, shouldPreserve = true) {
+        const fixture = document.getElementById("fixture");
+        fixture.replaceChildren();
+        const table = document.createElement("table");
+        const body = document.createElement("tbody");
+        const before = createRow("before");
+        const after = createRow("after");
+        body.append(before, after);
+        table.appendChild(body);
+        fixture.appendChild(table);
+        body.id = "tracked-row-group";
+        before.id = "tracked-existing-row";
+
+        const insertedRows = createInsertedRows();
+        const [bodyTransition, beforeTransition] = layoutTreeBuildWork(() => insert(body, after, insertedRows), { tracked: [body, before] }).transitions();
+
+        const preserved = bodyTransition === "PRESERVED" && beforeTransition === "PRESERVED";
+        println(`${preserved === shouldPreserve ? "PASS" : "FAIL"}: ${name} | ${shouldPreserve ? "preserve" : "rebuild"} existing rows: row group ${bodyTransition}, row ${beforeTransition}`);
+        println(`${insertedRows.every(row => internals.dumpLayoutTree(row) !== "(no layout node)") ? "PASS" : "FAIL"}: ${name} | create inserted rows`);
+        println(`${internals.compareLayoutTreeWithFullRebuild().matches ? "PASS" : "FAIL"}: ${name} | incremental tree matches full rebuild`);
+    }
+
+    function createCustomRow() {
+        const row = document.createElement("div");
+        row.style.display = "table-row";
+        for (let column = 0; column < 2; ++column) {
+            const cell = document.createElement("div");
+            cell.style.display = "table-cell";
+            cell.textContent = `custom-${column}`;
+            row.appendChild(cell);
+        }
+        return row;
+    }
+
+    function runWhitespaceInsertionCase(name, boundaryKind, insert, shouldPreserve) {
+        const fixture = document.getElementById("fixture");
+        fixture.replaceChildren();
+        const table = document.createElement("table");
+        const body = document.createElement("tbody");
+        const before = createRow("before");
+        const after = createRow("after");
+        body.append(before, after);
+        table.appendChild(body);
+        fixture.appendChild(table);
+        body.id = "tracked-row-group";
+
+        const [bodyTransition] = layoutTreeBuildWork(() => insert(body, after, createBoundaryNodes(boundaryKind)), { tracked: [body] }).transitions();
+
+        const preserved = bodyTransition === "PRESERVED";
+        println(`${preserved === shouldPreserve ? "PASS" : "FAIL"}: ${name} | row group ${bodyTransition}`);
+        println(`${internals.compareLayoutTreeWithFullRebuild().matches ? "PASS" : "FAIL"}: ${name} | incremental tree matches full rebuild`);
+    }
+
+    test(() => {
+        runPreservationCase("append row", (body, row) => body.appendChild(row));
+        runPreservationCase("prepend row", (body, row) => body.insertBefore(row, body.firstChild));
+        runPreservationCase("insert middle row", (body, row) => body.insertBefore(row, body.rows[1]));
+        runPreservationCase("append header row", (body, row) => body.appendChild(row), "thead");
+        runPreservationCase("append footer row", (body, row) => body.appendChild(row), "tfoot");
+        runFallbackCase();
+        runRowInsertionCase("prepend multiple rows", () => [createRow("first"), createRow("second")], (body, after, rows) => body.prepend(...rows));
+        runRowInsertionCase("insert multiple rows", () => [createRow("first"), createRow("second")], (body, after, rows) => {
+            const fragment = new DocumentFragment();
+            fragment.append(...rows);
+            body.insertBefore(fragment, after);
+        });
+        runRowInsertionCase("append multiple rows", () => [createRow("first"), createRow("second")], (body, after, rows) => body.append(...rows));
+        runRowInsertionCase("insert CSS table row", () => [createCustomRow()], (body, after, rows) => body.insertBefore(rows[0], after));
+        runRowInsertionCase("insert absolutely positioned row", () => {
+            const row = createRow("absolute");
+            row.style.position = "absolute";
+            return [row];
+        }, (body, after, rows) => body.insertBefore(rows[0], after));
+        runRowInsertionCase("insert floating row", () => {
+            const row = createRow("float");
+            row.style.cssFloat = "left";
+            return [row];
+        }, (body, after, rows) => body.insertBefore(rows[0], after));
+
+        for (const boundaryKind of ["whitespace", "multiple whitespace nodes", "whitespace around comment", "whitespace around hidden element"]) {
+            runWhitespaceInsertionCase(`insert interior ${boundaryKind}`, boundaryKind, (body, after, nodes) => {
+                const fragment = new DocumentFragment();
+                fragment.append(...nodes);
+                body.insertBefore(fragment, after);
+            }, true);
+        }
+        runWhitespaceInsertionCase("prepend edge whitespace", "whitespace", (body, after, nodes) => body.prepend(...nodes), true);
+        runWhitespaceInsertionCase("append edge whitespace", "whitespace", (body, after, nodes) => body.append(...nodes), true);
+
+        for (const groupTag of ["tbody", "thead", "tfoot"]) {
+            for (const direction of ["prepend", "append"]) {
+                for (const insertionPosition of ["outside", "inside", "opposite"]) {
+                    for (const boundaryKind of ["whitespace", "multiple whitespace nodes", "whitespace around comment", "whitespace around hidden element"])
+                        runWhitespaceBoundaryCase(groupTag, direction, boundaryKind, insertionPosition);
+                }
+            }
+        }
+    });
+</script>

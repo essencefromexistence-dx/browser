@@ -1,0 +1,15 @@
+$30e83781 block-function-declaration-order.js:1:1
+  Registers: 6
+  Blocks:    1
+  Locals:    f1~0, f2~1
+  Constants:
+    [0] = Undefined
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] NewFunction dst:f1~0, shared_function_data_index:0
+  [   b] NewFunction dst:f2~1, shared_function_data_index:1
+  [  12] SetVariableBindingOfBlockFunction `f1`, src:f1~0, program_environment_depth:0
+  [  1a] SetVariableBindingOfBlockFunction `f2`, src:f2~1, program_environment_depth:0
+  [  22] End value:reg5

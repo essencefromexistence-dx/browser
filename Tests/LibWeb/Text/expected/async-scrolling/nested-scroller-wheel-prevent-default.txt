@@ -1,0 +1,8 @@
+wheel target before wheel: blocked-by-wheel-event-region
+#1 compositor: blocked-by-wheel-event-region
+#1 compositor: forwarded-to-page
+wheel event count: 1
+wheel event cancelable: true
+wheel event defaultPrevented: true
+scroller scrollTop: 0
+window scrollY: 0

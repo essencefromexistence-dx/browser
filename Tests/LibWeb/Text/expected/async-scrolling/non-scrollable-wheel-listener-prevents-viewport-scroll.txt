@@ -1,0 +1,9 @@
+wheel routing admission: accepted
+wheel target over map: blocked-by-wheel-event-region
+window scrollY before wheel: 900
+#1 compositor: blocked-by-wheel-event-region
+#1 compositor: forwarded-to-page
+wheel event count: 1
+wheel event cancelable: true
+wheel event defaultPrevented: true
+window scrollY: 900

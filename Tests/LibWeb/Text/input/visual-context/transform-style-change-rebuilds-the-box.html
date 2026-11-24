@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<svg width="100" height="100">
+    <g id="group">
+        <rect width="50" height="50" fill="green"/>
+    </g>
+</svg>
+<script>
+    visualContextTest({
+        setup: async () => {
+            internals.forceIncompatibleVisualContextTreeRebuild();
+            while (internals.frameSchedulerState() !== "idle")
+                await new Promise(resolve => setTimeout(resolve, 0));
+        },
+        steps: [
+            {
+                name: "preserve-3d",
+                mutate: () => { group.style.transformStyle = "preserve-3d"; },
+                expect: `
+                    update DIRTY-PATH
+                      g#group transform ALLOCATED
+                      recording NEEDED
+                `,
+            },
+            {
+                name: "flat again",
+                mutate: () => { group.style.transformStyle = "flat"; },
+                expect: `
+                    update DIRTY-PATH
+                      g#group transform RELEASED
+                      epoch NEW
+                      recording NEEDED
+                `,
+            },
+        ],
+    });
+</script>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #clip { position: absolute; top: 200vh; width: 100px; height: 100px; overflow: hidden; }
+    #target { position: relative; width: 20px; height: 20px; }
+    #target::after { content: ""; position: absolute; inset: 0; background: linear-gradient(red, blue); }
+    #target.fixed::after { position: fixed; inset: 0 auto auto 0; width: 20px; height: 20px; }
+</style>
+<div id="clip"><div id="target"></div></div>
+<script>
+    asyncTest(async done => {
+        internals.updateStyle();
+        const nextFrame = () => new Promise(requestAnimationFrame);
+        async function settle() {
+            for (let i = 0; i < 4; ++i)
+                await nextFrame();
+        }
+        async function traceOverFrames() {
+            internals.beginStyleTrace();
+            internals.beginRenderingTrace();
+            await settle();
+            const sampled = parseStyleTrace(internals.takeStyleTrace()).filter(event => event.outcome?.startsWith("sampled"));
+            const pumpRequests = internals.takeRenderingTrace().split("\n").filter(line => line.startsWith("animation frame pump request"));
+            return {
+                sampled: `[${[...new Set(sampled.map(event => event.element))].join(", ")}]`,
+                pumpRequests: `[${[...new Set(pumpRequests.map(line => line.replace(/ x\d+$/, "")))].join(", ")}]`,
+            };
+        }
+        const timeline = internals.createInternalAnimationTimeline();
+        timeline.setTime(0);
+        timeline.setTimeForObservation(0);
+        const animation = new Animation(new KeyframeEffect(target, [
+            { backgroundPositionX: "0px" },
+            { backgroundPositionX: "100px" },
+        ], { duration: 1000, iterations: Infinity, pseudoElement: "::after" }), timeline);
+        animation.play();
+        animation.startTime = 0;
+        await settle();
+        let trace = await traceOverFrames();
+        println(`offscreen pseudo-element samples: ${trace.sampled}`);
+        println(`offscreen pseudo-element frame requests: ${trace.pumpRequests}`);
+
+        timeline.setTimeForObservation(400);
+        println(`pseudo-element style observes the current time: ${Math.abs(parseFloat(getComputedStyle(target, "::after").backgroundPositionX) - 40) < 0.0001}`);
+        timeline.setTime(600);
+        timeline.setTimeForObservation(600);
+        clip.scrollIntoView();
+        await settle();
+        println(`scrolling into view samples the pseudo-element: ${Math.abs(parseFloat(getComputedStyle(target, "::after").backgroundPositionX) - 60) < 0.0001}`);
+        trace = await traceOverFrames();
+        println(`visible pseudo-element frame requests: ${trace.pumpRequests}`);
+        scrollTo(0, 0);
+        await settle();
+        trace = await traceOverFrames();
+        println(`frame requests after scrolling out of view: ${trace.pumpRequests}`);
+
+        target.className = "fixed";
+        await settle();
+        trace = await traceOverFrames();
+        println(`fixed pseudo-element escaping its host's clip frame requests: ${trace.pumpRequests}`);
+        animation.cancel();
+        done();
+    });
+</script>

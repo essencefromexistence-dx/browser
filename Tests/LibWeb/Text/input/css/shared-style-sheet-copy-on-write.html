@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script>
+    test(() => {
+        const roots = [];
+        for (let index = 0; index < 2; ++index) {
+            const host = document.createElement("div");
+            document.body.append(host);
+            const root = host.attachShadow({ mode: "open" });
+            root.innerHTML = `<style>
+                .target { color: green; }
+                .unused { color: red; }
+            </style><span class="target"></span>`;
+            roots.push(root);
+        }
+        const color = root => getComputedStyle(root.querySelector(".target")).color;
+        color(roots[0]);
+        color(roots[1]);
+        const sheet = roots[0].querySelector("style").sheet;
+        sheet.insertRule(".target { color: red; }", 2);
+        println(`first edit: ${color(roots[0])}, ${color(roots[1])}`);
+
+        sheet.insertRule(".target { color: green; }", 3);
+        println(`later insertion: ${color(roots[0])}, ${color(roots[1])}`);
+
+        sheet.cssRules[3].style.color = "blue";
+        println(`later declaration edit: ${color(roots[0])}, ${color(roots[1])}`);
+        roots[0].host.remove();
+        println(`second sheet outlives first: ${color(roots[1])}`);
+    });
+</script>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<script src="include.js"></script>
+<style>
+    body {
+        margin: 0;
+    }
+
+    #scroller {
+        width: 100px;
+        height: 100px;
+        overflow: scroll;
+    }
+
+    #spacer {
+        height: 500px;
+    }
+
+    #page-spacer {
+        height: 2000px;
+    }
+</style>
+<div id="scroller"><div id="spacer"></div></div>
+<div id="page-spacer"></div>
+<script>
+    promiseTest(async () => {
+        scroller.addEventListener("wheel", () => {
+            scroller.remove();
+            document.body.offsetHeight;
+        }, { passive: false });
+
+        const finished = new Promise(resolve => document.addEventListener("scrollend", resolve, { once: true }));
+        internals.wheel(50, 50, 0, 100);
+
+        println("PASS");
+        await finished;
+        println(`window.scrollY: ${window.scrollY}`);
+    });
+</script>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script>
+    function nextTask() {
+        const { promise, resolve } = Promise.withResolvers();
+        const channel = new MessageChannel();
+        channel.port1.onmessage = resolve;
+        channel.port2.postMessage(null);
+        return promise;
+    }
+
+    function printRenderingSchedule(title, trace) {
+        println(title);
+        for (const line of trace.split("\n")) {
+            if (/^(request|opportunity|update$)/.test(line))
+                println(`  ${line}`);
+        }
+    }
+
+    asyncTest(async done => {
+        internals.setManualRenderingOpportunities(true);
+        await nextTask();
+
+        let animationFrameRan = false;
+        requestAnimationFrame(() => animationFrameRan = true);
+
+        let messageCount = 0;
+        const messagesFinished = Promise.withResolvers();
+        const channel = new MessageChannel();
+        channel.port1.onmessage = () => {
+            if (++messageCount === 10)
+                messagesFinished.resolve();
+            else
+                channel.port2.postMessage(null);
+        };
+        channel.port2.postMessage(null);
+        await messagesFinished.promise;
+        await nextTask();
+
+        const animationFrameStayedPending = !animationFrameRan;
+        internals.beginRenderingTrace();
+        internals.injectRenderingOpportunity(performance.now());
+        await nextTask();
+        const trace = internals.takeRenderingTrace();
+        internals.setManualRenderingOpportunities(false);
+
+        println(`posted messages before opportunity: ${messageCount}`);
+        println(`animation frame stayed pending: ${animationFrameStayedPending}`);
+        println(`animation frame ran after opportunity: ${animationFrameRan}`);
+        printRenderingSchedule("rendering after the opportunity:", trace);
+        done();
+    });
+</script>

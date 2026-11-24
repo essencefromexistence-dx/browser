@@ -1,0 +1,7 @@
+font status before removal: loading
+later link has style record before removal: true
+later link has layout before removal: false
+non-layout pseudo-element has computed style before removal: true
+shadow link has style record before removal: true
+shadow link has layout before removal: false
+PASS (did not crash)

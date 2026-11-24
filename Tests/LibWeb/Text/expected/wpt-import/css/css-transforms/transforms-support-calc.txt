@@ -1,0 +1,12 @@
+Harness status: OK
+
+Found 7 tests
+
+7 Pass
+Pass	translate supports calc
+Pass	rotate supports calc
+Pass	scale supports calc
+Pass	perspective supports calc
+Pass	perspective-origin supports calc
+Pass	transform supports calc
+Pass	transform-origin supports calc

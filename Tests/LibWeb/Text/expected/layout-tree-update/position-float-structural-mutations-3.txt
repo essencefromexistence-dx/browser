@@ -1,0 +1,77 @@
+PASS: remove first sibling run, absolute flow-root siblings in none
+PASS: move node to start, float-right-clear-both -webkit-box siblings in none
+PASS: remove individual node, absolute inline siblings in contents
+PASS: replace individual node, float-right-clear-both math siblings in contents
+PASS: append positioned fragment, absolute -webkit-box siblings in block
+PASS: remove last sibling run, float-right-clear-both inline-table siblings in block
+PASS: move subtree across parents, absolute math siblings in inline
+PASS: remove first sibling run, float-right-clear-both table siblings in inline
+PASS: move node to start, absolute inline-table siblings in flow-root
+PASS: remove individual node, float-right-clear-both inline-grid siblings in flow-root
+PASS: replace individual node, absolute table siblings in inline-block
+PASS: append positioned fragment, float-right-clear-both table-caption siblings in inline-block
+PASS: remove last sibling run, absolute inline-grid siblings in run-in
+PASS: move subtree across parents, float-right-clear-both table-column siblings in run-in
+PASS: remove first sibling run, absolute grid siblings in list-item
+PASS: move node to start, float-right-clear-both table-column-group siblings in list-item
+PASS: remove individual node, absolute inline-flex siblings in inline list-item
+PASS: replace individual node, float-right-clear-both table-cell siblings in inline list-item
+PASS: append positioned fragment, absolute table-column-group siblings in flex
+PASS: remove last sibling run, float-right-clear-both table-row siblings in flex
+PASS: move subtree across parents, absolute table-cell siblings in inline-flex
+PASS: remove first sibling run, float-right-clear-both table-footer-group siblings in inline-flex
+PASS: move node to start, absolute table-row siblings in grid
+PASS: remove individual node, float-right-clear-both table-header-group siblings in grid
+PASS: replace individual node, absolute table-footer-group siblings in inline-grid
+PASS: append positioned fragment, float-right-clear-both block grid siblings in inline-grid
+PASS: remove last sibling run, absolute table-header-group siblings in table
+PASS: move subtree across parents, float-right-clear-both inline flex siblings in table
+PASS: remove first sibling run, absolute table-row-group siblings in inline-table
+PASS: move node to start, float-right-clear-both block flex siblings in inline-table
+PASS: remove individual node, absolute -webkit-inline-box siblings in math
+PASS: replace individual node, float-right-clear-both inline flow-root siblings in math
+PASS: append positioned fragment, absolute block flex siblings in -webkit-box
+PASS: remove last sibling run, float-right-clear-both block flow-root siblings in -webkit-box
+PASS: move subtree across parents, absolute inline flow-root siblings in -webkit-inline-box
+PASS: remove first sibling run, float-right-clear-both inline flow siblings in -webkit-inline-box
+PASS: move node to start, absolute block flow-root siblings in table-row-group
+PASS: remove individual node, float-right-clear-both block flow siblings in table-row-group
+PASS: replace individual node, absolute inline flow siblings in table-header-group
+PASS: append positioned fragment, float-right-clear-both contents siblings in table-header-group
+PASS: remove last sibling run, absolute block flow siblings in table-footer-group
+PASS: move subtree across parents, float-right-clear-both none siblings in table-footer-group
+PASS: remove first sibling run, absolute table-caption siblings in table-row
+PASS: move node to start, float-right-clear-both inline flow list-item siblings in table-row
+PASS: remove individual node, absolute table-column siblings in table-cell
+PASS: replace individual node, float-right-clear-both block flow list-item siblings in table-cell
+PASS: append positioned fragment, absolute inline flow list-item siblings in table-column-group
+PASS: remove last sibling run, float-right-clear-both inline table siblings in table-column-group
+PASS: move subtree across parents, absolute block flow list-item siblings in table-column
+PASS: remove first sibling run, float-right-clear-both block table siblings in table-column
+PASS: move node to start, absolute inline table siblings in table-caption
+PASS: remove individual node, float-right-clear-both inline grid siblings in table-caption
+PASS: replace individual node, absolute block table siblings in block flow
+PASS: append positioned fragment, float-right-clear-both inline list-item siblings in block flow
+PASS: remove last sibling run, absolute inline grid siblings in inline flow
+PASS: move subtree across parents, float-right-clear-both list-item siblings in inline flow
+PASS: remove first sibling run, absolute block grid siblings in block flow-root
+PASS: move node to start, float-right-clear-both run-in siblings in block flow-root
+PASS: remove individual node, absolute inline flex siblings in inline flow-root
+PASS: replace individual node, float-right-clear-both inline-block siblings in inline flow-root
+PASS: append positioned fragment, absolute run-in siblings in block flex
+PASS: remove last sibling run, float-right-clear-both flow-root siblings in block flex
+PASS: move subtree across parents, absolute inline-block siblings in inline flex
+PASS: remove first sibling run, float-right-clear-both inline siblings in inline flex
+PASS: move node to start, absolute flow-root siblings in block grid
+PASS: remove individual node, float-right-clear-both block siblings in block grid
+PASS: replace individual node, absolute inline siblings in inline grid
+PASS: append positioned fragment, float-right-clear-both math siblings in inline grid
+PASS: remove last sibling run, absolute block siblings in block table
+PASS: move subtree across parents, float-right-clear-both inline-table siblings in block table
+PASS: remove first sibling run, absolute contents siblings in inline table
+PASS: move node to start, float-right-clear-both table siblings in inline table
+PASS: remove individual node, absolute none siblings in block flow list-item
+PASS: replace individual node, float-right-clear-both inline-grid siblings in block flow list-item
+PASS: append positioned fragment, absolute table siblings in inline flow list-item
+PASS: remove last sibling run, float-right-clear-both grid siblings in inline flow list-item
+76 cases; 76 matched; 0 mismatched

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #moving { margin-left: 0; width: 100px; height: 50px; }
+    #barrier { width: 100px; height: 50px; overflow: hidden; transform: translateX(0); }
+    #clip { width: 50px; height: 50px; overflow: hidden; }
+    #target { width: 100px; height: 50px; background: green; }
+</style>
+<div id="moving">
+    <div id="barrier">
+        <div id="clip"><div id="target"></div></div>
+    </div>
+</div>
+<script>
+    visualContextTest({
+        setup: async () => {
+            internals.forceIncompatibleVisualContextTreeRebuild();
+            while (internals.frameSchedulerState() !== "idle")
+                await new Promise(resolve => setTimeout(resolve, 0));
+        },
+        steps: [
+            {
+                name: "clip-path added",
+                mutate: () => { moving.style.clipPath = "inset(0)"; },
+                expect: `
+                    update DIRTY-PATH
+                      div#moving clip-path ALLOCATED
+                      div#moving clip-path ALLOCATED
+                      div#barrier clip REPURPOSED
+                      epoch NEW
+                      recording NEEDED
+                `,
+            },
+            {
+                name: "clip-path removed",
+                mutate: () => { moving.style.clipPath = "none"; },
+                expect: `
+                    update DIRTY-PATH
+                      div#moving clip-path RELEASED
+                      div#moving clip-path RELEASED
+                      div#barrier clip REPURPOSED
+                      epoch NEW
+                      recording NEEDED
+                `,
+            },
+            {
+                name: "moved with a clip-path again",
+                mutate: () => {
+                    moving.style.marginLeft = "100px";
+                    moving.style.clipPath = "inset(0)";
+                },
+                check: equal => {
+                    equal(document.elementFromPoint(125, 25).id, "target", "inside the moved clip");
+                    equal(document.elementFromPoint(25, 25).tagName, "BODY", "old position after the move");
+                },
+                expect: `
+                    update DIRTY-PATH
+                      div#moving clip-path ALLOCATED
+                      div#moving clip-path ALLOCATED
+                      div#barrier transform UPDATED
+                      div#barrier clip REPURPOSED
+                      div#clip clip UPDATED
+                      div#clip scroll UPDATED
+                      epoch NEW
+                      recording NEEDED
+                `,
+            },
+        ],
+    });
+</script>

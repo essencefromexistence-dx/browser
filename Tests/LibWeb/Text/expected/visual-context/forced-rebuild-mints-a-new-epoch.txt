@@ -1,0 +1,3 @@
+PASS: dropping a transform releases its node (work)
+PASS: a forced rebuild builds a fresh tree under a new epoch (work + checks)
+PASS: the fresh tree has no released slots to hand out (work)

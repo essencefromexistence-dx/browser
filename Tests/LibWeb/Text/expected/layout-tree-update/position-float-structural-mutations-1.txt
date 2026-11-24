@@ -1,0 +1,77 @@
+PASS: remove individual node, static none siblings in none
+PASS: replace individual node, float-left-clear-both inline-grid siblings in none
+PASS: append positioned fragment, static table siblings in contents
+PASS: remove last sibling run, float-left-clear-both grid siblings in contents
+PASS: move subtree across parents, static inline-grid siblings in block
+PASS: remove first sibling run, float-left-clear-both inline-flex siblings in block
+PASS: move node to start, static grid siblings in inline
+PASS: remove individual node, float-left-clear-both flex siblings in inline
+PASS: replace individual node, static inline-flex siblings in flow-root
+PASS: append positioned fragment, float-left-clear-both table-cell siblings in flow-root
+PASS: remove last sibling run, static flex siblings in inline-block
+PASS: move subtree across parents, float-left-clear-both table-row siblings in inline-block
+PASS: remove first sibling run, static inline list-item siblings in run-in
+PASS: move node to start, float-left-clear-both table-footer-group siblings in run-in
+PASS: remove individual node, static list-item siblings in list-item
+PASS: replace individual node, float-left-clear-both table-header-group siblings in list-item
+PASS: append positioned fragment, static table-footer-group siblings in inline list-item
+PASS: remove last sibling run, float-left-clear-both table-row-group siblings in inline list-item
+PASS: move subtree across parents, static table-header-group siblings in flex
+PASS: remove first sibling run, float-left-clear-both -webkit-inline-box siblings in flex
+PASS: move node to start, static table-row-group siblings in inline-flex
+PASS: remove individual node, float-left-clear-both -webkit-box siblings in inline-flex
+PASS: replace individual node, static -webkit-inline-box siblings in grid
+PASS: append positioned fragment, float-left-clear-both inline flow-root siblings in grid
+PASS: remove last sibling run, static -webkit-box siblings in inline-grid
+PASS: move subtree across parents, float-left-clear-both block flow-root siblings in inline-grid
+PASS: remove first sibling run, static math siblings in table
+PASS: move node to start, float-left-clear-both inline flow siblings in table
+PASS: remove individual node, static inline-table siblings in inline-table
+PASS: replace individual node, float-left-clear-both block flow siblings in inline-table
+PASS: append positioned fragment, static inline flow siblings in math
+PASS: remove last sibling run, float-left-clear-both table-caption siblings in math
+PASS: move subtree across parents, static block flow siblings in -webkit-box
+PASS: remove first sibling run, float-left-clear-both table-column siblings in -webkit-box
+PASS: move node to start, static table-caption siblings in -webkit-inline-box
+PASS: remove individual node, float-left-clear-both table-column-group siblings in -webkit-inline-box
+PASS: replace individual node, static table-column siblings in table-row-group
+PASS: append positioned fragment, float-left-clear-both block flow list-item siblings in table-row-group
+PASS: remove last sibling run, static table-column-group siblings in table-header-group
+PASS: move subtree across parents, float-left-clear-both inline table siblings in table-header-group
+PASS: remove first sibling run, static table-cell siblings in table-footer-group
+PASS: move node to start, float-left-clear-both block table siblings in table-footer-group
+PASS: remove individual node, static table-row siblings in table-row
+PASS: replace individual node, float-left-clear-both inline grid siblings in table-row
+PASS: append positioned fragment, static block table siblings in table-cell
+PASS: remove last sibling run, float-left-clear-both block grid siblings in table-cell
+PASS: move subtree across parents, static inline grid siblings in table-column-group
+PASS: remove first sibling run, float-left-clear-both inline flex siblings in table-column-group
+PASS: move node to start, static block grid siblings in table-column
+PASS: remove individual node, float-left-clear-both block flex siblings in table-column
+PASS: replace individual node, static inline flex siblings in table-caption
+PASS: append positioned fragment, float-left-clear-both inline-block siblings in table-caption
+PASS: remove last sibling run, static block flex siblings in block flow
+PASS: move subtree across parents, float-left-clear-both flow-root siblings in block flow
+PASS: remove first sibling run, static inline flow-root siblings in inline flow
+PASS: move node to start, float-left-clear-both inline siblings in inline flow
+PASS: remove individual node, static block flow-root siblings in block flow-root
+PASS: replace individual node, float-left-clear-both block siblings in block flow-root
+PASS: append positioned fragment, static inline siblings in inline flow-root
+PASS: remove last sibling run, float-left-clear-both contents siblings in inline flow-root
+PASS: move subtree across parents, static block siblings in block flex
+PASS: remove first sibling run, float-left-clear-both none siblings in block flex
+PASS: move node to start, static contents siblings in inline flex
+PASS: remove individual node, float-left-clear-both inline flow list-item siblings in inline flex
+PASS: replace individual node, static none siblings in block grid
+PASS: append positioned fragment, float-left-clear-both inline-grid siblings in block grid
+PASS: remove last sibling run, static inline flow list-item siblings in inline grid
+PASS: move subtree across parents, float-left-clear-both grid siblings in inline grid
+PASS: remove first sibling run, static block flow list-item siblings in block table
+PASS: move node to start, float-left-clear-both inline-flex siblings in block table
+PASS: remove individual node, static inline table siblings in inline table
+PASS: replace individual node, float-left-clear-both flex siblings in inline table
+PASS: append positioned fragment, static inline-flex siblings in block flow list-item
+PASS: remove last sibling run, float-left-clear-both inline list-item siblings in block flow list-item
+PASS: move subtree across parents, static flex siblings in inline flow list-item
+PASS: remove first sibling run, float-left-clear-both list-item siblings in inline flow list-item
+76 cases; 76 matched; 0 mismatched

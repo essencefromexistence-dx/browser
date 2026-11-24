@@ -1,0 +1,16 @@
+$d04518fd const-fold-exponentiation.js:1:7
+  Registers: 6
+  Blocks:    1
+  Constants:
+    [0] = Undefined
+    [1] = Double(nan)
+    [2] = Int32(1024)
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] DynamicInitializeLexicalBinding `a`, src:Double(nan)
+  [   a] DynamicInitializeLexicalBinding `b`, src:Double(nan)
+  [  10] DynamicInitializeLexicalBinding `c`, src:Double(nan)
+  [  16] DynamicInitializeLexicalBinding `d`, src:Int32(1024)
+  [  1c] End value:reg5

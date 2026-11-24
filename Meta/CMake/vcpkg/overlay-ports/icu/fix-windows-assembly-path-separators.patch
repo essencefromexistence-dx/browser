@@ -1,0 +1,22 @@
+diff --git a/source/tools/toolutil/pkg_genc.cpp b/source/tools/toolutil/pkg_genc.cpp
+index e2ecf07..639f561 100644
+--- a/source/tools/toolutil/pkg_genc.cpp
++++ b/source/tools/toolutil/pkg_genc.cpp
+@@ -370,7 +370,7 @@ writeAssemblyCode(
+             exit(U_ILLEGAL_ARGUMENT_ERROR);
+         }
+         uprv_strcpy(outFilePath, buffer.chars);
+-#if defined (WINDOWS_WITH_GNUC) && U_PLATFORM != U_PF_CYGWIN
++#if defined (U_PLATFORM_HAS_WIN32_API) && U_PLATFORM != U_PF_CYGWIN
+         /* Need to fix the file separator character when using MinGW. */
+         swapFileSepChar(outFilePath, U_FILE_SEP_CHAR, '/');
+ #endif
+@@ -488,7 +488,7 @@ writeCCode(
+             exit(U_ILLEGAL_ARGUMENT_ERROR);
+         }
+         uprv_strcpy(outFilePath, buffer);
+-#if defined (WINDOWS_WITH_GNUC) && U_PLATFORM != U_PF_CYGWIN
++#if defined (U_PLATFORM_HAS_WIN32_API) && U_PLATFORM != U_PF_CYGWIN
+         /* Need to fix the file separator character when using MinGW. */
+         swapFileSepChar(outFilePath, U_FILE_SEP_CHAR, '/');
+ #endif

@@ -1,0 +1,6 @@
+posted messages before opportunity: 10
+animation frame stayed pending: true
+animation frame ran after opportunity: true
+rendering after the opportunity:
+  opportunity
+  update

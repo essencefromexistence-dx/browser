@@ -1,0 +1,15 @@
+$563356ff constant-fold-large-string-to-number.js:1:5
+  Registers: 6
+  Blocks:    1
+  Constants:
+    [0] = Undefined
+    [1] = Double(18446744073709552000)
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] SetGlobal `a`, src:Double(18446744073709552000)
+  [   a] SetGlobal `b`, src:Double(18446744073709552000)
+  [  10] SetGlobal `c`, src:Double(18446744073709552000)
+  [  16] SetGlobal `d`, src:Double(18446744073709552000)
+  [  1c] End value:reg5

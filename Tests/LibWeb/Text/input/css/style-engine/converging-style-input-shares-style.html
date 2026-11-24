@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<style>
+    .old-a {
+        color: red;
+    }
+
+    .old-b {
+        color: blue;
+    }
+
+    .new {
+        color: green;
+    }
+</style>
+<div id="container">
+    <span class="old-a">a</span>
+    <span class="old-b">b</span>
+    <span class="old-a">c</span>
+</div>
+<script>
+    test(() => {
+        const items = document.querySelectorAll("span");
+        const work = styleWork(() => {
+            for (const item of items)
+                item.className = "new";
+        });
+
+        println(work.text.trimEnd());
+        println(`colors became green: ${[...items].every(item => getComputedStyle(item).color === "rgb(0, 128, 0)")}`);
+    });
+</script>

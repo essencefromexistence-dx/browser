@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<script src="include.js"></script>
+<script src="work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #outer { display: flex; width: 300px; }
+    #inner { display: flex; flex: none; padding-left: 10%; }
+    .item { padding: 5px; }
+</style>
+<div id="outer"><div id="inner"><div class="item">alpha beta</div><div class="item">gamma</div></div></div>
+<script>
+    test(() => {
+        const widthBefore = document.getElementById("inner").getBoundingClientRect().width;
+
+        // #inner's percentage padding resolves against #outer's width, so its measurements are keyed
+        // on that basis and must be redone.
+        const work = layoutWork(() => document.getElementById("outer").style.width = "400px");
+
+        println(`measured again: ${work.boxes({ event: "measure", cache: "miss" }).join(", ") || "nothing"}`);
+        println(`inner width: ${widthBefore} -> ${document.getElementById("inner").getBoundingClientRect().width}`);
+    });
+</script>

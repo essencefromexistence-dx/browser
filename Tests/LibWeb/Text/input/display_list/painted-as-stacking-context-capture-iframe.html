@@ -1,0 +1,90 @@
+<!doctype html>
+<html id="html">
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; font: 16px/20px monospace; }
+    #root { position: relative; width: 200px; }
+    iframe { display: block; width: 100px; height: 60px; border: 0; }
+    #after { height: 20px; }
+</style>
+<body id="body">
+<div id="root"><iframe id="frame" srcdoc="<div style='height:60px;background:lime'></div>"></iframe><div id="after">after</div></div>
+<script>
+displayListTest({
+    setup: removeBodyWhitespace,
+    steps: [
+        {
+            name: "quiet iframe",
+            expect: `
+                @canvas RECORD (empty)
+                @viewport COPY
+            `
+        },
+        {
+            name: "change next to iframe",
+            mutate: () => { after.style.color = "red"; },
+            check: equal => { equal(document.elementFromPoint(50, 30).id, "frame", "hit target"); },
+            expect: `
+                @canvas RECORD (empty)
+                @viewport ASSEMBLE
+                  @viewport/preamble COPY
+                  @viewport/scroll-metadata COPY
+                  @viewport/background COPY
+                  @viewport/border COPY
+                  BlockContainer<HTML>#html/descendants(background-and-borders) ASSEMBLE
+                  @viewport/foreground COPY
+                  BlockContainer<HTML>#html/descendants(foreground) ASSEMBLE
+                  BlockContainer<HTML>#html ASSEMBLE
+                    BlockContainer<HTML>#html/preamble COPY
+                    BlockContainer<HTML>#html/scroll-metadata COPY
+                    BlockContainer<HTML>#html/background COPY
+                    BlockContainer<HTML>#html/border COPY
+                    BlockContainer<BODY>#body/descendants(background-and-borders) ASSEMBLE
+                      BlockContainer<BODY>#body/scroll-metadata COPY
+                      BlockContainer<BODY>#body/background COPY
+                      BlockContainer<BODY>#body/border COPY
+                      BlockContainer<DIV>#root/descendants(background-and-borders) ASSEMBLE
+                    BlockContainer<BODY>#body/descendants(inline-background-and-borders) ASSEMBLE
+                      BlockContainer<DIV>#root/descendants(inline-background-and-borders) ASSEMBLE
+                    BlockContainer<HTML>#html/foreground COPY
+                    BlockContainer<BODY>#body/descendants(foreground) ASSEMBLE
+                      BlockContainer<BODY>#body/foreground COPY
+                      BlockContainer<DIV>#root/descendants(foreground) ASSEMBLE
+                      BlockContainer<BODY>#body/outline COPY
+                      BlockContainer<BODY>#body/overlay COPY
+                    BlockContainer<DIV>#root ASSEMBLE
+                      BlockContainer<DIV>#root/scroll-metadata COPY
+                      BlockContainer<DIV>#root/background COPY
+                      BlockContainer<DIV>#root/border COPY
+                      NavigableContainerViewport<IFRAME>#frame/descendants(background-and-borders) COPY
+                      BlockContainer<DIV>#after/descendants(background-and-borders) ASSEMBLE
+                        BlockContainer<DIV>#after/scroll-metadata RECORD
+                        BlockContainer<DIV>#after/background SKIP
+                        BlockContainer<DIV>#after/border SKIP
+                      NavigableContainerViewport<IFRAME>#frame/descendants(floats) COPY
+                      BlockContainer<DIV>#after/descendants(floats) ASSEMBLE
+                      NavigableContainerViewport<IFRAME>#frame/descendants(inline-background-and-borders) COPY
+                      BlockContainer<DIV>#after/descendants(inline-background-and-borders) ASSEMBLE
+                      BlockContainer<DIV>#root/foreground COPY
+                      NavigableContainerViewport<IFRAME>#frame/descendants(foreground) COPY
+                      BlockContainer<DIV>#after/descendants(foreground) ASSEMBLE
+                        BlockContainer<DIV>#after/foreground RECORD
+                        BlockContainer<DIV>#after/outline SKIP
+                        BlockContainer<DIV>#after/overlay SKIP
+                      BlockContainer<DIV>#root/outline COPY
+                      BlockContainer<DIV>#root/overlay COPY
+                    BlockContainer<HTML>#html/outline COPY
+                  @viewport/outline COPY
+            `
+        },
+        {
+            name: "quiet after adjacent change",
+            expect: `
+                @canvas RECORD (empty)
+                @viewport COPY
+            `
+        }
+    ]
+});
+</script>

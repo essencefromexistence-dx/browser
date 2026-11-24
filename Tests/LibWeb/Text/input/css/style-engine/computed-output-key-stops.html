@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    #target {
+        margin-left: 1in;
+    }
+</style>
+<div id="target">target</div>
+<script>
+    test(() => {
+        internals.updateStyle();
+
+        document.styleSheets[0].cssRules[0].style.marginLeft = "96px";
+        internals.updateStyle();
+
+        println(`computed margin: ${getComputedStyle(target).marginLeft}`);
+    });
+</script>

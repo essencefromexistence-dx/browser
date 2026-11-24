@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    .underline { text-decoration-line: underline; }
+    .overline { text-decoration-line: overline; }
+    .line-through { text-decoration-line: line-through; }
+</style>
+<script>
+    test(() => {
+        const work = styleWork(() => {
+            for (const decoration of ["underline", "overline", "line-through"]) {
+                const parent = document.createElement("div");
+                parent.className = decoration;
+                parent.append(document.createElement("span"));
+                document.body.append(parent);
+            }
+        });
+
+        for (const child of document.querySelectorAll("span"))
+            println(getComputedStyle(child).textDecorationLine);
+        // Spans under differently decorated parents have the same style, so all but the first take
+        // the record of another, shared without matching or reused after matching.
+        println(work.text.trimEnd());
+    });
+</script>

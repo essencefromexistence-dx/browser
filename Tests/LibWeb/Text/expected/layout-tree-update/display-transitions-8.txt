@@ -1,0 +1,33 @@
+PASS: display transition list-item -> table-row-group
+PASS: display transition list-item -> table-header-group
+PASS: display transition list-item -> table-footer-group
+PASS: display transition list-item -> table-row
+PASS: display transition list-item -> table-cell
+PASS: display transition list-item -> table-column-group
+PASS: display transition list-item -> table-column
+PASS: display transition list-item -> table-caption
+PASS: display transition math -> run-in
+PASS: display transition math -> list-item
+PASS: display transition math -> inline list-item
+PASS: display transition math -> flex
+PASS: display transition math -> inline-flex
+PASS: display transition math -> grid
+PASS: display transition math -> inline-grid
+PASS: display transition math -> table
+PASS: display transition table-column-group -> block grid
+PASS: display transition table-column-group -> inline grid
+PASS: display transition table-column-group -> block table
+PASS: display transition table-column-group -> inline table
+PASS: display transition table-column-group -> block flow list-item
+PASS: display transition table-column-group -> inline flow list-item
+PASS: display transition table-column-group -> none
+PASS: display transition table-column-group -> contents
+PASS: display transition inline flex -> table-footer-group
+PASS: display transition inline flex -> table-row
+PASS: display transition inline flex -> table-cell
+PASS: display transition inline flex -> table-column-group
+PASS: display transition inline flex -> table-column
+PASS: display transition inline flex -> table-caption
+PASS: display transition inline flex -> block flow
+PASS: display transition inline flex -> inline flow
+32 cases; 32 matched; 0 mismatched

@@ -1,0 +1,41 @@
+PASS: display transition contents -> inline list-item
+PASS: display transition contents -> flex
+PASS: display transition contents -> inline-flex
+PASS: display transition contents -> grid
+PASS: display transition contents -> inline-grid
+PASS: display transition contents -> table
+PASS: display transition contents -> inline-table
+PASS: display transition contents -> math
+PASS: display transition flex -> block table
+PASS: display transition flex -> inline table
+PASS: display transition flex -> block flow list-item
+PASS: display transition flex -> inline flow list-item
+PASS: display transition flex -> none
+PASS: display transition flex -> contents
+PASS: display transition flex -> block
+PASS: display transition flex -> inline
+PASS: display transition -webkit-inline-box -> table-cell
+PASS: display transition -webkit-inline-box -> table-column-group
+PASS: display transition -webkit-inline-box -> table-column
+PASS: display transition -webkit-inline-box -> table-caption
+PASS: display transition -webkit-inline-box -> block flow
+PASS: display transition -webkit-inline-box -> inline flow
+PASS: display transition -webkit-inline-box -> block flow-root
+PASS: display transition -webkit-inline-box -> inline flow-root
+PASS: display transition table-caption -> inline-flex
+PASS: display transition table-caption -> grid
+PASS: display transition table-caption -> inline-grid
+PASS: display transition table-caption -> table
+PASS: display transition table-caption -> inline-table
+PASS: display transition table-caption -> math
+PASS: display transition table-caption -> -webkit-box
+PASS: display transition table-caption -> -webkit-inline-box
+PASS: display transition inline grid -> block flow list-item
+PASS: display transition inline grid -> inline flow list-item
+PASS: display transition inline grid -> none
+PASS: display transition inline grid -> contents
+PASS: display transition inline grid -> block
+PASS: display transition inline grid -> inline
+PASS: display transition inline grid -> flow-root
+PASS: display transition inline grid -> inline-block
+40 cases; 40 matched; 0 mismatched

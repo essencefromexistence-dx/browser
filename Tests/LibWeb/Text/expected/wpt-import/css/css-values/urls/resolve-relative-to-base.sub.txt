@@ -1,0 +1,7 @@
+Harness status: OK
+
+Found 2 tests
+
+2 Pass
+Pass	base-relative URL: relative-image-url
+Pass	base-relative URL: relative-image-variable-url

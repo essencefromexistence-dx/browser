@@ -1,0 +1,8 @@
+Harness status: OK
+
+Found 3 tests
+
+3 Pass
+Pass	stylesheet-relative URL: stylesheet-relative-image
+Pass	stylesheet-relative URL: stylesheet-relative-variable-image
+Pass	stylesheet-relative URL: stylesheet-relative-document-variable-image

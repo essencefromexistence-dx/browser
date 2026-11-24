@@ -1,0 +1,40 @@
+$c24e47d4 nested-for-loop-completion.js:4:5
+  Registers: 8
+  Blocks:    7
+  Constants:
+    [0] = Undefined
+    [1] = Int32(4)
+    [2] = Int32(0)
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] Mov dst:reg5, src:Undefined
+  [   7] SetGlobal `n`, src:Int32(4)
+  [   d] Jump target:block5
+
+block1:
+  [  12] Mov dst:reg5, src:Undefined
+  [  15] SetGlobal `depth`, src:Int32(0)
+  [  1b] Jump target:block3
+
+block2:
+  [  20] GetGlobal value_feedback:0, dst:reg6, `depth`
+  [  28] AddRhsInt32 arith_feedback:0, dst:reg7, lhs:reg6, rhs:2
+  [  31] SetGlobal `depth`, src:reg7
+
+block3:
+  [  37] GetGlobal value_feedback:1, dst:reg6, `depth`
+  [  3f] JumpLessThanEqualsLoopRhsInt32 arith_feedback:1, lhs:reg6, rhs:0, true_target:block2, false_target:block4
+
+block4:
+  [  4f] GetGlobal value_feedback:2, dst:reg6, `n`
+  [  57] AddRhsInt32 arith_feedback:2, dst:reg7, lhs:reg6, rhs:1
+  [  60] SetGlobal `n`, src:reg7
+
+block5:
+  [  66] GetGlobal value_feedback:3, dst:reg6, `n`
+  [  6e] JumpLessThanEqualsLoopRhsInt32 arith_feedback:3, lhs:reg6, rhs:7, true_target:block1, false_target:block6
+
+block6:
+  [  7e] End value:reg5

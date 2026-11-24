@@ -1,0 +1,8 @@
+Blob              [Success]: [object ImageBitmap]
+ImageData         [Success]: [object ImageBitmap]
+HTMLImageElement  [ Error ]: InvalidStateError: image argument is not usable
+SVGImageElement   [ Error ]: InvalidStateError: image argument is not usable
+HTMLCanvasElement [Success]: [object ImageBitmap]
+ImageBitmap       [ Error ]: TypeError: No union types matched
+OffscreenCanvas   [Success]: [object ImageBitmap]
+HTMLVideoElement  [ Error ]: InvalidStateError: image argument is not usable

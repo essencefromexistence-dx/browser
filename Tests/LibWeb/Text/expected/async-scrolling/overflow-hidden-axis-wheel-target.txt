@@ -1,0 +1,2 @@
+horizontal wheel target: latched scroller=#scroller
+vertical wheel target: no-scroll-target

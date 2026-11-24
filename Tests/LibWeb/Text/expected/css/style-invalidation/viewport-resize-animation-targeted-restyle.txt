@@ -1,0 +1,14 @@
+initial viewport animated width: 45px
+initial inherited-font animated width: 45px
+initial root-font animated width: 45px
+initial animated font size: 45px
+initial animated inherited-font width: 67.5px
+initial post-style animated width: 45px
+targeted pending animated outline width: 75px
+resized viewport animated width: 75px
+resized inherited-font animated width: 75px
+resized root-font animated width: 75px
+resized animated font size: 75px
+resized animated inherited-font width: 112.5px
+resized post-style animated width: 75px
+resize restyle passes: PARTIAL [html, head, body, viewport-target, font-source, inherited-font-target, root-font-target, animated-font-source, pending-outline-animation-target, post-style-animation-target, script], PARTIAL [animated-inherited-font-target]

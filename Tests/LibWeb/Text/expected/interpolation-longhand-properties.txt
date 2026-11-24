@@ -1,0 +1,26 @@
+At time 400:
+  accent-color: rgb(86, 96, 106)
+  align-content: flex-start
+  animation-duration: 0s
+  aspect-ratio: 1.544154 / 1
+  background-color: rgb(86, 96, 106)
+  background-repeat: repeat-x
+  border-radius: 40px 60px 80px 100px
+  bottom: auto
+  box-shadow: rgb(255, 0, 0) 0px 0px 10px 0px inset
+  color: rgb(153, 0, 102)
+  transform: matrix(1, 0, 0, 1, 40, 40)
+
+At time 750:
+  accent-color: rgb(153, 163, 173)
+  align-content: space-between
+  animation-duration: 0s
+  aspect-ratio: 1.36506 / 1
+  background-color: rgb(153, 163, 173)
+  background-repeat: space
+  border-radius: 75px 95px 115px 135px
+  bottom: 100%
+  box-shadow: rgb(0, 0, 255) 100px 200px 300px 0px, rgb(0, 0, 255) 50px 10px 20px 30px
+  color: rgb(64, 0, 191)
+  transform: matrix(1, 0, 0, 1, 75, 75)
+

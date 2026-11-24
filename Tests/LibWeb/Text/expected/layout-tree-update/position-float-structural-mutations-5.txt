@@ -1,0 +1,77 @@
+PASS: remove last sibling run, sticky inline list-item siblings in none
+PASS: move subtree across parents, float-inline-end table-footer-group siblings in none
+PASS: remove first sibling run, sticky list-item siblings in contents
+PASS: move node to start, float-inline-end table-header-group siblings in contents
+PASS: remove individual node, sticky run-in siblings in block
+PASS: replace individual node, float-inline-end table-row-group siblings in block
+PASS: append positioned fragment, sticky table-header-group siblings in inline
+PASS: remove last sibling run, float-inline-end -webkit-inline-box siblings in inline
+PASS: move subtree across parents, sticky table-row-group siblings in flow-root
+PASS: remove first sibling run, float-inline-end -webkit-box siblings in flow-root
+PASS: move node to start, sticky -webkit-inline-box siblings in inline-block
+PASS: remove individual node, float-inline-end math siblings in inline-block
+PASS: replace individual node, sticky -webkit-box siblings in run-in
+PASS: append positioned fragment, float-inline-end block flow-root siblings in run-in
+PASS: remove last sibling run, sticky math siblings in list-item
+PASS: move subtree across parents, float-inline-end inline flow siblings in list-item
+PASS: remove first sibling run, sticky inline-table siblings in inline list-item
+PASS: move node to start, float-inline-end block flow siblings in inline list-item
+PASS: remove individual node, sticky table siblings in flex
+PASS: replace individual node, float-inline-end table-caption siblings in flex
+PASS: append positioned fragment, sticky block flow siblings in inline-flex
+PASS: remove last sibling run, float-inline-end table-column siblings in inline-flex
+PASS: move subtree across parents, sticky table-caption siblings in grid
+PASS: remove first sibling run, float-inline-end table-column-group siblings in grid
+PASS: move node to start, sticky table-column siblings in inline-grid
+PASS: remove individual node, float-inline-end table-cell siblings in inline-grid
+PASS: replace individual node, sticky table-column-group siblings in table
+PASS: append positioned fragment, float-inline-end inline table siblings in table
+PASS: remove last sibling run, sticky table-cell siblings in inline-table
+PASS: move subtree across parents, float-inline-end block table siblings in inline-table
+PASS: remove first sibling run, sticky table-row siblings in math
+PASS: move node to start, float-inline-end inline grid siblings in math
+PASS: remove individual node, sticky table-footer-group siblings in -webkit-box
+PASS: replace individual node, float-inline-end block grid siblings in -webkit-box
+PASS: append positioned fragment, sticky inline grid siblings in -webkit-inline-box
+PASS: remove last sibling run, float-inline-end inline flex siblings in -webkit-inline-box
+PASS: move subtree across parents, sticky block grid siblings in table-row-group
+PASS: remove first sibling run, float-inline-end block flex siblings in table-row-group
+PASS: move node to start, sticky inline flex siblings in table-header-group
+PASS: remove individual node, float-inline-end inline flow-root siblings in table-header-group
+PASS: replace individual node, sticky block flex siblings in table-footer-group
+PASS: append positioned fragment, float-inline-end flow-root siblings in table-footer-group
+PASS: remove last sibling run, sticky inline flow-root siblings in table-row
+PASS: move subtree across parents, float-inline-end inline siblings in table-row
+PASS: remove first sibling run, sticky block flow-root siblings in table-cell
+PASS: move node to start, float-inline-end block siblings in table-cell
+PASS: remove individual node, sticky inline flow siblings in table-column-group
+PASS: replace individual node, float-inline-end contents siblings in table-column-group
+PASS: append positioned fragment, sticky block siblings in table-column
+PASS: remove last sibling run, float-inline-end none siblings in table-column
+PASS: move subtree across parents, sticky contents siblings in table-caption
+PASS: remove first sibling run, float-inline-end inline flow list-item siblings in table-caption
+PASS: move node to start, sticky none siblings in block flow
+PASS: remove individual node, float-inline-end block flow list-item siblings in block flow
+PASS: replace individual node, sticky inline flow list-item siblings in inline flow
+PASS: append positioned fragment, float-inline-end grid siblings in inline flow
+PASS: remove last sibling run, sticky block flow list-item siblings in block flow-root
+PASS: move subtree across parents, float-inline-end inline-flex siblings in block flow-root
+PASS: remove first sibling run, sticky inline table siblings in inline flow-root
+PASS: move node to start, float-inline-end flex siblings in inline flow-root
+PASS: remove individual node, sticky block table siblings in block flex
+PASS: replace individual node, float-inline-end inline list-item siblings in block flex
+PASS: append positioned fragment, sticky flex siblings in inline flex
+PASS: remove last sibling run, float-inline-end list-item siblings in inline flex
+PASS: move subtree across parents, sticky inline list-item siblings in block grid
+PASS: remove first sibling run, float-inline-end run-in siblings in block grid
+PASS: move node to start, sticky list-item siblings in inline grid
+PASS: remove individual node, float-inline-end inline-block siblings in inline grid
+PASS: replace individual node, sticky run-in siblings in block table
+PASS: append positioned fragment, float-inline-end table-row-group siblings in block table
+PASS: remove last sibling run, sticky inline-block siblings in inline table
+PASS: move subtree across parents, float-inline-end -webkit-inline-box siblings in inline table
+PASS: remove first sibling run, sticky flow-root siblings in block flow list-item
+PASS: move node to start, float-inline-end -webkit-box siblings in block flow list-item
+PASS: remove individual node, sticky inline siblings in inline flow list-item
+PASS: replace individual node, float-inline-end math siblings in inline flow list-item
+76 cases; 76 matched; 0 mismatched

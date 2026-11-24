@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+#
+# Copyright (c) 2026-present, the Ladybird developers.
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
+import argparse
+import http.client
+import importlib
+import json
+import subprocess
+
+from urllib.parse import quote
+
+WEBDRIVER_REQUEST_TIMEOUT_SECONDS = 30
+
+webdriver_helpers = importlib.import_module("test-webdriver-delete-session")
+
+
+def request(connection, method, path, body=None):
+    encoded_body = json.dumps(body).encode() if body is not None else None
+    headers = {"Connection": "keep-alive"}
+    if body is not None:
+        headers["Content-Type"] = "application/json"
+    connection.request(method, path, encoded_body, headers)
+    response = connection.getresponse()
+    response_body = response.read().decode()
+
+    payload = json.loads(response_body) if response_body else {}
+    return response.status, payload, response_body
+
+
+def check_screenshot_error_preserves_element(connection, session_id, left):
+    session_path = f"/session/{session_id}"
+    document = (
+        '<!doctype html><body style="margin:0">'
+        f'<div style="position:fixed;left:{left};top:0;width:1px;height:1px"></div>'
+    )
+    status, _, body = request(connection, "POST", f"{session_path}/url", {"url": f"data:text/html,{quote(document)}"})
+    assert status == 200, body
+
+    status, payload, body = request(
+        connection, "POST", f"{session_path}/element", {"using": "css selector", "value": "div"}
+    )
+    assert status == 200, body
+    element_id = payload["value"]["element-6066-11e4-a52e-4f735466cecf"]
+    element_path = f"{session_path}/element/{element_id}"
+
+    status, payload, body = request(connection, "GET", f"{element_path}/screenshot")
+    assert status == 500 and payload["value"]["error"] == "unable to capture screen", body
+
+    status, payload, body = request(connection, "GET", f"{element_path}/name")
+    assert status == 200 and payload["value"] == "div", body
+
+    status, _, body = request(connection, "GET", f"{session_path}/screenshot")
+    assert status == 200, body
+
+
+def run_test(webdriver_binary):
+    webdriver, webdriver_port = webdriver_helpers.launch_webdriver(
+        webdriver_binary, "--headless", "--force-cpu-painting"
+    )
+    connection = None
+    try:
+        # Every request in this test is sent over the same keep-alive connection, matching how the
+        # WPT wdspec harness drives WebDriver. An error response must leave the connection usable.
+        connection = http.client.HTTPConnection("127.0.0.1", webdriver_port, timeout=WEBDRIVER_REQUEST_TIMEOUT_SECONDS)
+
+        status, payload, response_body = request(
+            connection,
+            "POST",
+            "/session",
+            {"capabilities": {"alwaysMatch": {"ladybird:headless": True}}},
+        )
+        value = payload.get("value")
+        session_id = value.get("sessionId") if isinstance(value, dict) else None
+        if status != 200 or not session_id:
+            raise AssertionError(f"New Session failed with HTTP {status}: {response_body}")
+
+        status, payload, response_body = request(
+            connection, "POST", f"/session/{session_id}/window", {"handle": "does-not-exist"}
+        )
+        if status != 404 or payload.get("value", {}).get("error") != "no such window":
+            raise AssertionError(f"Switch To Window returned an unexpected response: HTTP {status}: {response_body}")
+
+        status, payload, response_body = request(connection, "GET", f"/session/{session_id}/title")
+        if status != 200:
+            raise AssertionError(f"Get Title after error failed with HTTP {status}: {response_body}")
+
+        status, payload, response_body = request(connection, "GET", f"/session/{session_id}/unknown-command")
+        if status != 404 or payload.get("value", {}).get("error") != "unknown command":
+            raise AssertionError(f"Unknown command returned an unexpected response: HTTP {status}: {response_body}")
+
+        status, payload, response_body = request(connection, "GET", f"/session/{session_id}/title")
+        if status != 200:
+            raise AssertionError(f"Get Title after unknown command failed with HTTP {status}: {response_body}")
+
+        check_screenshot_error_preserves_element(connection, session_id, "-100000px")
+        # At the right edge of the viewport, the calculated screenshot width is zero.
+        check_screenshot_error_preserves_element(connection, session_id, "100vw")
+
+        status, payload, response_body = request(connection, "DELETE", f"/session/{session_id}")
+        if status != 200:
+            raise AssertionError(f"Delete Session failed with HTTP {status}: {response_body}")
+    finally:
+        if connection is not None:
+            connection.close()
+        webdriver.terminate()
+        try:
+            webdriver.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            webdriver.kill()
+            webdriver.wait()
+
+    if webdriver.returncode not in (0, -15):
+        raise RuntimeError(f"WebDriver exited with status {webdriver.returncode}")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("webdriver_binary")
+    args = parser.parse_args()
+
+    run_test(args.webdriver_binary)
+
+
+if __name__ == "__main__":
+    main()

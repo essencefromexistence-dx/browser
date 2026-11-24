@@ -1,0 +1,18 @@
+compositor animations:
+  opacity div#opacity
+  transform div#individual-transform
+  transform div#relative-transform
+  transform div#transform
+reference box resize: [compositor keyframe values resolved x2, compositor animations updated]
+style change: [compositor keyframe values resolved x2, compositor animations updated]
+stable compositor animations: []
+stable compositor animations main-thread samples: []
+stable compositor animations with changing visual nodes: []
+cancel: [compositor animations updated]
+cancel removes compositor animations: []
+empty compositor animations: []
+finite animation uses compositor: [opacity div#finite, transform div#finite]
+finite animation requests only end frames: [animation frame pump request, compositor animations updated]
+finite animation dispatches end event: true
+finite animation reaches end opacity: true
+finite animation reaches end style: true

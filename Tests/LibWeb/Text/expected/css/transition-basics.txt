@@ -1,0 +1,5 @@
+left starts at: 0px
+left 0ms into the transition: 0px
+left 500ms into the transition: 100px
+left 950ms into the transition: 190px
+after the transition, left is: 200px

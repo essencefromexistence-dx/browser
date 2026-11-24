@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    .containing-block {
+        position: relative;
+        width: 100px;
+        height: 50px;
+        overflow: auto;
+    }
+    .absolute {
+        position: absolute;
+        left: 180px;
+        width: 20px;
+        height: 20px;
+    }
+    .sibling {
+        width: 40px;
+        height: 30px;
+    }
+</style>
+<div id="fixture"></div>
+<script>
+    test(() => {
+        const fixture = document.getElementById("fixture");
+        const results = [];
+
+        const hasBox = node => internals.dumpLayoutTree(node) !== "(no layout node)";
+
+        function describeLayoutTreeBuilds(work) {
+            if (!work.builds()) return "no layout tree build";
+            const builds = work.builds() > 1 ? ` in ${work.builds()} builds` : "";
+            if (work.rebuiltWholeTree()) return `rebuilt the whole tree${builds}`;
+            return `rebuilt [${work.rebuiltRoots().join(", ")}]${work.escaped() ? ", escaped" : ""}${builds}`;
+        }
+
+        function runRemovalCase(name, markup, selector) {
+            fixture.innerHTML = markup;
+
+            const parent = fixture.querySelector(".parent");
+            const target = fixture.querySelector(selector);
+            const sibling = fixture.querySelector(".sibling");
+            parent.id = "tracked-parent";
+            sibling.id = "tracked-sibling";
+
+            const work = layoutTreeBuildWork(() => target.remove(), { tracked: [parent, sibling] });
+            const [parentTransition, siblingTransition] = work.transitions();
+            results.push(`${name}: ${describeLayoutTreeBuilds(work)}`);
+            results.push(`${name}: parent=${parentTransition}`);
+            results.push(`${name}: sibling=${siblingTransition}`);
+            results.push(`${name}: target-detached=${!hasBox(target)}`);
+            results.push(`${name}: tree-matches=${internals.compareLayoutTreeWithFullRebuild().matches}`);
+        }
+
+        fixture.innerHTML = `
+            <div class="parent containing-block">
+                <div class="absolute"></div>
+                <div class="sibling"></div>
+            </div>`;
+
+        const container = fixture.querySelector(".parent");
+        const absolute = fixture.querySelector(".absolute");
+        const sibling = fixture.querySelector(".sibling");
+        container.id = "tracked-container";
+        sibling.id = "tracked-sibling";
+        document.body.offsetHeight;
+        const scrollWidthBefore = container.scrollWidth;
+
+        const overflowWork = layoutTreeBuildWork(() => absolute.remove(), { tracked: [container, sibling] });
+
+        const scrollWidthAfter = container.scrollWidth;
+        const [containerTransition, overflowSiblingTransition] = overflowWork.transitions();
+        results.push(`overflow: width-updated=${scrollWidthBefore === 200 && scrollWidthAfter === 100}`);
+        results.push(`overflow: ${describeLayoutTreeBuilds(overflowWork)}`);
+        results.push(`overflow: container=${containerTransition}`);
+        results.push(`overflow: sibling=${overflowSiblingTransition}`);
+        results.push(`overflow: target-detached=${!hasBox(absolute)}`);
+        results.push(`overflow: tree-matches=${internals.compareLayoutTreeWithFullRebuild().matches}`);
+
+        const bodyTarget = document.createElement("div");
+        bodyTarget.style.position = "absolute";
+        document.body.appendChild(bodyTarget);
+        const bodyWork = layoutTreeBuildWork(() => bodyTarget.remove(), { tracked: [fixture] });
+        results.push(`body: ${describeLayoutTreeBuilds(bodyWork)}`);
+        results.push(`body: fixture=${bodyWork.transitions()[0]}`);
+        results.push(`body: target-detached=${!hasBox(bodyTarget)}`);
+        results.push(`body: tree-matches=${internals.compareLayoutTreeWithFullRebuild().matches}`);
+
+        runRemovalCase("block", '<div class="parent containing-block"><span>inline</span><div class="absolute"></div><span class="sibling">inline</span></div>', ".absolute");
+        runRemovalCase("flex", '<div class="parent containing-block" style="display:flex"><div class="absolute"></div><div class="sibling"></div></div>', ".absolute");
+        runRemovalCase("grid", '<div class="parent containing-block" style="display:grid"><div class="absolute"></div><div class="sibling"></div></div>', ".absolute");
+        runRemovalCase("ancestor-containing-block", '<div class="containing-block"><div class="parent"><div class="absolute"></div><div class="sibling"></div></div></div>', ".absolute");
+        runRemovalCase("fixed", '<div class="parent containing-block"><div class="absolute" style="position:fixed"></div><div class="sibling"></div></div>', ".absolute");
+        runRemovalCase("float", '<div class="parent containing-block"><div class="absolute" style="position:static;float:left"></div><div class="sibling"></div></div>', ".absolute");
+        runRemovalCase("generated-content", '<div class="parent containing-block"><div class="absolute" style="counter-increment:test"></div><div class="sibling"></div></div>', ".absolute");
+
+        for (const result of results)
+            println(result);
+    });
+</script>

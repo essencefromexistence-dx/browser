@@ -1,0 +1,7 @@
+
+    <div>foobar</div>
+    <ul>
+        <li>foo</li>
+        <li></li><li>bar</li>
+        <li>baz</li>
+    </ul>

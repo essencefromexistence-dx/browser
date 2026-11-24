@@ -1,0 +1,5 @@
+changed value: 0.5
+unchanged value: rgb(0, 128, 0)
+independent leaf opacity: 0.75
+independent leaf background: rgb(0, 0, 255)
+logical value: 20px

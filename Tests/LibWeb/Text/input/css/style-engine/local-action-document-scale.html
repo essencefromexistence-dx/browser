@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<style>
+    #target.active { color: red }
+</style>
+<div id="root"><div id="target"></div></div>
+<script>
+    test(() => {
+        const root = document.getElementById("root");
+        const target = document.getElementById("target");
+
+        function toggleActive(active) {
+            target.classList.toggle("active", active);
+            internals.updateStyle();
+        }
+
+        function measureAddition() {
+            // Establish the same retained answer and inactive starting state at every size.
+            toggleActive(true);
+            toggleActive(false);
+
+            const work = styleWork(() => target.classList.toggle("active", true));
+            toggleActive(false);
+            return work;
+        }
+
+        function growTo(size) {
+            const fragment = document.createDocumentFragment();
+            const currentSize = root.childElementCount;
+            for (let index = currentSize; index < size; ++index) {
+                const filler = document.createElement("div");
+                filler.className = "unrelated";
+                fragment.appendChild(filler);
+            }
+            root.appendChild(fragment);
+            internals.updateStyle();
+        }
+
+        internals.updateStyle();
+        const measurements = [];
+        // These sizes increase the unrelated document population by 16x.
+        for (const size of [257, 1025, 4097]) {
+            growTo(size);
+            measurements.push(measureAddition());
+        }
+
+        const baseline = measurements[0];
+        println(`passes: ${baseline.passes().join(" | ") || "(no pass)"}`);
+        println(`restyled: [${baseline.restyled().map(shortStyleName).join(", ")}]`);
+        println(`changed: [${baseline.changed().map(shortStyleName).join(", ")}]`);
+        println(`style work is the same at every document size: ${measurements.every(measurement => measurement.text === baseline.text)}`);
+        println(`largest document elements: ${root.childElementCount}`);
+    });
+</script>

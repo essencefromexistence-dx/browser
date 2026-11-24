@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script>
+    function nextTask() {
+        const { promise, resolve } = Promise.withResolvers();
+        const channel = new MessageChannel();
+        channel.port1.onmessage = resolve;
+        channel.port2.postMessage(null);
+        return promise;
+    }
+
+    function printRenderingSchedule(title, trace, pattern) {
+        println(title);
+        for (const line of trace.split("\n")) {
+            if (pattern.test(line))
+                println(`  ${line}`);
+        }
+    }
+
+    asyncTest(async done => {
+        internals.setManualRenderingOpportunities(true);
+        await nextTask();
+
+        // The requests are traced apart from the opportunity, since the rendering work it starts can request frames of
+        // its own, and that work can finish before the trace of the opportunity is taken.
+        internals.beginRenderingTrace();
+        let callbackCount = 0;
+        for (let i = 0; i < 20; ++i)
+            requestAnimationFrame(() => ++callbackCount);
+        const requests = internals.takeRenderingTrace();
+
+        internals.beginRenderingTrace();
+        internals.injectRenderingOpportunity(performance.now());
+        await nextTask();
+        const rendering = internals.takeRenderingTrace();
+        internals.setManualRenderingOpportunities(false);
+
+        println(`callbacks after one opportunity: ${callbackCount}`);
+        printRenderingSchedule("requests:", requests, /^(request|opportunity|update$)/);
+        printRenderingSchedule("rendering:", rendering, /^(opportunity|update$)/);
+        done();
+    });
+</script>

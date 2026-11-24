@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    .before { color: green; border: 1px solid currentColor }
+    .after { color: blue; border: 1px solid currentColor }
+</style>
+<div id="target" class="before"></div>
+<script>
+    test(() => {
+        internals.updateStyle();
+
+        target.className = "after";
+        internals.updateStyle();
+
+        println(`color: ${getComputedStyle(target).color}`);
+        println(`border color: ${getComputedStyle(target).borderTopColor}`);
+    });
+</script>

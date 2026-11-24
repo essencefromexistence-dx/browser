@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<style>
+body {
+    margin: 0;
+    width: 200px;
+    height: 200px;
+}
+
+#scrollable {
+    width: 150px;
+    height: 100px;
+    overflow-y: scroll;
+    pointer-events: none;
+}
+
+#content {
+    height: 1000px;
+}
+</style>
+<div id="scrollable">
+    <div id="content"></div>
+</div>
+<script src="../include.js"></script>
+<script>
+    promiseTest(async () => {
+        await animationFrame();
+        await animationFrame();
+
+        // Move over the scrollbar area, then click on it. With pointer-events: none,
+        // this should not crash and should not scroll.
+        await internals.mouseEventThroughUIProcess("mousemove", 147, 50);
+        await internals.mouseEventThroughUIProcess("mousedown", 147, 50);
+        await internals.mouseEventThroughUIProcess("mouseup", 147, 50);
+        await animationFrame();
+        println(`scrollTop after click on scrollbar: ${scrollable.scrollTop}`);
+
+        // Wheel events should also not scroll the element.
+        internals.wheel(75, 50, 0, 100);
+        println(`scrollTop after wheel: ${scrollable.scrollTop}`);
+    });
+</script>

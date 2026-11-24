@@ -1,0 +1,4 @@
+timers armed before navigation: [wakeup timer armed, observation timer armed]
+timers armed after navigation: []
+timers armed before destruction: [wakeup timer armed, observation timer armed]
+timers armed after destruction: []

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    .before { font-size: 16px; margin-left: 2em }
+    .after { font-size: 20px; margin-left: 2em }
+</style>
+<div id="target" class="before"></div>
+<script>
+    test(() => {
+        internals.updateStyle();
+
+        target.className = "after";
+        internals.updateStyle();
+
+        println(`font size: ${getComputedStyle(target).fontSize}`);
+        println(`font-relative margin: ${getComputedStyle(target).marginLeft}`);
+    });
+</script>

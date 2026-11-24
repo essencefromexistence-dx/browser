@@ -1,0 +1,125 @@
+<!doctype html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    .run,
+    .item {
+        display: inline-block;
+    }
+
+    .generated::before {
+        content: "before";
+        display: inline-block;
+    }
+
+    .generated::after {
+        content: "after";
+        display: inline-block;
+    }
+
+    .structural > .item:first-child {
+        display: block;
+    }
+</style>
+<div id="fixture"></div>
+<script>
+    const cases = [
+        {
+            name: "remove middle inline-block leaf",
+            markup: '<div class="run"><i class="before item"></i><i class="target item"></i><i class="after item"></i></div>',
+            mutate: run => run.querySelector(".target").remove(),
+            tracked: ["run", "before", "after"],
+            expectNoBuild: false,
+        },
+        {
+            name: "remove first inline-block leaf",
+            markup: '<div class="run"><i class="target item"></i><i class="after item"></i></div>',
+            mutate: run => run.querySelector(".target").remove(),
+            tracked: ["run", "after"],
+            expectNoBuild: false,
+        },
+        {
+            name: "remove last inline-block leaf",
+            markup: '<div class="run"><i class="before item"></i><i class="target item"></i></div>',
+            mutate: run => run.querySelector(".target").remove(),
+            tracked: ["run", "before"],
+            expectNoBuild: false,
+        },
+        {
+            name: "remove only inline-block child",
+            markup: '<div class="run"><i class="target item"></i></div>',
+            mutate: run => run.querySelector(".target").remove(),
+            tracked: ["run"],
+            expectNoBuild: false,
+        },
+        {
+            name: "remove inline-block subtree",
+            markup: '<div class="run"><i class="before item"></i><section class="target item"><b>child</b><em>child</em></section><i class="after item"></i></div>',
+            mutate: run => run.querySelector(".target").remove(),
+            tracked: ["run", "before", "after"],
+            expectNoBuild: false,
+        },
+        {
+            name: "remove inline-block with generated content",
+            markup: '<div class="run generated"><i class="before item"></i><i class="target item generated"></i><i class="after item"></i></div>',
+            mutate: run => run.querySelector(".target").remove(),
+            tracked: ["run", "before", "after"],
+            expectNoBuild: false,
+        },
+        {
+            name: "remove inline-block sibling run",
+            markup: '<div class="run"><i class="before item"></i><i class="target item"></i><i class="target item"></i><i class="target item"></i><i class="after item"></i></div>',
+            mutate: run => run.querySelectorAll(".target").forEach(node => node.remove()),
+            tracked: ["run", "before", "after"],
+            expectNoBuild: false,
+        },
+        {
+            name: "remove inline-block before structural display change",
+            markup: '<div class="run structural"><i class="target item"></i><i class="after item"></i></div>',
+            mutate: run => run.querySelector(".target").remove(),
+            tracked: [],
+            expectNoBuild: false,
+        },
+    ];
+
+    function describeLayoutTreeBuilds(work) {
+        if (!work.builds()) return "no layout tree build";
+        const builds = work.builds() > 1 ? ` in ${work.builds()} builds` : "";
+        if (work.rebuiltWholeTree()) return `rebuilt the whole tree${builds}`;
+        return `rebuilt [${work.rebuiltRoots().join(", ")}]${work.escaped() ? ", escaped" : ""}${builds}`;
+    }
+
+    test(() => {
+        const results = [];
+        for (const case_ of cases) {
+            fixture.innerHTML = case_.markup;
+            const run = fixture.firstElementChild;
+
+            const trackedNodes = case_.tracked.map(className => ({
+                label: className,
+                node: className === "run" ? run : run.querySelector(`.${className}`),
+            }));
+            for (const { label, node } of trackedNodes) node.id = `tracked-${label}`;
+
+            const work = layoutTreeBuildWork(() => case_.mutate(run), { tracked: trackedNodes.map(({ node }) => node) });
+            results.push({
+                name: case_.name,
+                transitions: trackedNodes.map(({ label }, index) => ({ label, transition: work.transitions()[index] })),
+                noBuild: work.builds() === 0,
+                builds: describeLayoutTreeBuilds(work),
+                expectNoBuild: case_.expectNoBuild,
+                matches: internals.compareLayoutTreeWithFullRebuild().matches,
+            });
+        }
+
+        for (const result of results) {
+            for (const { label, transition } of result.transitions)
+                println(`${transition === "PRESERVED" ? "PASS" : "FAIL"}: ${result.name} | ${label} ${transition}`);
+            if (result.expectNoBuild !== undefined) {
+                const expectationMatches = result.noBuild === result.expectNoBuild;
+                println(`${expectationMatches ? "PASS" : "FAIL"}: ${result.name} | ${result.builds}`);
+            }
+            println(`${result.matches ? "PASS" : "FAIL"}: ${result.name} | incremental tree matches full rebuild`);
+        }
+    });
+</script>

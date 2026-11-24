@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <style>
+        #box {
+            width: 200px;
+            height: 200px;
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+</body>
+<script src="../include.js"></script>
+<script>
+    // Reachable for the whole test: A ResizeObserver holds its targets weakly, so a collection could otherwise take the
+    // removed box, and the observer with it, before the callback that reports the removal.
+    let box = null;
+    let resizeObserver = null;
+
+    promiseTest(async () => {
+        box = document.getElementById("box");
+
+        let resolve = null;
+        function createResizeObserverPromise() {
+            return new Promise(r => {
+                resolve = r;
+            });
+        }
+
+        resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                const { width, height } = entry.contentRect;
+                println(`Size changed: ${width}px x ${height}px`);
+            }
+
+            if (resolve) resolve();
+        });
+
+        let observerCallbackInvocation = createResizeObserverPromise();
+        resizeObserver.observe(box);
+        await observerCallbackInvocation;
+
+        box.remove();
+
+        observerCallbackInvocation = createResizeObserverPromise();
+        await observerCallbackInvocation;
+    });
+</script>

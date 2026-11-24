@@ -1,0 +1,2 @@
+font status before removal: loading
+PASS (did not crash)

@@ -1,0 +1,9 @@
+Harness status: OK
+
+Found 4 tests
+
+4 Pass
+Pass	Property font-palette value 'normal'
+Pass	Property font-palette value 'light'
+Pass	Property font-palette value 'dark'
+Pass	Property font-palette value '--pitchfork'

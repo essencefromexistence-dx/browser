@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<style>
+    body {
+        margin: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #button {
+        position: relative;
+        width: 22px;
+        height: 24px;
+        margin-left: 758px;
+    }
+
+    #button::after {
+        content: "";
+        position: absolute;
+        left: 11px;
+        top: 12px;
+        width: 44px;
+        height: 44px;
+    }
+
+    #spacer {
+        height: 2000px;
+    }
+</style>
+<div id="button"></div>
+<div id="spacer"></div>
+<script>
+    promiseTest(async () => {
+        await animationFrame();
+        await animationFrame();
+        println(`document scroll width: ${document.documentElement.scrollWidth}`);
+        println(`horizontal wheel target: ${wheelTargetToString(internals.compositorWheelTargetAt(400, 12, 100, 0))}`);
+        println(`vertical wheel target: ${wheelTargetToString(internals.compositorWheelTargetAt(400, 12, 0, 100))}`);
+        internals.beginInputTrace();
+        await internals.wheelThroughUIProcess(400, 12, 100, 0);
+        printInputTrace(internals.takeInputTrace(), { stages: ["compositor"] });
+        println(`scroll x after horizontal wheel: ${window.scrollX}`);
+    });
+</script>

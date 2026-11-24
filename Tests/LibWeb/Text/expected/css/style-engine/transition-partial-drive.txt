@@ -1,0 +1,6 @@
+transitions started: true
+midpoint color: rgb(50, 50, 50)
+midpoint text-decoration-line: line-through
+running transition kept: true
+running color: rgb(50, 50, 50)
+uncompleted text-decoration-line: none

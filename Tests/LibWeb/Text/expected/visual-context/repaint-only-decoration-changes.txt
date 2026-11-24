@@ -1,0 +1,5 @@
+PASS: decorations painted (work + checks)
+PASS: border style (work)
+PASS: box shadow (work)
+PASS: outline (work)
+PASS: background blending and clip (work)

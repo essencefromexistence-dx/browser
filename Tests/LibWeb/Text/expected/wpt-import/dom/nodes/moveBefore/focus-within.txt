@@ -1,0 +1,10 @@
+Harness status: OK
+
+Found 5 tests
+
+5 Pass
+Pass	focus-within should be updated when reparenting focused element directly
+Pass	focus-within should be updated when reparenting an element that has focus within
+Pass	focus-within should remain the same when moving to the same parent
+Pass	:focus-within should be eventually up to date when moving to an inert subtree
+Pass	:focus-within should be eventually up to date when moving to a subtree that would become inert via style

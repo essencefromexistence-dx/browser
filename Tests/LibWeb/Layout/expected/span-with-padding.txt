@@ -1,0 +1,10 @@
+Viewport <#document> at [0,0] [0+0+0 800 0+0+0] [0+0+0 600 0+0+0] [BFC] children: not-inline
+  BlockContainer <html> at [0,0] [0+0+0 800 0+0+0] [0+0+0 34 0+0+0] [BFC] children: not-inline
+    BlockContainer <body> at [8,8] [8+0+0 784 0+0+8] [8+0+0 18 0+0+8] children: inline
+      InlineNode <span> at [111,8] [0+3+100 42.28125 50+3+0] [0+3+25 18 75+3+0]
+        frag 0 from TextNode start: 0, length: 4, rect: [111,8 42.28125x18] baseline: 14
+            "Text"
+        TextNode <#text> (not painted)
+
+SC for Viewport<#document> [0,0 800x600] (z-index: auto)
+ SC for BlockContainer<HTML> [0,0 800x34] (z-index: auto)

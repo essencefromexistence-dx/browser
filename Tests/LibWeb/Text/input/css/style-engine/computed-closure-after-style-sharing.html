@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<style>
+    .changed { background-color: blue }
+</style>
+<span id="first"></span>
+<span id="second"></span>
+<script>
+    test(() => {
+        internals.updateStyle();
+
+        const records = internals.dumpStyleRecords(document.body).split("\n").filter(line => line.includes("span#")).join("\n");
+        const work = styleWork(() => (second.className = "changed"));
+
+        println(`initial records:\n${records}`);
+        println(`restyled: [${work.restyled().map(shortStyleName).join(", ")}]`);
+        println(`first background: ${getComputedStyle(first).backgroundColor}`);
+        println(`second background: ${getComputedStyle(second).backgroundColor}`);
+    });
+</script>

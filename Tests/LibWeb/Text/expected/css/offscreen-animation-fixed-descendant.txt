@@ -1,0 +1,3 @@
+compositor animations:
+frame requests: [animation frame pump request]
+fixed descendant is intersecting: true

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    #container {
+        container-type: size;
+        width: 100px;
+        height: 20px;
+    }
+    #target { color: black }
+    #ordinary.changed { color: green }
+    @container (min-width: 200px) {
+        #target { color: green }
+    }
+</style>
+<div id="container"><div id="target"></div></div>
+<div id="ordinary"></div>
+<script>
+    function printStabilization(title) {
+        println(title);
+        for (const line of internals.takeRenderingTrace().split("\n")) {
+            if (/^(style stabilization|provisional style pass)/.test(line))
+                println(`  ${line}`);
+        }
+    }
+
+    test(() => {
+        target.getBoundingClientRect();
+
+        internals.beginRenderingTrace();
+        ordinary.className = "changed";
+        internals.updateStyle();
+        printStabilization("feedback-free change:");
+
+        internals.beginRenderingTrace();
+        container.style.width = "300px";
+        target.getBoundingClientRect();
+        printStabilization("change with container query feedback:");
+        println(`stable query result: ${getComputedStyle(target).color}`);
+    });
+</script>

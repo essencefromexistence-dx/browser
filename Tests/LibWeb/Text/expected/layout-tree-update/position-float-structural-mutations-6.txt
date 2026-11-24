@@ -1,0 +1,77 @@
+PASS: remove all siblings forwards, float-left inline-flex siblings in none
+PASS: move sibling run across parents, relative-float-left table-cell siblings in none
+PASS: remove middle sibling run, float-left flex siblings in contents
+PASS: move node to end, relative-float-left table-row siblings in contents
+PASS: remove subtree, float-left inline list-item siblings in block
+PASS: replace sibling run, relative-float-left table-footer-group siblings in block
+PASS: clear with innerHTML, float-left table-row siblings in inline
+PASS: remove all siblings forwards, relative-float-left table-header-group siblings in inline
+PASS: move sibling run across parents, float-left table-footer-group siblings in flow-root
+PASS: remove middle sibling run, relative-float-left table-row-group siblings in flow-root
+PASS: move node to end, float-left table-header-group siblings in inline-block
+PASS: remove subtree, relative-float-left -webkit-inline-box siblings in inline-block
+PASS: replace sibling run, float-left table-row-group siblings in run-in
+PASS: clear with innerHTML, relative-float-left block flex siblings in run-in
+PASS: remove all siblings forwards, float-left -webkit-inline-box siblings in list-item
+PASS: move sibling run across parents, relative-float-left inline flow-root siblings in list-item
+PASS: remove middle sibling run, float-left -webkit-box siblings in inline list-item
+PASS: move node to end, relative-float-left block flow-root siblings in inline list-item
+PASS: remove subtree, float-left math siblings in flex
+PASS: replace sibling run, relative-float-left inline flow siblings in flex
+PASS: clear with innerHTML, float-left block flow-root siblings in inline-flex
+PASS: remove all siblings forwards, relative-float-left block flow siblings in inline-flex
+PASS: move sibling run across parents, float-left inline flow siblings in grid
+PASS: remove middle sibling run, relative-float-left table-caption siblings in grid
+PASS: move node to end, float-left block flow siblings in inline-grid
+PASS: remove subtree, relative-float-left table-column siblings in inline-grid
+PASS: replace sibling run, float-left table-caption siblings in table
+PASS: clear with innerHTML, relative-float-left inline flow list-item siblings in table
+PASS: remove all siblings forwards, float-left table-column siblings in inline-table
+PASS: move sibling run across parents, relative-float-left block flow list-item siblings in inline-table
+PASS: remove middle sibling run, float-left table-column-group siblings in math
+PASS: move node to end, relative-float-left inline table siblings in math
+PASS: remove subtree, float-left table-cell siblings in -webkit-box
+PASS: replace sibling run, relative-float-left block table siblings in -webkit-box
+PASS: clear with innerHTML, float-left inline table siblings in -webkit-inline-box
+PASS: remove all siblings forwards, relative-float-left inline grid siblings in -webkit-inline-box
+PASS: move sibling run across parents, float-left block table siblings in table-row-group
+PASS: remove middle sibling run, relative-float-left block grid siblings in table-row-group
+PASS: move node to end, float-left inline grid siblings in table-header-group
+PASS: remove subtree, relative-float-left inline flex siblings in table-header-group
+PASS: replace sibling run, float-left block grid siblings in table-footer-group
+PASS: clear with innerHTML, relative-float-left run-in siblings in table-footer-group
+PASS: remove all siblings forwards, float-left inline flex siblings in table-row
+PASS: move sibling run across parents, relative-float-left inline-block siblings in table-row
+PASS: remove middle sibling run, float-left block flex siblings in table-cell
+PASS: move node to end, relative-float-left flow-root siblings in table-cell
+PASS: remove subtree, float-left inline flow-root siblings in table-column-group
+PASS: replace sibling run, relative-float-left inline siblings in table-column-group
+PASS: clear with innerHTML, float-left flow-root siblings in table-column
+PASS: remove all siblings forwards, relative-float-left block siblings in table-column
+PASS: move sibling run across parents, float-left inline siblings in table-caption
+PASS: remove middle sibling run, relative-float-left contents siblings in table-caption
+PASS: move node to end, float-left block siblings in block flow
+PASS: remove subtree, relative-float-left none siblings in block flow
+PASS: replace sibling run, float-left contents siblings in inline flow
+PASS: clear with innerHTML, relative-float-left table siblings in inline flow
+PASS: remove all siblings forwards, float-left none siblings in block flow-root
+PASS: move sibling run across parents, relative-float-left inline-grid siblings in block flow-root
+PASS: remove middle sibling run, float-left inline flow list-item siblings in inline flow-root
+PASS: move node to end, relative-float-left grid siblings in inline flow-root
+PASS: remove subtree, float-left block flow list-item siblings in block flex
+PASS: replace sibling run, relative-float-left inline-flex siblings in block flex
+PASS: clear with innerHTML, float-left grid siblings in inline flex
+PASS: remove all siblings forwards, relative-float-left flex siblings in inline flex
+PASS: move sibling run across parents, float-left inline-flex siblings in block grid
+PASS: remove middle sibling run, relative-float-left inline list-item siblings in block grid
+PASS: move node to end, float-left flex siblings in inline grid
+PASS: remove subtree, relative-float-left list-item siblings in inline grid
+PASS: replace sibling run, float-left inline list-item siblings in block table
+PASS: clear with innerHTML, relative-float-left table-footer-group siblings in block table
+PASS: remove all siblings forwards, float-left list-item siblings in inline table
+PASS: move sibling run across parents, relative-float-left table-header-group siblings in inline table
+PASS: remove middle sibling run, float-left run-in siblings in block flow list-item
+PASS: move node to end, relative-float-left table-row-group siblings in block flow list-item
+PASS: remove subtree, float-left inline-block siblings in inline flow list-item
+PASS: replace sibling run, relative-float-left -webkit-inline-box siblings in inline flow list-item
+76 cases; 76 matched; 0 mismatched

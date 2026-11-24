@@ -1,0 +1,5 @@
+initial target color: rgb(0, 0, 0)
+initial read restyled: [target]
+dynamic target color: rgb(0, 128, 0)
+dynamic read restyled: [container, target]
+dynamic read restyled without change: []

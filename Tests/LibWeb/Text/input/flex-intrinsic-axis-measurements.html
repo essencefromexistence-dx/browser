@@ -1,0 +1,29 @@
+<!doctype html>
+<script src="include.js"></script>
+<script src="work-test.js"></script>
+<style>
+    #outer {
+        display: flex;
+        width: 100px;
+    }
+
+    #inner {
+        display: flex;
+    }
+
+    #item {
+        width: 100%;
+        overflow-wrap: break-word;
+    }
+</style>
+<template id="fixture">
+    <div id="outer"><div id="inner"><div id="item">AAAAAAAAAAAAAAAAAAAAAAAAAAAA</div></div></div>
+</template>
+<script>
+    test(() => {
+        const work = layoutWork(() => document.body.appendChild(document.getElementById("fixture").content.cloneNode(true)));
+        // Each measurement is of the axis the flex layout uses; none is computed only to be discarded.
+        for (const event of work.events.filter(event => event.event === "measure" && event.cache === "miss"))
+            println(`measured ${event.box} ${event.size}`);
+    });
+</script>

@@ -1,0 +1,6 @@
+PASS: anchored box (work + checks)
+PASS: unrelated transform added (work)
+PASS: unrelated opacity added (work)
+PASS: anchor scroller scrolled (work + checks)
+PASS: anchor resized (work + checks)
+PASS: anchor scroller removed (work + checks)

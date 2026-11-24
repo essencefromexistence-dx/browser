@@ -1,0 +1,1 @@
+PASS: every one of them starts a transition afterwards: true

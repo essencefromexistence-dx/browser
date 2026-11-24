@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #containing-block { transform: translateX(0); width: 200px; height: 100px; }
+    #clipped { overflow: hidden; width: 40px; height: 40px; }
+    #layer { width: 80px; height: 60px; }
+    #child { left: 60px; top: 0; width: 20px; height: 20px; background: green; }
+</style>
+<div id="containing-block"><div id="clipped"><div id="layer"><div id="child"></div></div></div></div>
+<script>
+    const valueUpdate = `
+        update DIRTY-PATH
+          div#layer effects UPDATED
+    `;
+    // NB: A child that escapes the clip, or stops escaping it, leaves the box of #layer and its effects in place.
+    const escapeChange = `
+        update DIRTY-PATH
+          div#clipped scroll UPDATED
+          recording NEEDED
+    `;
+    const step = (name, mutate, expect, check) => ({
+        name,
+        mutate,
+        check: equal => {
+            const ownedNodes = internals.dumpVisualContextNodes(layer).replace(/^\[e\d+\] /gm, "");
+            equal(ownedNodes, `effects=[opacity=${layer.style.opacity}]\n`, "nodes of #layer");
+            check?.(equal);
+        },
+        expect,
+    });
+    visualContextTest({
+        setup: async () => {
+            internals.forceIncompatibleVisualContextTreeRebuild();
+            // A rendering update can commit a recording before it resolves the fonts, so wait for them first: A recording
+            // still in flight as the steps begin would free a released slot when a step takes it in.
+            await document.fonts.ready;
+            while (internals.frameSchedulerState() !== "idle")
+                await new Promise(resolve => setTimeout(resolve, 0));
+        },
+        steps: [
+            step("new clipped effect", () => { layer.style.opacity = "0.5"; }, `
+                update DIRTY-PATH
+                  div#layer effects ALLOCATED
+                  recording NEEDED
+            `),
+            step("clipped opacity update", () => { layer.style.opacity = "0.6"; }, valueUpdate),
+            step("repeated clipped opacity update", () => { layer.style.opacity = "0.7"; }, valueUpdate),
+            step("absolute escape", () => { child.style.position = "absolute"; }, escapeChange,
+                equal => equal(document.elementFromPoint(65, 5), child, "absolute child escapes")),
+            step("escaped opacity update", () => { layer.style.opacity = "0.8"; }, valueUpdate),
+            step("absolute escape removed", () => { child.style.position = "static"; }, escapeChange),
+            step("fixed escape", () => { child.style.position = "fixed"; }, escapeChange,
+                equal => equal(document.elementFromPoint(65, 5), child, "fixed child escapes")),
+            step("fixed escape removed", () => { child.style.position = "static"; }, escapeChange),
+            step("clipped opacity update after escapes", () => { layer.style.opacity = "0.9"; }, valueUpdate),
+        ],
+    });
+</script>

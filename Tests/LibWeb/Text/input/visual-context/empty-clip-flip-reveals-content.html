@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #clip { overflow: hidden; width: 50px; height: 0; }
+    #child { width: 50px; height: 50px; }
+</style>
+<div id="clip"><div id="child"></div></div>
+<script>
+    const hit = () => document.elementFromPoint(25, 25);
+    visualContextTest({
+        setup: async () => {
+            internals.forceIncompatibleVisualContextTreeRebuild();
+            while (internals.frameSchedulerState() !== "idle")
+                await new Promise(resolve => setTimeout(resolve, 0));
+        },
+        steps: [
+            {
+                name: "clipped away",
+                check: equal => equal(hit().tagName, "HTML", "hit"),
+                expect: ``,
+            },
+            {
+                name: "the clip opens",
+                mutate: () => { clip.style.height = "50px"; },
+                check: equal => equal(hit().id, "child", "hit"),
+                expect: `
+                    update DIRTY-PATH
+                      div#clip clip UPDATED
+                      div#clip scroll RELEASED
+                      epoch NEW
+                      recording NEEDED
+                `,
+            },
+            {
+                name: "the clip closes again",
+                mutate: () => { clip.style.height = "0"; },
+                check: equal => equal(hit().tagName, "HTML", "hit"),
+                expect: `
+                    update DIRTY-PATH
+                      div#clip clip UPDATED
+                      div#clip scroll ALLOCATED
+                      recording NEEDED
+                `,
+            },
+        ],
+    });
+</script>

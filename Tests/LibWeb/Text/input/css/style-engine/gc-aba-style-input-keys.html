@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    .target {
+        color: rgb(255, 0, 0);
+    }
+</style>
+<div id="target" class="target">target</div>
+<script>
+    test(() => {
+        const target = document.getElementById("target");
+        const sheet = document.styleSheets[0];
+        internals.updateStyle();
+        println(`initial: ${getComputedStyle(target).color}`);
+
+        const environmentChanges = () => `[${internals.takeRenderingTrace().split("\n").filter(line => line.startsWith("style environment changed")).join(", ")}]`;
+        internals.beginRenderingTrace();
+        sheet.deleteRule(0);
+        println(`deletion environment changes: ${environmentChanges()}`);
+
+        internals.gc();
+        internals.beginRenderingTrace();
+        sheet.insertRule(".target { color: rgb(0, 0, 255) }", 0);
+        println(`insertion environment changes: ${environmentChanges()}`);
+
+        internals.updateStyle();
+        println(`replacement: ${getComputedStyle(target).color}`);
+    });
+</script>

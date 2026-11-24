@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #outer { width: 100px; height: 100px; overflow: hidden; }
+    #spacer { height: 20px; }
+    #reused { display: flow-root; width: 50px; height: 50px; }
+    #overflow { width: 250px; height: 180px; }
+    #nested { width: 80px; height: 60px; overflow: hidden; }
+    #content { width: 300px; height: 240px; }
+</style>
+<div id="outer">
+    <div id="spacer"></div>
+    <div id="reused"><div id="overflow"></div></div>
+    <div id="nested"><div id="content"></div></div>
+</div>
+<script>
+    test(() => {
+        const outer = document.getElementById("outer");
+        const spacer = document.getElementById("spacer");
+        const nested = document.getElementById("nested");
+        const content = document.getElementById("content");
+        const lines = [];
+        const snapshot = label => {
+            lines.push(`${label}: outer=${outer.scrollWidth}x${outer.scrollHeight}, nested=${nested.scrollWidth}x${nested.scrollHeight}`);
+        };
+        const step = (label, mutate) => {
+            const work = layoutWork(() => {
+                mutate();
+                snapshot(label);
+            });
+            lines.push(`  layout: ${work.passes().join(" | ") || "(no layout)"}`);
+        };
+        snapshot("initial");
+        step("move cached subtree", () => { spacer.style.height = "120px"; });
+        step("move cached subtree back", () => { spacer.style.height = "10px"; });
+        step("shrink behind clipping boundary", () => {
+            nested.scrollTop = 1000;
+            nested.scrollLeft = 1000;
+            content.style.width = "120px";
+            content.style.height = "90px";
+            document.body.getBoundingClientRect();
+            lines.push(`clamped offsets: ${nested.scrollLeft},${nested.scrollTop}`);
+        });
+        step("remove overflow", () => { content.remove(); });
+        step("restore overflow", () => { nested.appendChild(content); });
+        const reused = document.getElementById("reused");
+        step("clip unchanged geometry", () => { reused.style.overflow = "hidden"; });
+        step("restore visible overflow", () => { reused.style.overflow = "visible"; });
+        for (const line of lines)
+            println(line);
+    });
+</script>

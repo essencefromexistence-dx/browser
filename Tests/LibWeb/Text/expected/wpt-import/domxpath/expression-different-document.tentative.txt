@@ -1,0 +1,13 @@
+Harness status: OK
+
+Found 8 tests
+
+8 Pass
+Pass	expression from XML document, context node in XML document, no namespace resolver
+Pass	expression from HTML document, context node in HTML document, no namespace resolver
+Pass	expression from XML document, context node in HTML document, no namespace resolver
+Pass	expression from HTML document, context node in XML document, no namespace resolver
+Pass	expression from XML document, context node in XML document, with namespace resolver
+Pass	expression from HTML document, context node in HTML document, with namespace resolver
+Pass	expression from XML document, context node in HTML document, with namespace resolver
+Pass	expression from HTML document, context node in XML document, with namespace resolver

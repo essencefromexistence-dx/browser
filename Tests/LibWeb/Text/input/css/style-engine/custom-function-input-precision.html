@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<style id="definitions">@function --size() { result: 10px; }</style>
+<style>#target { width: --size(); }</style>
+<div id="container" style="width: 100px"><div id="target"></div></div>
+<script>
+    test(() => {
+        for (let index = 0; index < 64; ++index)
+            container.appendChild(document.createElement("div"));
+        internals.updateStyle();
+        println(`initial width: ${getComputedStyle(target).width}`);
+        const sheet = definitions.sheet;
+
+        internals.updateStyle();
+
+        // Each change stays selective: only the element calling the custom function restyles.
+        function change(label, callback) {
+            const work = styleWork(callback);
+            const fullPass = work.passes().includes("FULL") ? " (full pass)" : "";
+            println(`${label} width: ${getComputedStyle(target).width}`);
+            println(`${label} restyled: [${work.restyled().map(shortStyleName).join(", ")}]${fullPass}`);
+        }
+
+        change("delete", () => sheet.deleteRule(0));
+        change("restore", () => sheet.insertRule("@function --size() { result: 30px; }"));
+        change("grouped replacement", () => {
+            sheet.deleteRule(0);
+            sheet.insertRule("@media all { @function --size() { result: 40px; } }");
+        });
+        change("remove grouped definition", () => sheet.deleteRule(0));
+        change("unused definition", () => sheet.insertRule("@function --unused() { result: 50px; }"));
+        change("mixed broad rule", () => {
+            sheet.insertRule("@function --size() { result: 60px; }");
+            sheet.insertRule(":not(*) { color: red; }");
+        });
+    });
+</script>

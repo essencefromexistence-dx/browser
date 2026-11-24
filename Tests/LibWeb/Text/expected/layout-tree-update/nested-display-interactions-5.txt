@@ -1,0 +1,41 @@
+PASS: nested displays flow-root > block grid
+PASS: nested displays flow-root > inline grid
+PASS: nested displays flow-root > block table
+PASS: nested displays flow-root > inline table
+PASS: nested displays flow-root > block flow list-item
+PASS: nested displays flow-root > inline flow list-item
+PASS: nested displays flow-root > none
+PASS: nested displays flow-root > contents
+PASS: nested displays inline-grid > table-footer-group
+PASS: nested displays inline-grid > table-row
+PASS: nested displays inline-grid > table-cell
+PASS: nested displays inline-grid > table-column-group
+PASS: nested displays inline-grid > table-column
+PASS: nested displays inline-grid > table-caption
+PASS: nested displays inline-grid > block flow
+PASS: nested displays inline-grid > inline flow
+PASS: nested displays table-footer-group > inline list-item
+PASS: nested displays table-footer-group > flex
+PASS: nested displays table-footer-group > inline-flex
+PASS: nested displays table-footer-group > grid
+PASS: nested displays table-footer-group > inline-grid
+PASS: nested displays table-footer-group > table
+PASS: nested displays table-footer-group > inline-table
+PASS: nested displays table-footer-group > math
+PASS: nested displays block flow-root > block table
+PASS: nested displays block flow-root > inline table
+PASS: nested displays block flow-root > block flow list-item
+PASS: nested displays block flow-root > inline flow list-item
+PASS: nested displays block flow-root > none
+PASS: nested displays block flow-root > contents
+PASS: nested displays block flow-root > block
+PASS: nested displays block flow-root > inline
+PASS: nested displays block flow list-item > table-cell
+PASS: nested displays block flow list-item > table-column-group
+PASS: nested displays block flow list-item > table-column
+PASS: nested displays block flow list-item > table-caption
+PASS: nested displays block flow list-item > block flow
+PASS: nested displays block flow list-item > inline flow
+PASS: nested displays block flow list-item > block flow-root
+PASS: nested displays block flow list-item > inline flow-root
+40 cases; 40 matched; 0 mismatched

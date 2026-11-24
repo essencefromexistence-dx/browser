@@ -1,0 +1,10 @@
+$ab3d76f3
+  Registers: 6
+  Blocks:    1
+  Constants:
+    [0] = Undefined
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] End value:reg5

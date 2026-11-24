@@ -1,0 +1,44 @@
+<!doctype html>
+<script src="../include.js"></script>
+<div class="使用中" style="width: 10px; height: 10px"></div>
+<script>
+const token = crypto.randomUUID();
+const paths = ["discarded", "initial", "inserted", "replaced"].map(name => `/echo/native-sheet-image-${token}-${name}.png`);
+for (const path of paths) {
+    const request = new XMLHttpRequest();
+    request.open("POST", "/echo", false);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify({
+        method: "GET",
+        path,
+        status: 200,
+        headers: { "Content-Type": "image/png", "Cache-Control": "no-store" },
+        body_encoding: "base64",
+        body: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+    }));
+}
+
+const source = path => `@media all { .使用中 { background-image: url("${path}"); } }`;
+const sheet = new CSSStyleSheet({ disabled: true });
+sheet.replaceSync(source(paths[0]));
+document.adoptedStyleSheets = [sheet];
+sheet.replaceSync(source(paths[1]));
+sheet.disabled = false;
+sheet.cssRules[0].insertRule(`.使用中 { background-image: url("${paths[2]}"); }`, 1);
+sheet.disabled = true;
+sheet.disabled = false;
+sheet.replaceSync(source(paths[3]));
+sheet.disabled = true;
+sheet.disabled = false;
+
+asyncTest(done => {
+    window.addEventListener("load", async () => {
+        // Only the image the element has when it's laid out is requested, whatever the rule list held before.
+        for (const [index, path] of paths.entries()) {
+            const response = await fetch(`/recorded-request-headers${path}`);
+            println(`${["discarded", "initial", "inserted", "replaced"][index]} requested: ${response.ok}`);
+        }
+        done();
+    });
+});
+</script>

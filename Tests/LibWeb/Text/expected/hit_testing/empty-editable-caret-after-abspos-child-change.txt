@@ -1,0 +1,10 @@
+empty editor, cached: editor @0
+empty editor, quiet: editor @0
+empty editor, fresh: editor @0
+child is non-editable: true
+after insertion, cached: child @0
+after insertion, quiet: child @0
+after insertion, fresh: child @0
+after removal, cached: editor @0
+after removal, quiet: editor @0
+after removal, fresh: editor @0

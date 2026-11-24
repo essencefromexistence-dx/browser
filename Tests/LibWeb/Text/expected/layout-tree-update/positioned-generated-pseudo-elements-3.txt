@@ -1,0 +1,77 @@
+PASS: ::before change mode static -> relative block on none
+PASS: ::after change mode relative -> absolute inline on none
+PASS: ::before change mode relative -> absolute flow-root on contents
+PASS: ::after change mode absolute -> fixed inline-block on contents
+PASS: ::before change mode absolute -> fixed run-in on block
+PASS: ::after change mode fixed -> sticky list-item on block
+PASS: ::before change mode fixed -> sticky inline list-item on inline
+PASS: ::after change mode sticky -> float-left flex on inline
+PASS: ::before change mode sticky -> float-left inline-flex on flow-root
+PASS: ::after change mode float-left -> float-left-clear-both grid on flow-root
+PASS: ::before change mode float-left -> float-left-clear-both inline-grid on inline-block
+PASS: ::after change mode float-left-clear-both -> float-right table on inline-block
+PASS: ::before change mode float-left-clear-both -> float-right inline-table on run-in
+PASS: ::after change mode float-right -> float-right-clear-both math on run-in
+PASS: ::before change mode float-right -> float-right-clear-both -webkit-box on list-item
+PASS: ::after change mode float-right-clear-both -> float-inline-start -webkit-inline-box on list-item
+PASS: ::before change mode float-right-clear-both -> float-inline-start table-row-group on inline list-item
+PASS: ::after change mode float-inline-start -> float-inline-end table-header-group on inline list-item
+PASS: ::before change mode float-inline-start -> float-inline-end table-footer-group on flex
+PASS: ::after change mode float-inline-end -> relative-float-left table-row on flex
+PASS: ::before change mode float-inline-end -> relative-float-left table-cell on inline-flex
+PASS: ::after change mode relative-float-left -> static table-column-group on inline-flex
+PASS: ::before change mode relative-float-left -> static table-column on grid
+PASS: ::after change mode static -> relative table on grid
+PASS: ::before change mode static -> relative inline-table on inline-grid
+PASS: ::after change mode relative -> absolute math on inline-grid
+PASS: ::before change mode relative -> absolute -webkit-box on table
+PASS: ::after change mode absolute -> fixed -webkit-inline-box on table
+PASS: ::before change mode absolute -> fixed table-row-group on inline-table
+PASS: ::after change mode fixed -> sticky table-header-group on inline-table
+PASS: ::before change mode fixed -> sticky table-footer-group on math
+PASS: ::after change mode sticky -> float-left table-row on math
+PASS: ::before change mode sticky -> float-left table-cell on -webkit-box
+PASS: ::after change mode float-left -> float-left-clear-both table-column-group on -webkit-box
+PASS: ::before change mode float-left -> float-left-clear-both table-column on -webkit-inline-box
+PASS: ::after change mode float-left-clear-both -> float-right table-caption on -webkit-inline-box
+PASS: ::before change mode float-left-clear-both -> float-right block flow on table-row-group
+PASS: ::after change mode float-right -> float-right-clear-both inline flow on table-row-group
+PASS: ::before change mode float-right -> float-right-clear-both block flow-root on table-header-group
+PASS: ::after change mode float-right-clear-both -> float-inline-start inline flow-root on table-header-group
+PASS: ::before change mode float-right-clear-both -> float-inline-start block flex on table-footer-group
+PASS: ::after change mode float-inline-start -> float-inline-end inline flex on table-footer-group
+PASS: ::before change mode float-inline-start -> float-inline-end block grid on table-row
+PASS: ::after change mode float-inline-end -> relative-float-left inline grid on table-row
+PASS: ::before change mode float-inline-end -> relative-float-left block table on table-cell
+PASS: ::after change mode relative-float-left -> static inline table on table-cell
+PASS: ::before change mode relative-float-left -> static block flow list-item on table-column-group
+PASS: ::after change mode static -> relative table-caption on table-column-group
+PASS: ::before change mode static -> relative block flow on table-column
+PASS: ::after change mode relative -> absolute inline flow on table-column
+PASS: ::before change mode relative -> absolute block flow-root on table-caption
+PASS: ::after change mode absolute -> fixed inline flow-root on table-caption
+PASS: ::before change mode absolute -> fixed block flex on block flow
+PASS: ::after change mode fixed -> sticky inline flex on block flow
+PASS: ::before change mode fixed -> sticky block grid on inline flow
+PASS: ::after change mode sticky -> float-left inline grid on inline flow
+PASS: ::before change mode sticky -> float-left block table on block flow-root
+PASS: ::after change mode float-left -> float-left-clear-both inline table on block flow-root
+PASS: ::before change mode float-left -> float-left-clear-both block flow list-item on inline flow-root
+PASS: ::after change mode float-left-clear-both -> float-right inline flow list-item on inline flow-root
+PASS: ::before change mode float-left-clear-both -> float-right none on block flex
+PASS: ::after change mode float-right -> float-right-clear-both contents on block flex
+PASS: ::before change mode float-right -> float-right-clear-both block on inline flex
+PASS: ::after change mode float-right-clear-both -> float-inline-start inline on inline flex
+PASS: ::before change mode float-right-clear-both -> float-inline-start flow-root on block grid
+PASS: ::after change mode float-inline-start -> float-inline-end inline-block on block grid
+PASS: ::before change mode float-inline-start -> float-inline-end run-in on inline grid
+PASS: ::after change mode float-inline-end -> relative-float-left list-item on inline grid
+PASS: ::before change mode float-inline-end -> relative-float-left inline list-item on block table
+PASS: ::after change mode relative-float-left -> static flex on block table
+PASS: ::before change mode relative-float-left -> static inline-flex on inline table
+PASS: ::after change mode static -> relative inline flow list-item on inline table
+PASS: ::before change mode static -> relative none on block flow list-item
+PASS: ::after change mode relative -> absolute contents on block flow list-item
+PASS: ::before change mode relative -> absolute block on inline flow list-item
+PASS: ::after change mode absolute -> fixed inline on inline flow list-item
+76 cases; 76 matched; 0 mismatched

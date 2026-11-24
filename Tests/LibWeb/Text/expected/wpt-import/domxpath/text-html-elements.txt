@@ -1,0 +1,16 @@
+Harness status: OK
+
+Found 11 tests
+
+11 Pass
+Pass	HTML elements no namespace prefix
+Pass	HTML elements namespace prefix
+Pass	HTML elements mixed use of prefix
+Pass	SVG elements no namespace prefix
+Pass	SVG elements namespace prefix
+Pass	HTML elements mixed case
+Pass	SVG elements mixed case selector
+Pass	Non-ascii HTML element
+Pass	Non-ascii HTML element2
+Pass	Non-ascii HTML element3
+Pass	Throw with invalid prefix

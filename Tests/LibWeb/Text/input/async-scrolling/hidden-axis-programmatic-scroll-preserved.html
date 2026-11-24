@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<style>
+    body {
+        margin: 0;
+    }
+
+    #scroller {
+        width: 100px;
+        height: 100px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    #spacer {
+        width: 300px;
+        height: 300px;
+    }
+</style>
+<div id="scroller"><div id="spacer"></div></div>
+<script>
+    promiseTest(async () => {
+        await scrollSettled(scroller, () => {
+            scroller.scrollLeft = 50;
+            scroller.scrollTop = 0;
+        });
+        println(`initial scrollLeft: ${scroller.scrollLeft}`);
+        println(`vertical wheel target: ${wheelTargetToString(internals.compositorWheelTargetAt(50, 50, 0, 100))}`);
+        println(`horizontal wheel target: ${wheelTargetToString(internals.compositorWheelTargetAt(50, 50, 100, 0))}`);
+        internals.beginInputTrace();
+        await scrollSettled(scroller, () => internals.wheelThroughUIProcess(50, 50, 0, 100));
+        printInputTrace(internals.takeInputTrace(), { stages: ["compositor"] });
+        println(`final scrollLeft: ${scroller.scrollLeft}`);
+        println(`final scrollTop: ${scroller.scrollTop}`);
+    });
+</script>

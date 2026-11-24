@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    #container > span {
+        font-family: "WeightSpecific", serif;
+    }
+
+    .regular {
+        font-weight: 400;
+    }
+
+    .bold {
+        font-weight: 700;
+    }
+</style>
+<div id="container"></div>
+<script>
+    promiseTest(async () => {
+        const boldFace = new FontFace("WeightSpecific", 'url("../../../Assets/HashSans.woff")', { weight: "700" });
+        document.fonts.add(boldFace);
+        await boldFace.load();
+
+        const container = document.getElementById("container");
+        container.appendChild(document.createElement("span")).className = "regular";
+        for (let index = 0; index < 100; ++index)
+            container.appendChild(document.createElement("span")).className = "bold";
+        internals.updateStyle();
+
+        internals.beginStyleTrace();
+        const regularFace = new FontFace("WeightSpecific", 'url("../../../Assets/HashSansNoSpace.woff")', { weight: "400" });
+        document.fonts.add(regularFace);
+        await regularFace.load();
+        internals.updateStyle();
+
+        // Only the span with the regular weight selects the new face, so it is the only one of the
+        // 101 spans that has to be restyled.
+        const restyled = [...new Set(parseStyleTrace(internals.takeStyleTrace(), { stylePassesOnly: true })
+            .filter(event => event.event === "restyle" && event.outcome !== "kept")
+            .map(event => shortStyleName(event.element)))];
+        println(`restyled: [${restyled.join(", ")}]`);
+        println(`regular face loaded: ${regularFace.status}`);
+    });
+</script>

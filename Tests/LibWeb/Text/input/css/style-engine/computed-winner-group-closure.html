@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    .before { color: green; opacity: 1 }
+    .after { color: green; opacity: 0.5 }
+    .leaves { color: green; opacity: 0.75; transform: translateX(10px); background-color: blue }
+    .broad { color: green; opacity: 0.5; margin-inline-start: 20px }
+</style>
+<div id="target" class="before"></div>
+<script>
+    test(() => {
+        internals.updateStyle();
+
+        target.className = "after";
+        internals.updateStyle();
+
+        println(`changed value: ${getComputedStyle(target).opacity}`);
+        println(`unchanged value: ${getComputedStyle(target).color}`);
+
+        target.className = "leaves";
+        internals.updateStyle();
+        println(`independent leaf opacity: ${getComputedStyle(target).opacity}`);
+        println(`independent leaf background: ${getComputedStyle(target).backgroundColor}`);
+
+        target.className = "broad";
+        internals.updateStyle();
+        println(`logical value: ${getComputedStyle(target).marginInlineStart}`);
+    });
+</script>

@@ -1,0 +1,5 @@
+passes: PARTIAL
+restyled: [target]
+changed: [target]
+style work is the same at every document size: true
+largest document elements: 4097

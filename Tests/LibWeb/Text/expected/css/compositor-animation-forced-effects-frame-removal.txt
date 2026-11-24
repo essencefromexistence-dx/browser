@@ -1,0 +1,5 @@
+stale animation creates an effects frame: true
+stale effects frame is removed: true
+compositor animations after the rebuild:
+  background-color div#target.box
+  wakeup timer armed

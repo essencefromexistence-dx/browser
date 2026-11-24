@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<style>
+body {
+    margin: 0;
+}
+
+#scrollable {
+    width: 100px;
+    height: 100px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+#content {
+    width: 1000px;
+    height: 80px;
+}
+</style>
+<div id="scrollable">
+    <div id="content"></div>
+</div>
+<script src="../include.js"></script>
+<script>
+    promiseTest(async () => {
+        await animationFrame();
+        await animationFrame();
+
+        // The scrollbar goes away while it is dragged.
+        scrollable.addEventListener("pointerdown", () => {
+            scrollable.style.overflowX = "hidden";
+        }, { once: true });
+
+        await internals.mouseEventThroughUIProcess("mousedown", 50, 97);
+        await animationFrame();
+        await internals.mouseEventThroughUIProcess("mousemove", 80, 97, { buttons: 1 });
+        await internals.mouseEventThroughUIProcess("mouseup", 80, 97);
+
+        // The scroller goes away while its scrollbar is dragged.
+        scrollable.style.overflowX = "scroll";
+        await animationFrame();
+        await animationFrame();
+        await internals.mouseEventThroughUIProcess("mousedown", 50, 97);
+        await internals.mouseEventThroughUIProcess("mousemove", 80, 50, { buttons: 1 });
+        scrollable.addEventListener("mouseover", () => {
+            scrollable.remove();
+        }, { once: true });
+        await internals.mouseEventThroughUIProcess("mousemove", 80, 97, { buttons: 1 });
+        await animationFrame();
+        await internals.mouseEventThroughUIProcess("mousemove", 90, 97, { buttons: 1 });
+        await internals.mouseEventThroughUIProcess("mouseup", 90, 97);
+
+        println("PASS");
+    });
+</script>

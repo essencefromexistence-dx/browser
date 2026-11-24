@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    #ancestor { color: red; }
+</style>
+<div id="ancestor">
+    <div id="inheritance-parent">
+        <svg>
+            <filter id="filter"><feFlood id="flood" flood-color="currentColor" /></filter>
+            <linearGradient id="gradient"><stop id="stop" stop-color="currentColor" /></linearGradient>
+        </svg>
+    </div>
+    <span id="ordinary">ordinary hidden content</span>
+</div>
+<script>
+test(() => {
+    internals.updateStyle();
+    ancestor.style.display = "none";
+    internals.updateStyle();
+    println("style records after hiding:");
+    println(internals.dumpStyleRecords(ancestor).trimEnd());
+
+    ancestor.style.color = "green";
+    internals.updateStyle();
+    println(`hidden styles disagreeing with a cold pass: [${internals.styleSelfCheck().join(", ")}]`);
+    println(`hidden inherited color: ${getComputedStyle(flood).color}`);
+});
+</script>

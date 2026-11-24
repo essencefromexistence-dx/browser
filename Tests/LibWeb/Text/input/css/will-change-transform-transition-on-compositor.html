@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<style>
+    #box {
+        width: 20px;
+        height: 20px;
+        background: green;
+        will-change: transform;
+        transition: transform 400ms linear;
+    }
+    body.changed #box {
+        transform: scale(1.1);
+    }
+</style>
+<div id="box"></div>
+<script>
+    function nextTask() {
+        const { promise, resolve } = Promise.withResolvers();
+        const channel = new MessageChannel();
+        channel.port1.onmessage = resolve;
+        channel.port2.postMessage(null);
+        return promise;
+    }
+
+    // A transform transition that starts from none on a will-change: transform box targets the
+    // transform node the box already owns: it starts on the compositor while still pending, and
+    // the visual context tree keeps its structure.
+    asyncTest(async done => {
+        internals.setManualRenderingOpportunities(true);
+        await nextTask();
+
+        const firstFrameTime = performance.now();
+        internals.injectRenderingOpportunity(firstFrameTime);
+        await nextTask();
+        const nodesBefore = internals.dumpVisualContextNodes(box);
+
+        document.body.classList.add("changed");
+        internals.beginVisualContextTrace();
+        internals.injectRenderingOpportunity(firstFrameTime + 60);
+        await nextTask();
+        internals.updateCompositorAnimations();
+        const visualContextUpdates = internals.takeVisualContextTrace();
+        const compositorAnimations = internals.dumpCompositorAnimations();
+        const animation = box.getAnimations()[0];
+        const nodesAfter = internals.dumpVisualContextNodes(box);
+        println(`box owns a transform node before the transition: ${nodesBefore.replace(/^\[s\d+\] /, "").trimEnd()}`);
+        println(`transition is still pending: ${animation.pending}`);
+        println("transition starts on the compositor:");
+        for (const line of compositorAnimations.split("\n").filter(Boolean))
+            println(`  ${line}`);
+        println(`transition keeps the transform node: ${nodesAfter === nodesBefore}`);
+        println("visual context tree updates of the transition:");
+        for (const line of visualContextUpdates.split("\n").filter(Boolean))
+            println(`  ${line}`);
+
+        animation.cancel();
+        internals.setManualRenderingOpportunities(false);
+        done();
+    });
+</script>

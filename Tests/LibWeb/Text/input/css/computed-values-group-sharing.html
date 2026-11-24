@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<div id="parent"><div id="child">hello</div></div>
+<script>
+    test(() => {
+        const child = document.getElementById("child");
+        internals.updateStyle();
+
+        println(`unstyled child: ${internals.dumpStyleRecords(child, { groups: true }).trimEnd()}`);
+
+        child.style.color = "red";
+        internals.updateStyle();
+        println(`color-styled child: ${internals.dumpStyleRecords(child, { groups: true }).trimEnd()}`);
+
+        child.style.gridTemplateColumns = "1fr 2fr";
+        internals.updateStyle();
+        println(`grid-styled child: ${internals.dumpStyleRecords(child, { groups: true }).trimEnd()}`);
+
+        child.style.color = "";
+        internals.updateStyle();
+        println(`unstyled-again child: ${internals.dumpStyleRecords(child, { groups: true }).trimEnd()}`);
+
+        // The writing mode and visibility a child inherits unchanged are its parent's, and one it
+        // overrides is its own.
+        const parent = document.getElementById("parent");
+        parent.style.writingMode = "vertical-rl";
+        parent.style.visibility = "hidden";
+        internals.updateStyle();
+        println(`writing-mode parent: child writing-mode: ${getComputedStyle(child).writingMode}`);
+        println(`writing-mode parent: child visibility: ${getComputedStyle(child).visibility}`);
+
+        child.style.visibility = "visible";
+        internals.updateStyle();
+        println(`visibility-overriding child visibility: ${getComputedStyle(child).visibility}`);
+        println(`visibility-overriding child writing-mode: ${getComputedStyle(child).writingMode}`);
+    });
+</script>

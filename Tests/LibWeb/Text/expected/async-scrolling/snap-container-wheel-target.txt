@@ -1,0 +1,3 @@
+wheel along the snapping axis: latched scroller=#scroller
+wheel across the snapping axis: latched scroller=#scroller
+wheel chained to the snap container: latched scroller=#scroller

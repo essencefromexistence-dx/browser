@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<style>
+    #target { animation: arriving 1000s paused both; }
+</style>
+<div id="container"><div id="target"></div></div>
+<script>
+    test(() => {
+        const sheet = document.styleSheets[0];
+        for (let index = 0; index < 64; ++index)
+            container.appendChild(document.createElement("div"));
+        internals.updateStyle();
+
+        function mutate(label, mutation) {
+            const work = styleWork(mutation);
+            const fullPass = work.passes().includes("FULL") ? " (full pass)" : "";
+            println(`${label} restyled: [${work.restyled().map(shortStyleName).join(", ")}]${fullPass}`);
+            println(`${label} opacity: ${getComputedStyle(target).opacity}`);
+        }
+
+        mutate("insert", () => {
+            sheet.insertRule("@keyframes arriving { from, to { opacity: 0.5; } }", sheet.cssRules.length);
+            sheet.insertRule(":not(*) { color: red; }", sheet.cssRules.length);
+        });
+        mutate("edit", () => {
+            sheet.cssRules[1].cssRules[0].style.opacity = "0.25";
+            sheet.cssRules[2].selectorText = ":not(*), :not(*)";
+        });
+        mutate("delete", () => {
+            sheet.deleteRule(1);
+            sheet.cssRules[1].selectorText = ":not(*)";
+        });
+    });
+</script>

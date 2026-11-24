@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    #target {
+        width: 10px;
+    }
+
+    #target.changed {
+        width: 20px;
+    }
+</style>
+<div id="target"></div>
+<script>
+    test(() => {
+        document.body.offsetWidth;
+
+        target.classList.add("changed");
+        target.offsetWidth;
+
+        println(`computed width: ${getComputedStyle(target).width}`);
+    });
+</script>

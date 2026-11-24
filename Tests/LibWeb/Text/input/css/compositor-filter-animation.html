@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    @keyframes functions {
+        from { filter: none; }
+        to { filter: blur(4px) brightness(0.5) hue-rotate(90deg); }
+    }
+
+    @keyframes shadow {
+        from { filter: drop-shadow(0 0 0 rgba(0, 0, 255, 0)); }
+        to { filter: drop-shadow(8px 4px 2px blue); }
+    }
+
+    @keyframes referenced {
+        from { filter: url(#blur); }
+        to { filter: url(#blur-more); }
+    }
+
+    .target {
+        width: 20px;
+        height: 20px;
+        background: red;
+    }
+
+    #functions {
+        animation: functions 1s linear infinite;
+    }
+
+    #shadow {
+        animation: shadow 1s linear infinite;
+    }
+
+    #referenced {
+        animation: referenced 1s linear infinite;
+    }
+</style>
+<svg width="0" height="0">
+    <filter id="blur"><feGaussianBlur stdDeviation="2" /></filter>
+    <filter id="blur-more"><feGaussianBlur stdDeviation="4" /></filter>
+</svg>
+<div id="functions" class="target"></div>
+<div id="shadow" class="target"></div>
+<div id="referenced" class="target"></div>
+<script>
+    function compositorAnimationDump() {
+        const lines = internals.dumpCompositorAnimations().split("\n").filter(Boolean);
+        const animations = lines.filter(line => /^(opacity|background-color|filter|transform) /.test(line)).sort();
+        return [...animations, ...lines.filter(line => !animations.includes(line))];
+    }
+
+    function compositorAnimationLines() {
+        return compositorAnimationDump().map(line => `  ${line}`).join("\n");
+    }
+
+    asyncTest(async done => {
+        internals.updateStyle();
+        for (let i = 0; i < 4; ++i)
+            await new Promise(requestAnimationFrame);
+
+        const initialCompositorAnimations = compositorAnimationLines();
+        const initialAnimationCount = document.getAnimations().length;
+        document.querySelector("#referenced").getAnimations()[0].cancel();
+        for (let i = 0; i < 2; ++i)
+            await new Promise(requestAnimationFrame);
+
+        internals.beginStyleTrace();
+        internals.beginRenderingTrace();
+        for (let i = 0; i < 4; ++i)
+            internals.updateCompositorAnimations();
+        const sampled = parseStyleTrace(internals.takeStyleTrace()).filter(event => event.outcome?.startsWith("sampled"));
+        const pumpRequests = internals.takeRenderingTrace().split("\n").filter(line => line.startsWith("animation frame pump request"));
+
+        for (const animation of document.getAnimations())
+            animation.cancel();
+        internals.updateCompositorAnimations();
+        const cancelledCompositorAnimations = compositorAnimationLines();
+
+        println(`animations: ${initialAnimationCount}`);
+        println("CSS filter functions use compositor, URL filter stays on main thread:");
+        println(initialCompositorAnimations);
+        println(`stable CSS filters sample: [${sampled.map(event => event.element).join(", ")}]`);
+        println(`stable CSS filters frame requests: [${pumpRequests.join(", ")}]`);
+        println("cancel removes CSS filter animations:");
+        if (cancelledCompositorAnimations)
+            println(cancelledCompositorAnimations);
+        done();
+    });
+</script>

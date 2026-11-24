@@ -1,0 +1,25 @@
+Harness status: OK
+
+Found 20 tests
+
+20 Pass
+Pass	CSS Fonts Module Level 5: getComputedStyle().fontSizeAdjust
+Pass	Property font-size-adjust value 'none'
+Pass	Property font-size-adjust value '0.5'
+Pass	Property font-size-adjust value 'ex-height 0.5'
+Pass	Property font-size-adjust value 'cap-height 0.8'
+Pass	Property font-size-adjust value 'ch-width 0.4'
+Pass	Property font-size-adjust value 'ic-width 0.9'
+Pass	Property font-size-adjust value 'ic-height 1.1'
+Pass	Property font-size-adjust value 'from-font'
+Pass	Property font-size-adjust value 'ex-height from-font'
+Pass	Property font-size-adjust value 'cap-height from-font'
+Pass	Property font-size-adjust value 'ch-width from-font'
+Pass	Property font-size-adjust value 'ic-width from-font'
+Pass	Property font-size-adjust value 'ic-height from-font'
+Pass	Property font-size-adjust value 'calc(0.5)'
+Pass	Property font-size-adjust value 'ex-height calc(0.5)'
+Pass	Property font-size-adjust value 'cap-height calc(0.5)'
+Pass	Property font-size-adjust value 'cap-height calc(0.5 + 1)'
+Pass	Property font-size-adjust value 'cap-height calc(-0.5)'
+Pass	Property font-size-adjust value 'cap-height calc(10 + (sign(20cqw - 10px) * 5))'

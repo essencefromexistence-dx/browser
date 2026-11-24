@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<style>
+body {
+    margin: 0;
+    width: 300px;
+    height: 300px;
+}
+
+#outer {
+    width: 200px;
+    height: 150px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#spacer {
+    height: 300px;
+}
+
+#inner {
+    width: 150px;
+    height: 100px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#content {
+    height: 1000px;
+}
+
+#extra {
+    height: 200px;
+}
+</style>
+<div id="outer">
+    <div id="spacer"></div>
+    <div id="inner">
+        <div id="content"></div>
+    </div>
+    <div id="extra"></div>
+</div>
+<script src="../include.js"></script>
+<script>
+    outer.scrollTop = 300;
+
+    promiseTest(async () => {
+        await animationFrame();
+        await animationFrame();
+
+        // Move the cursor over the inner scrollbar, and press its gutter below the thumb to page down.
+        await scrollSettled(inner, async () => {
+            await internals.mouseEventThroughUIProcess("mousemove", 147, 50);
+            await internals.mouseEventThroughUIProcess("mousedown", 147, 80);
+            await internals.mouseEventThroughUIProcess("mouseup", 147, 80);
+        });
+        println(`inner scrolled: ${inner.scrollTop > 0}`);
+    });
+</script>

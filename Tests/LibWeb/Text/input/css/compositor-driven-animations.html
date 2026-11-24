@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    @keyframes fade {
+        from { opacity: 0.2; }
+        to { opacity: 0.8; }
+    }
+
+    @keyframes move {
+        from { transform: translateX(0px) rotate(0deg); }
+        to { transform: translateX(100px) rotate(360deg); }
+    }
+
+    @keyframes relative-move {
+        from { transform: translate(calc(-100% + 100vw + var(--distance))); }
+        50% { animation-timing-function: ease-in; }
+        to { transform: translateX(calc(100vw + 100% + var(--distance))); }
+    }
+
+    @keyframes individual-move {
+        from { translate: 0px; rotate: 0deg; }
+        to { translate: 100px; rotate: 360deg; }
+    }
+
+    @keyframes individual-translate {
+        from { translate: 0px; }
+        to { translate: 100px; }
+    }
+
+    @keyframes individual-rotate {
+        from { rotate: 0deg; }
+        to { rotate: 360deg; }
+    }
+
+    @keyframes visual-node-churn {
+        from { display: block; }
+        to { display: none; }
+    }
+
+    @keyframes finite-move {
+        from { opacity: 0.2; transform: translateX(0px); }
+        to { opacity: 0.8; transform: translateX(100px); }
+    }
+
+    #visual-node-churn {
+        animation: visual-node-churn 1s steps(1) infinite;
+    }
+
+    #opacity {
+        width: 20px;
+        height: 20px;
+        background: red;
+        animation: fade 1s linear infinite;
+    }
+
+    #transform {
+        width: 20px;
+        height: 20px;
+        background: blue;
+        animation: move 1s linear infinite;
+    }
+
+    #relative-transform {
+        --distance: 10px;
+        width: 20px;
+        height: 20px;
+        animation: relative-move 1s linear infinite;
+    }
+
+    #individual-transform {
+        width: 20px;
+        height: 20px;
+        animation: individual-move 1s linear infinite;
+    }
+
+    #competing-transform-effects {
+        width: 20px;
+        height: 20px;
+        animation: individual-translate 1s linear infinite, individual-rotate 1s linear infinite;
+    }
+</style>
+<div id="visual-node-churn"></div>
+<div id="opacity"></div>
+<div id="transform"></div>
+<div id="relative-transform"></div>
+<div id="individual-transform"></div>
+<div id="competing-transform-effects"></div>
+<script>
+    function compositorAnimationDump() {
+        const lines = internals.dumpCompositorAnimations().split("\n").filter(Boolean);
+        const animations = lines.filter(line => /^(opacity|background-color|filter|transform) /.test(line)).sort();
+        return [...animations, ...lines.filter(line => !animations.includes(line))];
+    }
+
+    function compositorAnimations() {
+        return compositorAnimationDump().filter(line => !line.endsWith("timer armed"));
+    }
+
+    function renderingTraceEvents(events) {
+        return `[${internals.takeRenderingTrace().split("\n").filter(line => events.some(event => line.startsWith(event))).join(", ")}]`;
+    }
+
+    function compositorAnimationWork() {
+        return renderingTraceEvents(["compositor animations updated", "compositor keyframe values resolved"]);
+    }
+
+    function compositorAnimationWorkAndFrameRequests() {
+        return renderingTraceEvents(["animation frame pump request", "compositor animations updated", "compositor keyframe values resolved"]);
+    }
+
+    asyncTest(async done => {
+        internals.updateStyle();
+        for (let i = 0; i < 4; ++i)
+            await new Promise(requestAnimationFrame);
+
+        const initialCompositorAnimations = compositorAnimations();
+
+        for (const animation of document.querySelector("#competing-transform-effects").getAnimations())
+            animation.cancel();
+        for (let i = 0; i < 2; ++i)
+            await new Promise(requestAnimationFrame);
+
+        internals.beginRenderingTrace();
+        document.querySelector("#relative-transform").style.width = "40px";
+        for (let i = 0; i < 2; ++i)
+            await new Promise(requestAnimationFrame);
+        const resizeWork = compositorAnimationWork();
+
+        internals.beginRenderingTrace();
+        document.querySelector("#relative-transform").style.setProperty("--distance", "20px");
+        for (let i = 0; i < 2; ++i)
+            await new Promise(requestAnimationFrame);
+        const styleChangeWork = compositorAnimationWork();
+
+        internals.beginStyleTrace();
+        internals.beginRenderingTrace();
+        for (let i = 0; i < 4; ++i)
+            internals.updateCompositorAnimations();
+        const stableSamples = parseStyleTrace(internals.takeStyleTrace()).filter(event => event.outcome?.startsWith("sampled"));
+        const stableWork = compositorAnimationWorkAndFrameRequests();
+
+        internals.beginRenderingTrace();
+        const visualNodeAnimation = document.querySelector("#visual-node-churn").getAnimations()[0];
+        for (const currentTime of [0, 750, 0, 750]) {
+            visualNodeAnimation.currentTime = currentTime;
+            await new Promise(requestAnimationFrame);
+        }
+        const visualNodeWork = compositorAnimationWork();
+
+        internals.beginRenderingTrace();
+        for (const animation of document.getAnimations())
+            animation.cancel();
+        internals.updateCompositorAnimations();
+        const cancellationWork = compositorAnimationWork();
+        const cancelledCompositorAnimations = compositorAnimations();
+
+        internals.beginRenderingTrace();
+        for (let i = 0; i < 4; ++i)
+            internals.updateCompositorAnimations();
+        const emptyWork = compositorAnimationWorkAndFrameRequests();
+
+        const finiteTarget = document.createElement("div");
+        finiteTarget.style.width = "20px";
+        finiteTarget.style.height = "20px";
+        finiteTarget.style.background = "green";
+        finiteTarget.style.animation = "finite-move 500ms linear forwards";
+        document.body.appendChild(finiteTarget);
+        for (let i = 0; i < 2; ++i)
+            await new Promise(requestAnimationFrame);
+        await new Promise(resolve => setTimeout(resolve, 0));
+        const finiteAnimation = finiteTarget.getAnimations()[0];
+        finiteTarget.id = "finite";
+        const finiteCompositorAnimations = compositorAnimations();
+        let receivedAnimationEnd = false;
+        finiteTarget.addEventListener("animationend", () => receivedAnimationEnd = true);
+        internals.beginRenderingTrace();
+        await finiteAnimation.finished;
+        await new Promise(resolve => setTimeout(resolve, 0));
+        const finiteWork = compositorAnimationWorkAndFrameRequests();
+
+        println("compositor animations:");
+        for (const line of initialCompositorAnimations)
+            println(`  ${line}`);
+        println(`reference box resize: ${resizeWork}`);
+        println(`style change: ${styleChangeWork}`);
+        println(`stable compositor animations: ${stableWork}`);
+        println(`stable compositor animations main-thread samples: [${stableSamples.map(event => event.element).join(", ")}]`);
+        println(`stable compositor animations with changing visual nodes: ${visualNodeWork}`);
+        println(`cancel: ${cancellationWork}`);
+        println(`cancel removes compositor animations: [${cancelledCompositorAnimations.join(", ")}]`);
+        println(`empty compositor animations: ${emptyWork}`);
+        println(`finite animation uses compositor: [${finiteCompositorAnimations.join(", ")}]`);
+        println(`finite animation requests only end frames: ${finiteWork}`);
+        println(`finite animation dispatches end event: ${receivedAnimationEnd}`);
+        println(`finite animation reaches end opacity: ${getComputedStyle(finiteTarget).opacity === "0.8"}`);
+        println(`finite animation reaches end style: ${getComputedStyle(finiteTarget).transform.includes("100")}`);
+        done();
+    });
+</script>

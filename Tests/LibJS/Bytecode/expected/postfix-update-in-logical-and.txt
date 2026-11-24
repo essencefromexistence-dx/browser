@@ -1,0 +1,30 @@
+$14eecc26 postfix-update-in-logical-and.js:4:1
+  Registers: 7
+  Blocks:    1
+  Constants:
+    [0] = Undefined
+    [1] = Int32(5)
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] GetGlobal value_feedback:0, dst:reg6, `postfixInLogicalAnd`
+  [   c] Call call_feedback:0, dst:reg5, callee:reg6, this_value:Undefined, arguments:[Int32(5)]
+  [  14] End value:reg5
+
+
+postfixInLogicalAnd$ee75b068 postfix-update-in-logical-and.js:2:5
+  Registers: 7
+  Blocks:    3
+
+block0:
+  [   0] Enter
+  [   1] GreaterThanRhsInt32 arith_feedback:0, dst:reg5, lhs:arg0, rhs:0
+  [   a] JumpFalse condition:reg5, target:block2
+
+block1:
+  [  10] PostfixDecrement arith_feedback:1, dst:reg6, src:arg0
+  [  15] Mov dst:reg5, src:reg6
+
+block2:
+  [  18] Return value:reg5

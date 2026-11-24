@@ -1,0 +1,337 @@
+PRESERVED: position static -> absolute on run-in in inline list-item | fixture ancestor
+PRESERVED: position static -> absolute on run-in in inline list-item | distant sibling
+PRESERVED: position static -> absolute on run-in in inline list-item | distant sibling descendant
+PRESERVED: position static -> absolute on run-in in inline list-item | DOM parent
+PRESERVED: position static -> absolute on run-in in inline list-item | preceding sibling
+PRESERVED: position static -> absolute on run-in in inline list-item | preceding sibling descendant
+RECREATED: position static -> absolute on run-in in inline list-item | target
+RECREATED: position static -> absolute on run-in in inline list-item | target descendant
+PRESERVED: position static -> absolute on run-in in inline list-item | following sibling
+PRESERVED: position static -> absolute on run-in in inline list-item | following sibling descendant
+STATS: position static -> absolute on run-in in inline list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: position static -> absolute on run-in in inline list-item | incremental tree matches full rebuild
+PRESERVED: position static -> sticky on inline-table in table-row-group | fixture ancestor
+PRESERVED: position static -> sticky on inline-table in table-row-group | distant sibling
+PRESERVED: position static -> sticky on inline-table in table-row-group | distant sibling descendant
+PRESERVED: position static -> sticky on inline-table in table-row-group | DOM parent
+PRESERVED: position static -> sticky on inline-table in table-row-group | preceding sibling
+PRESERVED: position static -> sticky on inline-table in table-row-group | preceding sibling descendant
+RECREATED: position static -> sticky on inline-table in table-row-group | target
+RECREATED: position static -> sticky on inline-table in table-row-group | target descendant
+PRESERVED: position static -> sticky on inline-table in table-row-group | following sibling
+PRESERVED: position static -> sticky on inline-table in table-row-group | following sibling descendant
+STATS: position static -> sticky on inline-table in table-row-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: position static -> sticky on inline-table in table-row-group | incremental tree matches full rebuild
+PRESERVED: position relative -> absolute on table-cell in block flow-root | fixture ancestor
+PRESERVED: position relative -> absolute on table-cell in block flow-root | distant sibling
+PRESERVED: position relative -> absolute on table-cell in block flow-root | distant sibling descendant
+PRESERVED: position relative -> absolute on table-cell in block flow-root | DOM parent
+PRESERVED: position relative -> absolute on table-cell in block flow-root | preceding sibling
+PRESERVED: position relative -> absolute on table-cell in block flow-root | preceding sibling descendant
+RECREATED: position relative -> absolute on table-cell in block flow-root | target
+RECREATED: position relative -> absolute on table-cell in block flow-root | target descendant
+PRESERVED: position relative -> absolute on table-cell in block flow-root | following sibling
+PRESERVED: position relative -> absolute on table-cell in block flow-root | following sibling descendant
+STATS: position relative -> absolute on table-cell in block flow-root | rebuilt [BlockContainer<SECTION>#DOM-parent]
+PASS: position relative -> absolute on table-cell in block flow-root | incremental tree matches full rebuild
+PRESERVED: position relative -> sticky on block flex in contents | fixture ancestor
+PRESERVED: position relative -> sticky on block flex in contents | distant sibling
+PRESERVED: position relative -> sticky on block flex in contents | distant sibling descendant
+ABSENT: position relative -> sticky on block flex in contents | DOM parent
+PRESERVED: position relative -> sticky on block flex in contents | preceding sibling
+PRESERVED: position relative -> sticky on block flex in contents | preceding sibling descendant
+RECREATED: position relative -> sticky on block flex in contents | target
+RECREATED: position relative -> sticky on block flex in contents | target descendant
+PRESERVED: position relative -> sticky on block flex in contents | following sibling
+PRESERVED: position relative -> sticky on block flex in contents | following sibling descendant
+STATS: position relative -> sticky on block flex in contents | rebuilt [BlockContainer<DIV>#fixture]
+PASS: position relative -> sticky on block flex in contents | incremental tree matches full rebuild
+PRESERVED: position absolute -> relative on none in inline-flex | fixture ancestor
+PRESERVED: position absolute -> relative on none in inline-flex | distant sibling
+PRESERVED: position absolute -> relative on none in inline-flex | distant sibling descendant
+PRESERVED: position absolute -> relative on none in inline-flex | DOM parent
+PRESERVED: position absolute -> relative on none in inline-flex | preceding sibling
+PRESERVED: position absolute -> relative on none in inline-flex | preceding sibling descendant
+ABSENT: position absolute -> relative on none in inline-flex | target
+ABSENT: position absolute -> relative on none in inline-flex | target descendant
+PRESERVED: position absolute -> relative on none in inline-flex | following sibling
+PRESERVED: position absolute -> relative on none in inline-flex | following sibling descendant
+STATS: position absolute -> relative on none in inline-flex | rebuilt []
+PASS: position absolute -> relative on none in inline-flex | incremental tree matches full rebuild
+PRESERVED: position absolute -> sticky on inline list-item in table-footer-group | fixture ancestor
+PRESERVED: position absolute -> sticky on inline list-item in table-footer-group | distant sibling
+PRESERVED: position absolute -> sticky on inline list-item in table-footer-group | distant sibling descendant
+PRESERVED: position absolute -> sticky on inline list-item in table-footer-group | DOM parent
+PRESERVED: position absolute -> sticky on inline list-item in table-footer-group | preceding sibling
+PRESERVED: position absolute -> sticky on inline list-item in table-footer-group | preceding sibling descendant
+RECREATED: position absolute -> sticky on inline list-item in table-footer-group | target
+RECREATED: position absolute -> sticky on inline list-item in table-footer-group | target descendant
+PRESERVED: position absolute -> sticky on inline list-item in table-footer-group | following sibling
+PRESERVED: position absolute -> sticky on inline list-item in table-footer-group | following sibling descendant
+STATS: position absolute -> sticky on inline list-item in table-footer-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: position absolute -> sticky on inline list-item in table-footer-group | incremental tree matches full rebuild
+PRESERVED: position fixed -> relative on -webkit-box in block flex | fixture ancestor
+PRESERVED: position fixed -> relative on -webkit-box in block flex | distant sibling
+PRESERVED: position fixed -> relative on -webkit-box in block flex | distant sibling descendant
+PRESERVED: position fixed -> relative on -webkit-box in block flex | DOM parent
+PRESERVED: position fixed -> relative on -webkit-box in block flex | preceding sibling
+PRESERVED: position fixed -> relative on -webkit-box in block flex | preceding sibling descendant
+RECREATED: position fixed -> relative on -webkit-box in block flex | target
+RECREATED: position fixed -> relative on -webkit-box in block flex | target descendant
+PRESERVED: position fixed -> relative on -webkit-box in block flex | following sibling
+PRESERVED: position fixed -> relative on -webkit-box in block flex | following sibling descendant
+STATS: position fixed -> relative on -webkit-box in block flex | rebuilt [Box<SECTION>#DOM-parent]
+PASS: position fixed -> relative on -webkit-box in block flex | incremental tree matches full rebuild
+PRESERVED: position fixed -> sticky on table-column in inline | fixture ancestor
+PRESERVED: position fixed -> sticky on table-column in inline | distant sibling
+PRESERVED: position fixed -> sticky on table-column in inline | distant sibling descendant
+PRESERVED: position fixed -> sticky on table-column in inline | DOM parent
+PRESERVED: position fixed -> sticky on table-column in inline | preceding sibling
+PRESERVED: position fixed -> sticky on table-column in inline | preceding sibling descendant
+RECREATED: position fixed -> sticky on table-column in inline | target
+REMOVED: position fixed -> sticky on table-column in inline | target descendant
+PRESERVED: position fixed -> sticky on table-column in inline | following sibling
+PRESERVED: position fixed -> sticky on table-column in inline | following sibling descendant
+STATS: position fixed -> sticky on table-column in inline | rebuilt [InlineNode<SECTION>#DOM-parent]
+PASS: position fixed -> sticky on table-column in inline | incremental tree matches full rebuild
+PRESERVED: position sticky -> relative on block grid in table | fixture ancestor
+PRESERVED: position sticky -> relative on block grid in table | distant sibling
+PRESERVED: position sticky -> relative on block grid in table | distant sibling descendant
+PRESERVED: position sticky -> relative on block grid in table | DOM parent
+PRESERVED: position sticky -> relative on block grid in table | preceding sibling
+PRESERVED: position sticky -> relative on block grid in table | preceding sibling descendant
+RECREATED: position sticky -> relative on block grid in table | target
+RECREATED: position sticky -> relative on block grid in table | target descendant
+PRESERVED: position sticky -> relative on block grid in table | following sibling
+PRESERVED: position sticky -> relative on block grid in table | following sibling descendant
+STATS: position sticky -> relative on block grid in table | rebuilt [Box<SECTION>#DOM-parent]
+PASS: position sticky -> relative on block grid in table | incremental tree matches full rebuild
+PRESERVED: position sticky -> fixed on block in table-cell | fixture ancestor
+PRESERVED: position sticky -> fixed on block in table-cell | distant sibling
+PRESERVED: position sticky -> fixed on block in table-cell | distant sibling descendant
+PRESERVED: position sticky -> fixed on block in table-cell | DOM parent
+PRESERVED: position sticky -> fixed on block in table-cell | preceding sibling
+PRESERVED: position sticky -> fixed on block in table-cell | preceding sibling descendant
+RECREATED: position sticky -> fixed on block in table-cell | target
+RECREATED: position sticky -> fixed on block in table-cell | target descendant
+PRESERVED: position sticky -> fixed on block in table-cell | following sibling
+PRESERVED: position sticky -> fixed on block in table-cell | following sibling descendant
+STATS: position sticky -> fixed on block in table-cell | rebuilt [BlockContainer<SECTION>#DOM-parent]
+PASS: position sticky -> fixed on block in table-cell | incremental tree matches full rebuild
+PRESERVED: float none -> right on inline-flex in block grid | fixture ancestor
+PRESERVED: float none -> right on inline-flex in block grid | distant sibling
+PRESERVED: float none -> right on inline-flex in block grid | distant sibling descendant
+PRESERVED: float none -> right on inline-flex in block grid | DOM parent
+PRESERVED: float none -> right on inline-flex in block grid | preceding sibling
+PRESERVED: float none -> right on inline-flex in block grid | preceding sibling descendant
+RECREATED: float none -> right on inline-flex in block grid | target
+RECREATED: float none -> right on inline-flex in block grid | target descendant
+PRESERVED: float none -> right on inline-flex in block grid | following sibling
+PRESERVED: float none -> right on inline-flex in block grid | following sibling descendant
+STATS: float none -> right on inline-flex in block grid | rebuilt [Box<SECTION>#DOM-parent]
+PASS: float none -> right on inline-flex in block grid | incremental tree matches full rebuild
+PRESERVED: float none -> inline-end on table-row-group in inline-block | fixture ancestor
+PRESERVED: float none -> inline-end on table-row-group in inline-block | distant sibling
+PRESERVED: float none -> inline-end on table-row-group in inline-block | distant sibling descendant
+PRESERVED: float none -> inline-end on table-row-group in inline-block | DOM parent
+PRESERVED: float none -> inline-end on table-row-group in inline-block | preceding sibling
+PRESERVED: float none -> inline-end on table-row-group in inline-block | preceding sibling descendant
+RECREATED: float none -> inline-end on table-row-group in inline-block | target
+RECREATED: float none -> inline-end on table-row-group in inline-block | target descendant
+PRESERVED: float none -> inline-end on table-row-group in inline-block | following sibling
+PRESERVED: float none -> inline-end on table-row-group in inline-block | following sibling descendant
+STATS: float none -> inline-end on table-row-group in inline-block | rebuilt [BlockContainer<SECTION>#DOM-parent]
+PASS: float none -> inline-end on table-row-group in inline-block | incremental tree matches full rebuild
+PRESERVED: float left -> right on block flow in math | fixture ancestor
+PRESERVED: float left -> right on block flow in math | distant sibling
+PRESERVED: float left -> right on block flow in math | distant sibling descendant
+PRESERVED: float left -> right on block flow in math | DOM parent
+PRESERVED: float left -> right on block flow in math | preceding sibling
+PRESERVED: float left -> right on block flow in math | preceding sibling descendant
+RECREATED: float left -> right on block flow in math | target
+RECREATED: float left -> right on block flow in math | target descendant
+PRESERVED: float left -> right on block flow in math | following sibling
+PRESERVED: float left -> right on block flow in math | following sibling descendant
+STATS: float left -> right on block flow in math | rebuilt [InlineNode<SECTION>#DOM-parent]
+PASS: float left -> right on block flow in math | incremental tree matches full rebuild
+PRESERVED: float left -> inline-end on block table in table-caption | fixture ancestor
+PRESERVED: float left -> inline-end on block table in table-caption | distant sibling
+PRESERVED: float left -> inline-end on block table in table-caption | distant sibling descendant
+PRESERVED: float left -> inline-end on block table in table-caption | DOM parent
+PRESERVED: float left -> inline-end on block table in table-caption | preceding sibling
+PRESERVED: float left -> inline-end on block table in table-caption | preceding sibling descendant
+RECREATED: float left -> inline-end on block table in table-caption | target
+RECREATED: float left -> inline-end on block table in table-caption | target descendant
+PRESERVED: float left -> inline-end on block table in table-caption | following sibling
+PRESERVED: float left -> inline-end on block table in table-caption | following sibling descendant
+STATS: float left -> inline-end on block table in table-caption | rebuilt [BlockContainer<SECTION>#DOM-parent]
+PASS: float left -> inline-end on block table in table-caption | incremental tree matches full rebuild
+PRESERVED: float right -> left on flow-root in block table | fixture ancestor
+PRESERVED: float right -> left on flow-root in block table | distant sibling
+PRESERVED: float right -> left on flow-root in block table | distant sibling descendant
+PRESERVED: float right -> left on flow-root in block table | DOM parent
+PRESERVED: float right -> left on flow-root in block table | preceding sibling
+PRESERVED: float right -> left on flow-root in block table | preceding sibling descendant
+RECREATED: float right -> left on flow-root in block table | target
+RECREATED: float right -> left on flow-root in block table | target descendant
+PRESERVED: float right -> left on flow-root in block table | following sibling
+PRESERVED: float right -> left on flow-root in block table | following sibling descendant
+STATS: float right -> left on flow-root in block table | rebuilt [Box<SECTION>#DOM-parent]
+PASS: float right -> left on flow-root in block table | incremental tree matches full rebuild
+PRESERVED: float right -> inline-end on inline-grid in list-item | fixture ancestor
+PRESERVED: float right -> inline-end on inline-grid in list-item | distant sibling
+PRESERVED: float right -> inline-end on inline-grid in list-item | distant sibling descendant
+PRESERVED: float right -> inline-end on inline-grid in list-item | DOM parent
+PRESERVED: float right -> inline-end on inline-grid in list-item | preceding sibling
+PRESERVED: float right -> inline-end on inline-grid in list-item | preceding sibling descendant
+RECREATED: float right -> inline-end on inline-grid in list-item | target
+RECREATED: float right -> inline-end on inline-grid in list-item | target descendant
+PRESERVED: float right -> inline-end on inline-grid in list-item | following sibling
+PRESERVED: float right -> inline-end on inline-grid in list-item | following sibling descendant
+STATS: float right -> inline-end on inline-grid in list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: float right -> inline-end on inline-grid in list-item | incremental tree matches full rebuild
+PRESERVED: float inline-start -> left on table-footer-group in -webkit-inline-box | fixture ancestor
+PRESERVED: float inline-start -> left on table-footer-group in -webkit-inline-box | distant sibling
+PRESERVED: float inline-start -> left on table-footer-group in -webkit-inline-box | distant sibling descendant
+PRESERVED: float inline-start -> left on table-footer-group in -webkit-inline-box | DOM parent
+PRESERVED: float inline-start -> left on table-footer-group in -webkit-inline-box | preceding sibling
+PRESERVED: float inline-start -> left on table-footer-group in -webkit-inline-box | preceding sibling descendant
+RECREATED: float inline-start -> left on table-footer-group in -webkit-inline-box | target
+RECREATED: float inline-start -> left on table-footer-group in -webkit-inline-box | target descendant
+PRESERVED: float inline-start -> left on table-footer-group in -webkit-inline-box | following sibling
+PRESERVED: float inline-start -> left on table-footer-group in -webkit-inline-box | following sibling descendant
+STATS: float inline-start -> left on table-footer-group in -webkit-inline-box | rebuilt [Box<SECTION>#DOM-parent]
+PASS: float inline-start -> left on table-footer-group in -webkit-inline-box | incremental tree matches full rebuild
+PRESERVED: float inline-start -> inline-end on block flow-root in inline flow | fixture ancestor
+PRESERVED: float inline-start -> inline-end on block flow-root in inline flow | distant sibling
+PRESERVED: float inline-start -> inline-end on block flow-root in inline flow | distant sibling descendant
+PRESERVED: float inline-start -> inline-end on block flow-root in inline flow | DOM parent
+PRESERVED: float inline-start -> inline-end on block flow-root in inline flow | preceding sibling
+PRESERVED: float inline-start -> inline-end on block flow-root in inline flow | preceding sibling descendant
+RECREATED: float inline-start -> inline-end on block flow-root in inline flow | target
+RECREATED: float inline-start -> inline-end on block flow-root in inline flow | target descendant
+PRESERVED: float inline-start -> inline-end on block flow-root in inline flow | following sibling
+PRESERVED: float inline-start -> inline-end on block flow-root in inline flow | following sibling descendant
+STATS: float inline-start -> inline-end on block flow-root in inline flow | rebuilt [InlineNode<SECTION>#DOM-parent]
+PASS: float inline-start -> inline-end on block flow-root in inline flow | incremental tree matches full rebuild
+PRESERVED: float inline-end -> left on block flow list-item in inline flow list-item | fixture ancestor
+PRESERVED: float inline-end -> left on block flow list-item in inline flow list-item | distant sibling
+PRESERVED: float inline-end -> left on block flow list-item in inline flow list-item | distant sibling descendant
+PRESERVED: float inline-end -> left on block flow list-item in inline flow list-item | DOM parent
+PRESERVED: float inline-end -> left on block flow list-item in inline flow list-item | preceding sibling
+PRESERVED: float inline-end -> left on block flow list-item in inline flow list-item | preceding sibling descendant
+RECREATED: float inline-end -> left on block flow list-item in inline flow list-item | target
+RECREATED: float inline-end -> left on block flow list-item in inline flow list-item | target descendant
+PRESERVED: float inline-end -> left on block flow list-item in inline flow list-item | following sibling
+PRESERVED: float inline-end -> left on block flow list-item in inline flow list-item | following sibling descendant
+STATS: float inline-end -> left on block flow list-item in inline flow list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: float inline-end -> left on block flow list-item in inline flow list-item | incremental tree matches full rebuild
+PRESERVED: float inline-end -> inline-start on run-in in flex | fixture ancestor
+PRESERVED: float inline-end -> inline-start on run-in in flex | distant sibling
+PRESERVED: float inline-end -> inline-start on run-in in flex | distant sibling descendant
+PRESERVED: float inline-end -> inline-start on run-in in flex | DOM parent
+PRESERVED: float inline-end -> inline-start on run-in in flex | preceding sibling
+PRESERVED: float inline-end -> inline-start on run-in in flex | preceding sibling descendant
+RECREATED: float inline-end -> inline-start on run-in in flex | target
+RECREATED: float inline-end -> inline-start on run-in in flex | target descendant
+PRESERVED: float inline-end -> inline-start on run-in in flex | following sibling
+PRESERVED: float inline-end -> inline-start on run-in in flex | following sibling descendant
+STATS: float inline-end -> inline-start on run-in in flex | rebuilt [Box<SECTION>#DOM-parent]
+PASS: float inline-end -> inline-start on run-in in flex | incremental tree matches full rebuild
+PRESERVED: clear none -> right on inline-table in table-header-group | fixture ancestor
+PRESERVED: clear none -> right on inline-table in table-header-group | distant sibling
+PRESERVED: clear none -> right on inline-table in table-header-group | distant sibling descendant
+PRESERVED: clear none -> right on inline-table in table-header-group | DOM parent
+PRESERVED: clear none -> right on inline-table in table-header-group | preceding sibling
+PRESERVED: clear none -> right on inline-table in table-header-group | preceding sibling descendant
+PRESERVED: clear none -> right on inline-table in table-header-group | target
+PRESERVED: clear none -> right on inline-table in table-header-group | target descendant
+PRESERVED: clear none -> right on inline-table in table-header-group | following sibling
+PRESERVED: clear none -> right on inline-table in table-header-group | following sibling descendant
+STATS: clear none -> right on inline-table in table-header-group | no layout tree build
+PASS: clear none -> right on inline-table in table-header-group | incremental tree matches full rebuild
+PRESERVED: clear left -> none on table-cell in inline flow-root | fixture ancestor
+PRESERVED: clear left -> none on table-cell in inline flow-root | distant sibling
+PRESERVED: clear left -> none on table-cell in inline flow-root | distant sibling descendant
+PRESERVED: clear left -> none on table-cell in inline flow-root | DOM parent
+PRESERVED: clear left -> none on table-cell in inline flow-root | preceding sibling
+PRESERVED: clear left -> none on table-cell in inline flow-root | preceding sibling descendant
+PRESERVED: clear left -> none on table-cell in inline flow-root | target
+PRESERVED: clear left -> none on table-cell in inline flow-root | target descendant
+PRESERVED: clear left -> none on table-cell in inline flow-root | following sibling
+PRESERVED: clear left -> none on table-cell in inline flow-root | following sibling descendant
+STATS: clear left -> none on table-cell in inline flow-root | no layout tree build
+PASS: clear left -> none on table-cell in inline flow-root | incremental tree matches full rebuild
+PRESERVED: clear left -> both on block flex in block | fixture ancestor
+PRESERVED: clear left -> both on block flex in block | distant sibling
+PRESERVED: clear left -> both on block flex in block | distant sibling descendant
+PRESERVED: clear left -> both on block flex in block | DOM parent
+PRESERVED: clear left -> both on block flex in block | preceding sibling
+PRESERVED: clear left -> both on block flex in block | preceding sibling descendant
+PRESERVED: clear left -> both on block flex in block | target
+PRESERVED: clear left -> both on block flex in block | target descendant
+PRESERVED: clear left -> both on block flex in block | following sibling
+PRESERVED: clear left -> both on block flex in block | following sibling descendant
+STATS: clear left -> both on block flex in block | no layout tree build
+PASS: clear left -> both on block flex in block | incremental tree matches full rebuild
+PRESERVED: clear right -> left on none in grid | fixture ancestor
+PRESERVED: clear right -> left on none in grid | distant sibling
+PRESERVED: clear right -> left on none in grid | distant sibling descendant
+PRESERVED: clear right -> left on none in grid | DOM parent
+PRESERVED: clear right -> left on none in grid | preceding sibling
+PRESERVED: clear right -> left on none in grid | preceding sibling descendant
+ABSENT: clear right -> left on none in grid | target
+ABSENT: clear right -> left on none in grid | target descendant
+PRESERVED: clear right -> left on none in grid | following sibling
+PRESERVED: clear right -> left on none in grid | following sibling descendant
+STATS: clear right -> left on none in grid | no layout tree build
+PASS: clear right -> left on none in grid | incremental tree matches full rebuild
+PRESERVED: clear both -> none on inline list-item in table-row | fixture ancestor
+PRESERVED: clear both -> none on inline list-item in table-row | distant sibling
+PRESERVED: clear both -> none on inline list-item in table-row | distant sibling descendant
+PRESERVED: clear both -> none on inline list-item in table-row | DOM parent
+PRESERVED: clear both -> none on inline list-item in table-row | preceding sibling
+PRESERVED: clear both -> none on inline list-item in table-row | preceding sibling descendant
+PRESERVED: clear both -> none on inline list-item in table-row | target
+PRESERVED: clear both -> none on inline list-item in table-row | target descendant
+PRESERVED: clear both -> none on inline list-item in table-row | following sibling
+PRESERVED: clear both -> none on inline list-item in table-row | following sibling descendant
+STATS: clear both -> none on inline list-item in table-row | no layout tree build
+PASS: clear both -> none on inline list-item in table-row | incremental tree matches full rebuild
+PRESERVED: clear both -> right on -webkit-box in inline flex | fixture ancestor
+PRESERVED: clear both -> right on -webkit-box in inline flex | distant sibling
+PRESERVED: clear both -> right on -webkit-box in inline flex | distant sibling descendant
+PRESERVED: clear both -> right on -webkit-box in inline flex | DOM parent
+PRESERVED: clear both -> right on -webkit-box in inline flex | preceding sibling
+PRESERVED: clear both -> right on -webkit-box in inline flex | preceding sibling descendant
+PRESERVED: clear both -> right on -webkit-box in inline flex | target
+PRESERVED: clear both -> right on -webkit-box in inline flex | target descendant
+PRESERVED: clear both -> right on -webkit-box in inline flex | following sibling
+PRESERVED: clear both -> right on -webkit-box in inline flex | following sibling descendant
+STATS: clear both -> right on -webkit-box in inline flex | no layout tree build
+PASS: clear both -> right on -webkit-box in inline flex | incremental tree matches full rebuild
+PRESERVED: absolute left -> static none on table-column in flow-root | fixture ancestor
+PRESERVED: absolute left -> static none on table-column in flow-root | distant sibling
+PRESERVED: absolute left -> static none on table-column in flow-root | distant sibling descendant
+PRESERVED: absolute left -> static none on table-column in flow-root | DOM parent
+PRESERVED: absolute left -> static none on table-column in flow-root | preceding sibling
+PRESERVED: absolute left -> static none on table-column in flow-root | preceding sibling descendant
+RECREATED: absolute left -> static none on table-column in flow-root | target
+REMOVED: absolute left -> static none on table-column in flow-root | target descendant
+PRESERVED: absolute left -> static none on table-column in flow-root | following sibling
+PRESERVED: absolute left -> static none on table-column in flow-root | following sibling descendant
+STATS: absolute left -> static none on table-column in flow-root | rebuilt [BlockContainer<SECTION>#DOM-parent]
+PASS: absolute left -> static none on table-column in flow-root | incremental tree matches full rebuild
+PRESERVED: fixed none -> sticky right on block grid in inline-table | fixture ancestor
+PRESERVED: fixed none -> sticky right on block grid in inline-table | distant sibling
+PRESERVED: fixed none -> sticky right on block grid in inline-table | distant sibling descendant
+PRESERVED: fixed none -> sticky right on block grid in inline-table | DOM parent
+PRESERVED: fixed none -> sticky right on block grid in inline-table | preceding sibling
+PRESERVED: fixed none -> sticky right on block grid in inline-table | preceding sibling descendant
+RECREATED: fixed none -> sticky right on block grid in inline-table | target
+RECREATED: fixed none -> sticky right on block grid in inline-table | target descendant
+PRESERVED: fixed none -> sticky right on block grid in inline-table | following sibling
+PRESERVED: fixed none -> sticky right on block grid in inline-table | following sibling descendant
+STATS: fixed none -> sticky right on block grid in inline-table | rebuilt [Box<SECTION>#DOM-parent]
+PASS: fixed none -> sticky right on block grid in inline-table | incremental tree matches full rebuild
+28 cases; 28 matched; 0 mismatched

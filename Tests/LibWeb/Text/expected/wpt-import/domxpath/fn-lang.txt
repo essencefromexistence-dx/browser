@@ -1,0 +1,12 @@
+Harness status: OK
+
+Found 7 tests
+
+7 Pass
+Pass	lang("en"): <root><match xml:lang="en"/></root>
+Pass	lang("en"): <root><match xml:lang="EN"/></root>
+Pass	lang("en"): <root><match xml:lang="en-us"/></root>
+Pass	lang("en"): <root><unmatch/></root>
+Pass	lang("ja"): <root xml:lang="ja"><match/></root>
+Pass	lang("ja"): <root xml:lang="ja-jp"><unmatch xml:lang="ja_JP"/></root>
+Pass	lang("ko"): <root><unmatch xml:lang="Ko"/></root>

@@ -1,0 +1,57 @@
+append inline child:
+  build
+    InlineNode<SPAN> REBUILD
+    InlineNode<SPAN> CREATE
+    TextNode<#text> CREATE
+two independent mutations:
+  build
+    InlineNode<SPAN> REBUILD
+    InlineNode<SPAN> REBUILD
+    InlineNode<SPAN> CREATE
+    TextNode<#text> CREATE
+    InlineNode<SPAN> CREATE
+    TextNode<#text> CREATE
+display none to block:
+  build
+    BlockContainer<DIV>#toggle-me REBUILD
+    BlockContainer<DIV>#toggle-me CREATE
+    TextNode<#text> CREATE
+append block into inline parent:
+  build
+    BlockContainer<DIV>#inline-parent REBUILD
+    BlockContainer<DIV> CREATE
+    BlockContainer(anonymous) CREATE
+    TextNode<#text> CREATE
+append under display:contents:
+  build
+    BlockContainer<BODY> REBUILD
+    BlockContainer<DIV>#contents-host CREATE
+    InlineNode<SPAN> CREATE
+    TextNode<#text> CREATE
+    InlineNode<SPAN> CREATE
+    TextNode<#text> CREATE
+showModal:
+  build ESCAPED
+    BlockContainer(anonymous) REBUILD
+    BlockContainer<DIALOG>#dlg REBUILD
+    BlockContainer<DIALOG>#dlg CREATE
+    BlockContainer(anonymous) CREATE
+    BlockContainer<P>#dlg-content CREATE
+    TextNode<#text> CREATE
+mutate inside open dialog:
+  build
+    InlineNode<SPAN> REBUILD
+    InlineNode<SPAN> CREATE
+    TextNode<#text> CREATE
+close dialog:
+  build ESCAPED
+attach shadow root with content:
+  build
+    BlockContainer<BODY> REBUILD
+    BlockContainer<DIV>#shadow-host CREATE
+    InlineNode<SPAN> CREATE
+    TextNode<#text> CREATE
+append abspos child:
+  build
+    BlockContainer<DIV> REBUILD
+    BlockContainer<DIV> CREATE

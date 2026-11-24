@@ -1,0 +1,166 @@
+/*
+ * Copyright (c) 2026-present, the Ladybird developers.
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+#include <LibCore/AnonymousBuffer.h>
+#include <LibGC/CellAllocator.h>
+#include <LibJS/Runtime/Realm.h>
+#include <LibJS/Runtime/VM.h>
+#include <LibTest/TestCase.h>
+#include <LibURL/Parser.h>
+#include <LibWeb/Bindings/MainThreadVM.h>
+#include <LibWeb/Bindings/PrincipalHostDefined.h>
+#include <LibWeb/CSS/CSSStyleProperties.h>
+#include <LibWeb/DOM/ElementFactory.h>
+#include <LibWeb/HTML/HTMLDocument.h>
+#include <LibWeb/HTML/HTMLElement.h>
+#include <LibWeb/HTML/LocalTraversableNavigable.h>
+#include <LibWeb/HTML/Scripting/Environments.h>
+#include <LibWeb/Loader/ContentBlocker.h>
+#include <LibWeb/Namespace.h>
+#include <LibWeb/Page/Page.h>
+#include <LibWeb/Platform/FontPlugin.h>
+
+namespace {
+
+class TestPageClient final : public Web::PageClient {
+    GC_CELL(TestPageClient, Web::PageClient);
+    GC_DECLARE_ALLOCATOR(TestPageClient);
+
+public:
+    TestPageClient()
+        : m_palette(Gfx::PaletteImpl::create_with_anonymous_buffer(MUST(Core::AnonymousBuffer::create_with_size(sizeof(Gfx::SystemTheme)))))
+    {
+    }
+
+    virtual Web::PageId id() const override { return Web::PageId { 1 }; }
+    virtual Web::Page& page() override { return *m_page; }
+    virtual Web::Page const& page() const override { return *m_page; }
+    virtual bool is_connection_open() const override { return true; }
+    virtual Gfx::Palette palette() const override { return m_palette; }
+    virtual Web::DevicePixelRect screen_rect() const override { return {}; }
+    virtual double zoom_level() const override { return 1; }
+    virtual double device_pixel_ratio() const override { return 1; }
+    virtual double device_pixels_per_css_pixel() const override { return 1; }
+    virtual Web::CSS::PreferredColorScheme preferred_color_scheme() const override { return Web::CSS::PreferredColorScheme::Auto; }
+    virtual Web::CSS::PreferredContrast preferred_contrast() const override { return Web::CSS::PreferredContrast::Auto; }
+    virtual Web::CSS::PreferredMotion preferred_motion() const override { return Web::CSS::PreferredMotion::NoPreference; }
+    virtual size_t screen_count() const override { return 1; }
+    virtual Queue<Web::QueuedInputEvent>& input_event_queue() override { VERIFY_NOT_REACHED(); }
+    virtual void report_finished_handling_input_event(Web::PageId, u64, Web::EventResult) override { }
+    virtual Web::HTML::CrossProcessId allocate_cross_process_id() override { return { 1, m_next_cross_process_id++ }; }
+    virtual void request_frame() override { }
+    virtual void request_file(Web::FileRequest) override { }
+    virtual bool is_headless() const override { return true; }
+    virtual void visit_edges(Visitor& visitor) override
+    {
+        Base::visit_edges(visitor);
+        visitor.visit(m_page);
+    }
+
+    Gfx::Palette m_palette;
+    GC::Ptr<Web::Page> m_page;
+    u64 m_next_cross_process_id { 1 };
+};
+
+GC_DEFINE_ALLOCATOR(TestPageClient);
+
+static void install_font_plugin()
+{
+    static bool installed = [] {
+        static Web::Platform::FontPlugin font_plugin(false);
+        Web::Platform::FontPlugin::install(font_plugin);
+        return true;
+    }();
+    VERIFY(installed);
+}
+
+}
+
+TEST_CASE(replacing_custom_property_only_inline_blocks_updates_dependent_style)
+{
+    install_font_plugin();
+    auto principal_realm = Web::Bindings::create_a_principal_javascript_realm();
+    VERIFY(principal_realm.ptr());
+    auto& vm = Web::Bindings::main_thread_vm();
+    auto client = vm.heap().allocate<TestPageClient>();
+    auto page = Web::Page::create(client);
+    client->m_page = page.ptr();
+    auto traversable = Web::HTML::LocalTraversableNavigable::create_a_new_top_level_traversable(page, nullptr, {});
+    page->set_top_level_traversable(traversable);
+    auto document = GC::Ref { *traversable->active_document() };
+    if (!document->body())
+        MUST(document->populate_with_html_head_and_body());
+    auto parent = MUST(Web::DOM::create_element(*document, "div"_utf16_fly_string, Web::Namespace::HTML));
+    auto child = MUST(Web::DOM::create_element(*document, "div"_utf16_fly_string, Web::Namespace::HTML));
+    MUST(document->body()->append_child(parent));
+    MUST(parent->append_child(child));
+    MUST(child->style()->set_property(Web::CSS::PropertyID::Color, "var(--paint, black)"_utf16));
+    document->update_style();
+
+    auto replace_block = [&](Utf16View declarations, Utf16View expected_color) {
+        auto block = Web::CSS::CSSStyleProperties::create({}, {});
+        MUST(block->set_css_text(declarations));
+        parent->set_inline_style(block);
+        document->update_style();
+        auto resolved = Web::CSS::CSSStyleProperties::create_resolved_style(Web::DOM::AbstractElement { *child });
+        EXPECT_EQ(resolved->get_property_value("color"_utf16_fly_string), expected_color);
+    };
+    replace_block("--paint: red"_utf16, "rgb(255, 0, 0)"_utf16);
+    replace_block("--paint: blue"_utf16, "rgb(0, 0, 255)"_utf16);
+    replace_block(""_utf16, "rgb(0, 0, 0)"_utf16);
+}
+
+TEST_CASE(content_blocking_policy_isolated_between_pages)
+{
+    install_font_plugin();
+    auto principal_realm = Web::Bindings::create_a_principal_javascript_realm();
+    VERIFY(principal_realm.ptr());
+    auto& vm = Web::Bindings::main_thread_vm();
+    auto make_page = [&] {
+        auto client = vm.heap().allocate<TestPageClient>();
+        auto page = Web::Page::create(client);
+        client->m_page = page.ptr();
+        auto traversable = Web::HTML::LocalTraversableNavigable::create_a_new_top_level_traversable(page, nullptr, {});
+        page->set_top_level_traversable(traversable);
+        auto& document = *traversable->active_document();
+        if (!document.body())
+            MUST(document.populate_with_html_head_and_body());
+        auto element = MUST(Web::DOM::create_element(document, "div"_utf16_fly_string, Web::Namespace::HTML));
+        element->set_attribute("class"_fly_string, "advertisement"_utf16);
+        MUST(document.body()->append_child(element));
+        return page;
+    };
+    auto first_page = make_page();
+    auto second_page = make_page();
+    auto& blocker = Web::ContentBlocker::the();
+    Vector<String> rules { "##.advertisement"_string, "||ads.example.com^"_string };
+    MUST(blocker.set_patterns(rules));
+    auto& first_document = *static_cast<Web::HTML::LocalNavigable&>(*first_page->top_level_traversable()).active_document();
+    auto& second_document = *static_cast<Web::HTML::LocalNavigable&>(*second_page->top_level_traversable()).active_document();
+    EXPECT(!first_document.content_blocker_style_sheet().is_empty());
+    EXPECT(!second_document.content_blocker_style_sheet().is_empty());
+    first_page->set_content_blocking_policy(false, {});
+    EXPECT(!first_document.content_blocking_enabled());
+    EXPECT(second_document.content_blocking_enabled());
+    EXPECT(first_document.content_blocker_style_sheet().is_empty());
+    EXPECT(!second_document.content_blocker_style_sheet().is_empty());
+    EXPECT(blocker.has_rules());
+    first_page->set_content_blocking_policy(true, {});
+    EXPECT(!first_document.content_blocker_style_sheet().is_empty());
+    EXPECT(!second_document.content_blocker_style_sheet().is_empty());
+    auto site = URL::Parser::basic_parse("https://example.com:8443/"sv).value();
+    first_document.relevant_settings_object().top_level_creation_url = site;
+    second_document.relevant_settings_object().top_level_creation_url = site;
+    first_page->set_content_blocking_policy(true, { { "EXAMPLE.COM."_string } });
+    EXPECT(!first_page->content_blocking_enabled_for_url(site));
+    EXPECT(second_page->content_blocking_enabled_for_url(site));
+    EXPECT(first_document.content_blocker_style_sheet().is_empty());
+    EXPECT(!second_document.content_blocker_style_sheet().is_empty());
+    EXPECT(first_page->content_blocking_enabled_for_url(URL::Parser::basic_parse("https://shop.example.com/"sv).value()));
+    first_page->set_content_blocking_policy(true, {});
+    EXPECT(!first_document.content_blocker_style_sheet().is_empty());
+    MUST(blocker.set_patterns({}));
+}

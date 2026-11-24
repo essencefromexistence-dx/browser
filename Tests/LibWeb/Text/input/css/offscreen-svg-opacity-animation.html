@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #clip { position: absolute; top: 200vh; width: 100px; height: 100px; overflow: hidden; }
+    #transformed { transform: rotateX(30deg); filter: blur(0px); }
+    svg { width: 100px; height: 100px; }
+</style>
+<div id="clip"><div id="transformed"><svg><circle cx="50" cy="50" r="20" /></svg></div></div>
+<script>
+    asyncTest(async done => {
+        internals.updateStyle();
+        const target = document.querySelector("circle");
+        const nextFrame = () => new Promise(requestAnimationFrame);
+        async function settle() {
+            for (let i = 0; i < 4; ++i)
+                await nextFrame();
+        }
+        // Visible SVG opacity updates beside the main thread if it can, or through frames of the main thread if not.
+        async function updatesOverFrames() {
+            internals.beginStyleTrace();
+            internals.beginRenderingTrace();
+            await settle();
+            const sampled = parseStyleTrace(internals.takeStyleTrace()).filter(event => event.outcome?.startsWith("sampled"));
+            const pumpRequests = internals.takeRenderingTrace().split("\n").filter(line => line.startsWith("animation frame pump request"));
+            const compositorAnimations = internals.dumpCompositorAnimations().split("\n").filter(line => line && !line.endsWith("timer armed"));
+            return {
+                sampled: `[${[...new Set(sampled.map(event => event.element))].join(", ")}]`,
+                updates: `frame requests [${[...new Set(pumpRequests.map(line => line.replace(/ x\d+$/, "")))].join(", ")}], compositor animations [${compositorAnimations.join(", ")}]`,
+            };
+        }
+        const timeline = internals.createInternalAnimationTimeline();
+        timeline.setTime(0);
+        timeline.setTimeForObservation(0);
+        const animation = new Animation(new KeyframeEffect(target, [
+            { opacity: 0 },
+            { opacity: 1 },
+        ], { duration: 1000, iterations: Infinity }), timeline);
+        animation.play();
+        animation.startTime = 0;
+        await settle();
+        let trace = await updatesOverFrames();
+        println(`offscreen SVG opacity samples: ${trace.sampled}`);
+        println(`updates of transformed and filtered SVG in an outer clip: ${trace.updates}`);
+
+        timeline.setTimeForObservation(400);
+        println(`SVG style observes the current opacity: ${getComputedStyle(target).opacity === "0.4"}`);
+        timeline.setTime(600);
+        timeline.setTimeForObservation(600);
+        clip.scrollIntoView();
+        await settle();
+        println(`scrolling into view samples SVG opacity: ${getComputedStyle(target).opacity === "0.6"}`);
+        trace = await updatesOverFrames();
+        println(`updates of visible SVG opacity: ${trace.updates}`);
+        scrollTo(0, 0);
+        await settle();
+        trace = await updatesOverFrames();
+        println(`updates after scrolling out of view: ${trace.updates}`);
+
+        clip.style.transform = "translateX(0px)";
+        await settle();
+        trace = await updatesOverFrames();
+        println(`updates with a transform outside the clip: ${trace.updates}`);
+        clip.style.transform = "";
+        clip.style.filter = "blur(100px)";
+        await settle();
+        trace = await updatesOverFrames();
+        println(`updates with a filter outside the clip: ${trace.updates}`);
+        clip.style.filter = "";
+
+        target.id = "referenced";
+        const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+        use.setAttribute("href", "#referenced");
+        const visibleSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        visibleSVG.append(use);
+        document.body.append(visibleSVG);
+        await settle();
+        trace = await updatesOverFrames();
+        println(`updates of potentially referenced SVG: ${trace.updates}`);
+        visibleSVG.remove();
+        target.removeAttribute("id");
+
+        const pattern = document.createElementNS("http://www.w3.org/2000/svg", "pattern");
+        target.replaceWith(pattern);
+        pattern.append(target);
+        await settle();
+        trace = await updatesOverFrames();
+        println(`updates of an SVG paint resource: ${trace.updates}`);
+        pattern.replaceWith(target);
+
+        animation.effect.setKeyframes([{ opacity: 0, r: "20px" }, { opacity: 1, r: "40px" }]);
+        await settle();
+        trace = await updatesOverFrames();
+        println(`updates of a mixed SVG geometry and opacity animation: ${trace.updates}`);
+        animation.cancel();
+        done();
+    });
+</script>

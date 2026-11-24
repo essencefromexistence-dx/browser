@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    .box { position: absolute; top: 100px; width: 100px; height: 100px; transform: translateX(1px); background-image: linear-gradient(green, green); }
+    #a { left: 0; }
+    #b { left: 150px; }
+</style>
+<div id="a" class="box"></div>
+<div id="b" class="box"></div>
+<script>
+    const nodesOf = element => internals.dumpVisualContextNodes(element).replace(/^\[[sce]\d+\] /gm, "");
+    let nodesBefore;
+    visualContextTest({
+        steps: [
+            {
+                name: "dropping a transform releases its node",
+                mutate: () => { b.style.transform = "none"; },
+                expect: `
+                    update DIRTY-PATH
+                      div#b.box transform RELEASED
+                      epoch NEW
+                      recording NEEDED
+                `,
+            },
+            {
+                name: "a forced rebuild builds a fresh tree under a new epoch",
+                mutate: () => {
+                    nodesBefore = nodesOf(a);
+                    internals.forceIncompatibleVisualContextTreeRebuild();
+                },
+                check: equal => equal(nodesOf(a), nodesBefore, "nodes of #a"),
+                expect: `
+                    update FRESH-TREE
+                      epoch NEW
+                      recording NEEDED
+                `,
+            },
+            {
+                name: "the fresh tree has no released slots to hand out",
+                mutate: () => {
+                    internals.recordDisplayListForTesting();
+                    b.style.transform = "";
+                },
+                expect: `
+                    update DIRTY-PATH
+                      div#b.box transform ALLOCATED
+                      recording NEEDED
+                `,
+            },
+        ],
+    });
+</script>

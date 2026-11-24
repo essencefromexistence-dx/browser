@@ -1,0 +1,1 @@
+grid-template-areas: var(--foo); grid-template-columns: var(--bar); grid-template-rows: var(--baz);

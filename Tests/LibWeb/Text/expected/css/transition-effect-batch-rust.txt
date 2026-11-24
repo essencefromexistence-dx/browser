@@ -1,0 +1,2 @@
+opacity: 0
+width: 10px

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<style>
+    .item.completed > div > :focus {
+        color: rgb(0, 128, 0);
+    }
+</style>
+<ul id="list"></ul>
+<script>
+    test(() => {
+        for (let index = 0; index < 20; ++index) {
+            const item = document.createElement("li");
+            item.className = "item";
+            const row = document.createElement("div");
+            for (let field = 0; field < 5; ++field)
+                row.appendChild(document.createElement("input"));
+            item.appendChild(row);
+            list.appendChild(item);
+        }
+        const probe = list.children[3].firstChild.children[2];
+        internals.updateStyle();
+
+        const restyledNames = work => `[${work.restyled().map(shortStyleName).join(", ")}]`;
+        let probeColor;
+        const unfocusedWork = styleWork(() => {
+            for (const item of list.children)
+                item.classList.add("completed");
+            probeColor = getComputedStyle(probe).color;
+        }, internals, { flush: false });
+        println(`unfocused probe: ${probeColor}`);
+        println(`styled with no focused element: ${restyledNames(unfocusedWork)}`);
+
+        for (const item of list.children)
+            item.classList.remove("completed");
+        probe.focus();
+        getComputedStyle(probe).color;
+
+        const focusedWork = styleWork(() => {
+            for (const item of list.children)
+                item.classList.add("completed");
+            probeColor = getComputedStyle(probe).color;
+        }, internals, { flush: false });
+        println(`focused probe: ${probeColor}`);
+        // The focused probe restyles with the elements of its user-agent shadow tree, which inherit its color.
+        println(`styled with one focused element: ${restyledNames(focusedWork)}`);
+    });
+</script>

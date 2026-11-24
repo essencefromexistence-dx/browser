@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<style>
+    .winner {
+        color: green !important;
+    }
+
+    .loser-a {
+        color: red;
+    }
+
+    .loser-b {
+        color: blue;
+    }
+</style>
+<div id="container"></div>
+<script>
+    test(() => {
+        const first = document.createElement("span");
+        first.className = "winner loser-a";
+        const second = document.createElement("span");
+        second.className = "winner loser-b";
+        const work = styleWork(() => document.getElementById("container").append(first, second));
+
+        println(work.text.trimEnd());
+        println(`first color: ${getComputedStyle(first).color}`);
+        println(`second color: ${getComputedStyle(second).color}`);
+    });
+</script>

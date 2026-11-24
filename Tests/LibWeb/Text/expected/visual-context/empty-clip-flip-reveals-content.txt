@@ -1,0 +1,3 @@
+PASS: clipped away (work + checks)
+PASS: the clip opens (work + checks)
+PASS: the clip closes again (work + checks)

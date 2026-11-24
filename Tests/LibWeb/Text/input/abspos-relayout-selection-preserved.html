@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<script src="include.js"></script>
+<script src="work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #root { position: relative; width: 400px; height: 200px; }
+    #boundary {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        width: 200px;
+        height: 100px;
+        overflow: hidden;
+    }
+    #child { height: 20px; }
+</style>
+<div id="root">
+    <div id="boundary">
+        <div id="text">selectable text</div>
+        <div id="child"></div>
+    </div>
+</div>
+<script>
+    promiseTest(async () => {
+        document.body.offsetHeight;
+
+        // Select the text inside the boundary.
+        const textNode = document.getElementById("text").firstChild;
+        const range = document.createRange();
+        range.setStart(textNode, 0);
+        range.setEnd(textNode, textNode.length);
+        window.getSelection().addRange(range);
+        document.body.offsetHeight;
+
+        // Mutate a sibling inside the boundary to trigger a partial relayout.
+        // Selection must survive the changed fragment output and any replaced
+        // layout nodes in that subtree.
+        const partialLayout = layoutWork(() => (document.getElementById("child").style.height = "40px")).passes();
+        const afterPartial = internals.dumpDisplayList();
+
+        // Ground truth: force a full layout without changing geometry and dump again.
+        const fullLayout = layoutWork(() => (document.body.style.minWidth = "1px")).passes();
+        const afterFull = internals.dumpDisplayList();
+
+        println(`partial-layout=[${partialLayout.join(" | ")}] full-layout=[${fullLayout.join(" | ")}]`);
+        println(`selection-painting-matches-full-layout=${afterPartial === afterFull}`);
+    });
+</script>

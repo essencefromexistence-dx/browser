@@ -1,0 +1,337 @@
+PRESERVED: display contents -> run-in in inline list-item | fixture ancestor
+PRESERVED: display contents -> run-in in inline list-item | distant sibling
+PRESERVED: display contents -> run-in in inline list-item | distant sibling descendant
+PRESERVED: display contents -> run-in in inline list-item | DOM parent
+PRESERVED: display contents -> run-in in inline list-item | preceding sibling
+PRESERVED: display contents -> run-in in inline list-item | preceding sibling descendant
+CREATED: display contents -> run-in in inline list-item | target
+RECREATED: display contents -> run-in in inline list-item | target descendant
+PRESERVED: display contents -> run-in in inline list-item | following sibling
+PRESERVED: display contents -> run-in in inline list-item | following sibling descendant
+STATS: display contents -> run-in in inline list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: display contents -> run-in in inline list-item | incremental tree matches full rebuild
+PRESERVED: display block -> inline-table in -webkit-inline-box | fixture ancestor
+PRESERVED: display block -> inline-table in -webkit-inline-box | distant sibling
+PRESERVED: display block -> inline-table in -webkit-inline-box | distant sibling descendant
+PRESERVED: display block -> inline-table in -webkit-inline-box | DOM parent
+PRESERVED: display block -> inline-table in -webkit-inline-box | preceding sibling
+PRESERVED: display block -> inline-table in -webkit-inline-box | preceding sibling descendant
+RECREATED: display block -> inline-table in -webkit-inline-box | target
+RECREATED: display block -> inline-table in -webkit-inline-box | target descendant
+PRESERVED: display block -> inline-table in -webkit-inline-box | following sibling
+PRESERVED: display block -> inline-table in -webkit-inline-box | following sibling descendant
+STATS: display block -> inline-table in -webkit-inline-box | rebuilt [Box<SECTION>#DOM-parent]
+PASS: display block -> inline-table in -webkit-inline-box | incremental tree matches full rebuild
+PRESERVED: display inline -> table-cell in block flow | fixture ancestor
+PRESERVED: display inline -> table-cell in block flow | distant sibling
+PRESERVED: display inline -> table-cell in block flow | distant sibling descendant
+PRESERVED: display inline -> table-cell in block flow | DOM parent
+PRESERVED: display inline -> table-cell in block flow | preceding sibling
+PRESERVED: display inline -> table-cell in block flow | preceding sibling descendant
+RECREATED: display inline -> table-cell in block flow | target
+RECREATED: display inline -> table-cell in block flow | target descendant
+PRESERVED: display inline -> table-cell in block flow | following sibling
+PRESERVED: display inline -> table-cell in block flow | following sibling descendant
+STATS: display inline -> table-cell in block flow | rebuilt [BlockContainer<SECTION>#DOM-parent]
+PASS: display inline -> table-cell in block flow | incremental tree matches full rebuild
+PRESERVED: display inline-block -> block flex in block flow list-item | fixture ancestor
+PRESERVED: display inline-block -> block flex in block flow list-item | distant sibling
+PRESERVED: display inline-block -> block flex in block flow list-item | distant sibling descendant
+PRESERVED: display inline-block -> block flex in block flow list-item | DOM parent
+PRESERVED: display inline-block -> block flex in block flow list-item | preceding sibling
+PRESERVED: display inline-block -> block flex in block flow list-item | preceding sibling descendant
+RECREATED: display inline-block -> block flex in block flow list-item | target
+RECREATED: display inline-block -> block flex in block flow list-item | target descendant
+PRESERVED: display inline-block -> block flex in block flow list-item | following sibling
+PRESERVED: display inline-block -> block flex in block flow list-item | following sibling descendant
+STATS: display inline-block -> block flex in block flow list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: display inline-block -> block flex in block flow list-item | incremental tree matches full rebuild
+PRESERVED: display run-in -> none in list-item | fixture ancestor
+PRESERVED: display run-in -> none in list-item | distant sibling
+PRESERVED: display run-in -> none in list-item | distant sibling descendant
+PRESERVED: display run-in -> none in list-item | DOM parent
+PRESERVED: display run-in -> none in list-item | preceding sibling
+PRESERVED: display run-in -> none in list-item | preceding sibling descendant
+REMOVED: display run-in -> none in list-item | target
+REMOVED: display run-in -> none in list-item | target descendant
+PRESERVED: display run-in -> none in list-item | following sibling
+PRESERVED: display run-in -> none in list-item | following sibling descendant
+STATS: display run-in -> none in list-item | rebuilt []
+PASS: display run-in -> none in list-item | incremental tree matches full rebuild
+PRESERVED: display list-item -> flex in -webkit-inline-box | fixture ancestor
+PRESERVED: display list-item -> flex in -webkit-inline-box | distant sibling
+PRESERVED: display list-item -> flex in -webkit-inline-box | distant sibling descendant
+PRESERVED: display list-item -> flex in -webkit-inline-box | DOM parent
+PRESERVED: display list-item -> flex in -webkit-inline-box | preceding sibling
+PRESERVED: display list-item -> flex in -webkit-inline-box | preceding sibling descendant
+RECREATED: display list-item -> flex in -webkit-inline-box | target
+RECREATED: display list-item -> flex in -webkit-inline-box | target descendant
+PRESERVED: display list-item -> flex in -webkit-inline-box | following sibling
+PRESERVED: display list-item -> flex in -webkit-inline-box | following sibling descendant
+STATS: display list-item -> flex in -webkit-inline-box | rebuilt [Box<SECTION>#DOM-parent]
+PASS: display list-item -> flex in -webkit-inline-box | incremental tree matches full rebuild
+PRESERVED: display flex -> -webkit-inline-box in inline flow | fixture ancestor
+PRESERVED: display flex -> -webkit-inline-box in inline flow | distant sibling
+PRESERVED: display flex -> -webkit-inline-box in inline flow | distant sibling descendant
+PRESERVED: display flex -> -webkit-inline-box in inline flow | DOM parent
+PRESERVED: display flex -> -webkit-inline-box in inline flow | preceding sibling
+PRESERVED: display flex -> -webkit-inline-box in inline flow | preceding sibling descendant
+RECREATED: display flex -> -webkit-inline-box in inline flow | target
+RECREATED: display flex -> -webkit-inline-box in inline flow | target descendant
+PRESERVED: display flex -> -webkit-inline-box in inline flow | following sibling
+PRESERVED: display flex -> -webkit-inline-box in inline flow | following sibling descendant
+STATS: display flex -> -webkit-inline-box in inline flow | rebuilt [InlineNode<SECTION>#DOM-parent]
+PASS: display flex -> -webkit-inline-box in inline flow | incremental tree matches full rebuild
+PRESERVED: display inline-flex -> table-caption in block flow list-item | fixture ancestor
+PRESERVED: display inline-flex -> table-caption in block flow list-item | distant sibling
+PRESERVED: display inline-flex -> table-caption in block flow list-item | distant sibling descendant
+PRESERVED: display inline-flex -> table-caption in block flow list-item | DOM parent
+PRESERVED: display inline-flex -> table-caption in block flow list-item | preceding sibling
+PRESERVED: display inline-flex -> table-caption in block flow list-item | preceding sibling descendant
+RECREATED: display inline-flex -> table-caption in block flow list-item | target
+RECREATED: display inline-flex -> table-caption in block flow list-item | target descendant
+PRESERVED: display inline-flex -> table-caption in block flow list-item | following sibling
+PRESERVED: display inline-flex -> table-caption in block flow list-item | following sibling descendant
+STATS: display inline-flex -> table-caption in block flow list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: display inline-flex -> table-caption in block flow list-item | incremental tree matches full rebuild
+PRESERVED: display grid -> inline grid in inline list-item | fixture ancestor
+PRESERVED: display grid -> inline grid in inline list-item | distant sibling
+PRESERVED: display grid -> inline grid in inline list-item | distant sibling descendant
+PRESERVED: display grid -> inline grid in inline list-item | DOM parent
+PRESERVED: display grid -> inline grid in inline list-item | preceding sibling
+PRESERVED: display grid -> inline grid in inline list-item | preceding sibling descendant
+RECREATED: display grid -> inline grid in inline list-item | target
+RECREATED: display grid -> inline grid in inline list-item | target descendant
+PRESERVED: display grid -> inline grid in inline list-item | following sibling
+PRESERVED: display grid -> inline grid in inline list-item | following sibling descendant
+STATS: display grid -> inline grid in inline list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: display grid -> inline grid in inline list-item | incremental tree matches full rebuild
+PRESERVED: display table -> inline in -webkit-inline-box | fixture ancestor
+PRESERVED: display table -> inline in -webkit-inline-box | distant sibling
+PRESERVED: display table -> inline in -webkit-inline-box | distant sibling descendant
+PRESERVED: display table -> inline in -webkit-inline-box | DOM parent
+PRESERVED: display table -> inline in -webkit-inline-box | preceding sibling
+PRESERVED: display table -> inline in -webkit-inline-box | preceding sibling descendant
+RECREATED: display table -> inline in -webkit-inline-box | target
+RECREATED: display table -> inline in -webkit-inline-box | target descendant
+PRESERVED: display table -> inline in -webkit-inline-box | following sibling
+PRESERVED: display table -> inline in -webkit-inline-box | following sibling descendant
+STATS: display table -> inline in -webkit-inline-box | rebuilt [Box<SECTION>#DOM-parent]
+PASS: display table -> inline in -webkit-inline-box | incremental tree matches full rebuild
+PRESERVED: display inline-table -> grid in block flow | fixture ancestor
+PRESERVED: display inline-table -> grid in block flow | distant sibling
+PRESERVED: display inline-table -> grid in block flow | distant sibling descendant
+PRESERVED: display inline-table -> grid in block flow | DOM parent
+PRESERVED: display inline-table -> grid in block flow | preceding sibling
+PRESERVED: display inline-table -> grid in block flow | preceding sibling descendant
+RECREATED: display inline-table -> grid in block flow | target
+RECREATED: display inline-table -> grid in block flow | target descendant
+PRESERVED: display inline-table -> grid in block flow | following sibling
+PRESERVED: display inline-table -> grid in block flow | following sibling descendant
+STATS: display inline-table -> grid in block flow | rebuilt [BlockContainer<SECTION>#DOM-parent]
+PASS: display inline-table -> grid in block flow | incremental tree matches full rebuild
+PRESERVED: display -webkit-box -> table-footer-group in inline flow list-item | fixture ancestor
+PRESERVED: display -webkit-box -> table-footer-group in inline flow list-item | distant sibling
+PRESERVED: display -webkit-box -> table-footer-group in inline flow list-item | distant sibling descendant
+PRESERVED: display -webkit-box -> table-footer-group in inline flow list-item | DOM parent
+PRESERVED: display -webkit-box -> table-footer-group in inline flow list-item | preceding sibling
+PRESERVED: display -webkit-box -> table-footer-group in inline flow list-item | preceding sibling descendant
+RECREATED: display -webkit-box -> table-footer-group in inline flow list-item | target
+RECREATED: display -webkit-box -> table-footer-group in inline flow list-item | target descendant
+PRESERVED: display -webkit-box -> table-footer-group in inline flow list-item | following sibling
+PRESERVED: display -webkit-box -> table-footer-group in inline flow list-item | following sibling descendant
+STATS: display -webkit-box -> table-footer-group in inline flow list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: display -webkit-box -> table-footer-group in inline flow list-item | incremental tree matches full rebuild
+PRESERVED: display -webkit-inline-box -> block flow-root in flex | fixture ancestor
+PRESERVED: display -webkit-inline-box -> block flow-root in flex | distant sibling
+PRESERVED: display -webkit-inline-box -> block flow-root in flex | distant sibling descendant
+PRESERVED: display -webkit-inline-box -> block flow-root in flex | DOM parent
+PRESERVED: display -webkit-inline-box -> block flow-root in flex | preceding sibling
+PRESERVED: display -webkit-inline-box -> block flow-root in flex | preceding sibling descendant
+RECREATED: display -webkit-inline-box -> block flow-root in flex | target
+RECREATED: display -webkit-inline-box -> block flow-root in flex | target descendant
+PRESERVED: display -webkit-inline-box -> block flow-root in flex | following sibling
+PRESERVED: display -webkit-inline-box -> block flow-root in flex | following sibling descendant
+STATS: display -webkit-inline-box -> block flow-root in flex | rebuilt [Box<SECTION>#DOM-parent]
+PASS: display -webkit-inline-box -> block flow-root in flex | incremental tree matches full rebuild
+PRESERVED: display table-row-group -> block flow list-item in table-row-group | fixture ancestor
+PRESERVED: display table-row-group -> block flow list-item in table-row-group | distant sibling
+PRESERVED: display table-row-group -> block flow list-item in table-row-group | distant sibling descendant
+PRESERVED: display table-row-group -> block flow list-item in table-row-group | DOM parent
+PRESERVED: display table-row-group -> block flow list-item in table-row-group | preceding sibling
+PRESERVED: display table-row-group -> block flow list-item in table-row-group | preceding sibling descendant
+RECREATED: display table-row-group -> block flow list-item in table-row-group | target
+RECREATED: display table-row-group -> block flow list-item in table-row-group | target descendant
+PRESERVED: display table-row-group -> block flow list-item in table-row-group | following sibling
+PRESERVED: display table-row-group -> block flow list-item in table-row-group | following sibling descendant
+STATS: display table-row-group -> block flow list-item in table-row-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: display table-row-group -> block flow list-item in table-row-group | incremental tree matches full rebuild
+PRESERVED: display table-footer-group -> run-in in inline flow | fixture ancestor
+PRESERVED: display table-footer-group -> run-in in inline flow | distant sibling
+PRESERVED: display table-footer-group -> run-in in inline flow | distant sibling descendant
+PRESERVED: display table-footer-group -> run-in in inline flow | DOM parent
+PRESERVED: display table-footer-group -> run-in in inline flow | preceding sibling
+PRESERVED: display table-footer-group -> run-in in inline flow | preceding sibling descendant
+RECREATED: display table-footer-group -> run-in in inline flow | target
+RECREATED: display table-footer-group -> run-in in inline flow | target descendant
+PRESERVED: display table-footer-group -> run-in in inline flow | following sibling
+PRESERVED: display table-footer-group -> run-in in inline flow | following sibling descendant
+STATS: display table-footer-group -> run-in in inline flow | rebuilt [InlineNode<SECTION>#DOM-parent]
+PASS: display table-footer-group -> run-in in inline flow | incremental tree matches full rebuild
+PRESERVED: display table-row -> inline-table in block flow list-item | fixture ancestor
+PRESERVED: display table-row -> inline-table in block flow list-item | distant sibling
+PRESERVED: display table-row -> inline-table in block flow list-item | distant sibling descendant
+PRESERVED: display table-row -> inline-table in block flow list-item | DOM parent
+PRESERVED: display table-row -> inline-table in block flow list-item | preceding sibling
+PRESERVED: display table-row -> inline-table in block flow list-item | preceding sibling descendant
+RECREATED: display table-row -> inline-table in block flow list-item | target
+RECREATED: display table-row -> inline-table in block flow list-item | target descendant
+PRESERVED: display table-row -> inline-table in block flow list-item | following sibling
+PRESERVED: display table-row -> inline-table in block flow list-item | following sibling descendant
+STATS: display table-row -> inline-table in block flow list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: display table-row -> inline-table in block flow list-item | incremental tree matches full rebuild
+PRESERVED: display table-cell -> table-column-group in flex | fixture ancestor
+PRESERVED: display table-cell -> table-column-group in flex | distant sibling
+PRESERVED: display table-cell -> table-column-group in flex | distant sibling descendant
+PRESERVED: display table-cell -> table-column-group in flex | DOM parent
+PRESERVED: display table-cell -> table-column-group in flex | preceding sibling
+PRESERVED: display table-cell -> table-column-group in flex | preceding sibling descendant
+RECREATED: display table-cell -> table-column-group in flex | target
+RECREATED: display table-cell -> table-column-group in flex | target descendant
+PRESERVED: display table-cell -> table-column-group in flex | following sibling
+PRESERVED: display table-cell -> table-column-group in flex | following sibling descendant
+STATS: display table-cell -> table-column-group in flex | rebuilt [Box<SECTION>#DOM-parent]
+PASS: display table-cell -> table-column-group in flex | incremental tree matches full rebuild
+PRESERVED: display table-column -> inline flex in table-header-group | fixture ancestor
+PRESERVED: display table-column -> inline flex in table-header-group | distant sibling
+PRESERVED: display table-column -> inline flex in table-header-group | distant sibling descendant
+PRESERVED: display table-column -> inline flex in table-header-group | DOM parent
+PRESERVED: display table-column -> inline flex in table-header-group | preceding sibling
+PRESERVED: display table-column -> inline flex in table-header-group | preceding sibling descendant
+RECREATED: display table-column -> inline flex in table-header-group | target
+CREATED: display table-column -> inline flex in table-header-group | target descendant
+PRESERVED: display table-column -> inline flex in table-header-group | following sibling
+PRESERVED: display table-column -> inline flex in table-header-group | following sibling descendant
+STATS: display table-column -> inline flex in table-header-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: display table-column -> inline flex in table-header-group | incremental tree matches full rebuild
+PRESERVED: display table-caption -> contents in inline flow | fixture ancestor
+PRESERVED: display table-caption -> contents in inline flow | distant sibling
+PRESERVED: display table-caption -> contents in inline flow | distant sibling descendant
+RECREATED: display table-caption -> contents in inline flow | DOM parent
+RECREATED: display table-caption -> contents in inline flow | preceding sibling
+RECREATED: display table-caption -> contents in inline flow | preceding sibling descendant
+REMOVED: display table-caption -> contents in inline flow | target
+RECREATED: display table-caption -> contents in inline flow | target descendant
+RECREATED: display table-caption -> contents in inline flow | following sibling
+RECREATED: display table-caption -> contents in inline flow | following sibling descendant
+STATS: display table-caption -> contents in inline flow | rebuilt [BlockContainer<DIV>#fixture]
+PASS: display table-caption -> contents in inline flow | incremental tree matches full rebuild
+PRESERVED: display block flow -> flex in block flow list-item | fixture ancestor
+PRESERVED: display block flow -> flex in block flow list-item | distant sibling
+PRESERVED: display block flow -> flex in block flow list-item | distant sibling descendant
+PRESERVED: display block flow -> flex in block flow list-item | DOM parent
+PRESERVED: display block flow -> flex in block flow list-item | preceding sibling
+PRESERVED: display block flow -> flex in block flow list-item | preceding sibling descendant
+RECREATED: display block flow -> flex in block flow list-item | target
+RECREATED: display block flow -> flex in block flow list-item | target descendant
+PRESERVED: display block flow -> flex in block flow list-item | following sibling
+PRESERVED: display block flow -> flex in block flow list-item | following sibling descendant
+STATS: display block flow -> flex in block flow list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: display block flow -> flex in block flow list-item | incremental tree matches full rebuild
+PRESERVED: display block flow-root -> -webkit-inline-box in flex | fixture ancestor
+PRESERVED: display block flow-root -> -webkit-inline-box in flex | distant sibling
+PRESERVED: display block flow-root -> -webkit-inline-box in flex | distant sibling descendant
+PRESERVED: display block flow-root -> -webkit-inline-box in flex | DOM parent
+PRESERVED: display block flow-root -> -webkit-inline-box in flex | preceding sibling
+PRESERVED: display block flow-root -> -webkit-inline-box in flex | preceding sibling descendant
+RECREATED: display block flow-root -> -webkit-inline-box in flex | target
+RECREATED: display block flow-root -> -webkit-inline-box in flex | target descendant
+PRESERVED: display block flow-root -> -webkit-inline-box in flex | following sibling
+PRESERVED: display block flow-root -> -webkit-inline-box in flex | following sibling descendant
+STATS: display block flow-root -> -webkit-inline-box in flex | rebuilt [Box<SECTION>#DOM-parent]
+PASS: display block flow-root -> -webkit-inline-box in flex | incremental tree matches full rebuild
+PRESERVED: display inline flow-root -> table-caption in table-row-group | fixture ancestor
+PRESERVED: display inline flow-root -> table-caption in table-row-group | distant sibling
+PRESERVED: display inline flow-root -> table-caption in table-row-group | distant sibling descendant
+PRESERVED: display inline flow-root -> table-caption in table-row-group | DOM parent
+PRESERVED: display inline flow-root -> table-caption in table-row-group | preceding sibling
+PRESERVED: display inline flow-root -> table-caption in table-row-group | preceding sibling descendant
+RECREATED: display inline flow-root -> table-caption in table-row-group | target
+RECREATED: display inline flow-root -> table-caption in table-row-group | target descendant
+PRESERVED: display inline flow-root -> table-caption in table-row-group | following sibling
+PRESERVED: display inline flow-root -> table-caption in table-row-group | following sibling descendant
+STATS: display inline flow-root -> table-caption in table-row-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: display inline flow-root -> table-caption in table-row-group | incremental tree matches full rebuild
+PRESERVED: display inline flex -> block table in inline flow-root | fixture ancestor
+PRESERVED: display inline flex -> block table in inline flow-root | distant sibling
+PRESERVED: display inline flex -> block table in inline flow-root | distant sibling descendant
+PRESERVED: display inline flex -> block table in inline flow-root | DOM parent
+PRESERVED: display inline flex -> block table in inline flow-root | preceding sibling
+PRESERVED: display inline flex -> block table in inline flow-root | preceding sibling descendant
+RECREATED: display inline flex -> block table in inline flow-root | target
+RECREATED: display inline flex -> block table in inline flow-root | target descendant
+PRESERVED: display inline flex -> block table in inline flow-root | following sibling
+PRESERVED: display inline flex -> block table in inline flow-root | following sibling descendant
+STATS: display inline flex -> block table in inline flow-root | rebuilt [BlockContainer<SECTION>#DOM-parent]
+PASS: display inline flex -> block table in inline flow-root | incremental tree matches full rebuild
+PRESERVED: display block grid -> flow-root in inline flow list-item | fixture ancestor
+PRESERVED: display block grid -> flow-root in inline flow list-item | distant sibling
+PRESERVED: display block grid -> flow-root in inline flow list-item | distant sibling descendant
+PRESERVED: display block grid -> flow-root in inline flow list-item | DOM parent
+PRESERVED: display block grid -> flow-root in inline flow list-item | preceding sibling
+PRESERVED: display block grid -> flow-root in inline flow list-item | preceding sibling descendant
+RECREATED: display block grid -> flow-root in inline flow list-item | target
+RECREATED: display block grid -> flow-root in inline flow list-item | target descendant
+PRESERVED: display block grid -> flow-root in inline flow list-item | following sibling
+PRESERVED: display block grid -> flow-root in inline flow list-item | following sibling descendant
+STATS: display block grid -> flow-root in inline flow list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: display block grid -> flow-root in inline flow list-item | incremental tree matches full rebuild
+PRESERVED: display inline grid -> inline-grid in flex | fixture ancestor
+PRESERVED: display inline grid -> inline-grid in flex | distant sibling
+PRESERVED: display inline grid -> inline-grid in flex | distant sibling descendant
+PRESERVED: display inline grid -> inline-grid in flex | DOM parent
+PRESERVED: display inline grid -> inline-grid in flex | preceding sibling
+PRESERVED: display inline grid -> inline-grid in flex | preceding sibling descendant
+PRESERVED: display inline grid -> inline-grid in flex | target
+PRESERVED: display inline grid -> inline-grid in flex | target descendant
+PRESERVED: display inline grid -> inline-grid in flex | following sibling
+PRESERVED: display inline grid -> inline-grid in flex | following sibling descendant
+STATS: display inline grid -> inline-grid in flex | no layout tree build
+PASS: display inline grid -> inline-grid in flex | incremental tree matches full rebuild
+PRESERVED: display inline table -> table-footer-group in table-header-group | fixture ancestor
+PRESERVED: display inline table -> table-footer-group in table-header-group | distant sibling
+PRESERVED: display inline table -> table-footer-group in table-header-group | distant sibling descendant
+PRESERVED: display inline table -> table-footer-group in table-header-group | DOM parent
+PRESERVED: display inline table -> table-footer-group in table-header-group | preceding sibling
+PRESERVED: display inline table -> table-footer-group in table-header-group | preceding sibling descendant
+RECREATED: display inline table -> table-footer-group in table-header-group | target
+RECREATED: display inline table -> table-footer-group in table-header-group | target descendant
+PRESERVED: display inline table -> table-footer-group in table-header-group | following sibling
+PRESERVED: display inline table -> table-footer-group in table-header-group | following sibling descendant
+STATS: display inline table -> table-footer-group in table-header-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: display inline table -> table-footer-group in table-header-group | incremental tree matches full rebuild
+PRESERVED: display block flow list-item -> block flow-root in block flow-root | fixture ancestor
+PRESERVED: display block flow list-item -> block flow-root in block flow-root | distant sibling
+PRESERVED: display block flow list-item -> block flow-root in block flow-root | distant sibling descendant
+PRESERVED: display block flow list-item -> block flow-root in block flow-root | DOM parent
+PRESERVED: display block flow list-item -> block flow-root in block flow-root | preceding sibling
+PRESERVED: display block flow list-item -> block flow-root in block flow-root | preceding sibling descendant
+RECREATED: display block flow list-item -> block flow-root in block flow-root | target
+RECREATED: display block flow list-item -> block flow-root in block flow-root | target descendant
+PRESERVED: display block flow list-item -> block flow-root in block flow-root | following sibling
+PRESERVED: display block flow list-item -> block flow-root in block flow-root | following sibling descendant
+STATS: display block flow list-item -> block flow-root in block flow-root | rebuilt [BlockContainer<SECTION>#DOM-parent]
+PASS: display block flow list-item -> block flow-root in block flow-root | incremental tree matches full rebuild
+PRESERVED: display inline flow list-item -> block flow list-item in inline flow list-item | fixture ancestor
+PRESERVED: display inline flow list-item -> block flow list-item in inline flow list-item | distant sibling
+PRESERVED: display inline flow list-item -> block flow list-item in inline flow list-item | distant sibling descendant
+PRESERVED: display inline flow list-item -> block flow list-item in inline flow list-item | DOM parent
+PRESERVED: display inline flow list-item -> block flow list-item in inline flow list-item | preceding sibling
+PRESERVED: display inline flow list-item -> block flow list-item in inline flow list-item | preceding sibling descendant
+RECREATED: display inline flow list-item -> block flow list-item in inline flow list-item | target
+RECREATED: display inline flow list-item -> block flow list-item in inline flow list-item | target descendant
+PRESERVED: display inline flow list-item -> block flow list-item in inline flow list-item | following sibling
+PRESERVED: display inline flow list-item -> block flow list-item in inline flow list-item | following sibling descendant
+STATS: display inline flow list-item -> block flow list-item in inline flow list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: display inline flow list-item -> block flow list-item in inline flow list-item | incremental tree matches full rebuild
+28 cases; 28 matched; 0 mismatched

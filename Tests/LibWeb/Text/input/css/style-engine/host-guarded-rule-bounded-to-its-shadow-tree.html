@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<ul id="list"></ul>
+<div id="host"></div>
+<script>
+    test(() => {
+        for (let i = 0; i < 50; ++i)
+            list.appendChild(document.createElement("li"));
+        const shadow = host.attachShadow({ mode: "open" });
+        const item = document.createElement("li");
+        shadow.appendChild(item);
+        internals.updateStyle();
+
+        function restyledForSheet(cssText) {
+            const sheet = new CSSStyleSheet();
+            sheet.replaceSync(cssText);
+            const work = styleWork(() => shadow.adoptedStyleSheets = [sheet]);
+            shadow.adoptedStyleSheets = [];
+            internals.updateStyle();
+            return `[${work.restyled().map(shortStyleName).join(", ")}]`;
+        }
+
+        // A sheet adopted by the shadow root restyles only what its rules can match, so nothing for rules
+        // guarded by a host state the host does not have, and none of the 50 list items outside it.
+        println(`li: ${restyledForSheet("li { color: red }")}`);
+        println(`:host > li: ${restyledForSheet(":host > li { color: red }")}`);
+        println(`:host(.a) li: ${restyledForSheet(":host(.a) li { color: red }")}`);
+        println(`:host([data-priority]) > li: ${restyledForSheet(":host([data-priority]) > li { color: red }")}`);
+        println(`:host: ${restyledForSheet(":host { color: red }")}`);
+
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(":host([data-priority]) > li { color: rgb(1, 2, 3) }");
+        shadow.adoptedStyleSheets = [sheet];
+        println(`without the host attribute: ${getComputedStyle(item).color}`);
+        host.dataset.priority = "1";
+        println(`with the host attribute: ${getComputedStyle(item).color}`);
+        delete host.dataset.priority;
+        println(`after removing the host attribute: ${getComputedStyle(item).color}`);
+    });
+</script>

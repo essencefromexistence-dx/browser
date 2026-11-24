@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #box {
+        width: 100px;
+        height: 50px;
+        border: 4px solid black;
+        background-color: #6d98cc;
+        background-image: linear-gradient(red, red), linear-gradient(blue, blue);
+    }
+</style>
+<div id="box"></div>
+<script>
+    let dump;
+    visualContextTest({
+        setup: () => {
+            box.style.borderStyle = "dashed";
+            box.style.boxShadow = "6px 6px 4px rgba(0, 0, 0, 0.5)";
+            box.style.outline = "3px dotted red";
+            box.style.outlineOffset = "2px";
+            box.style.backgroundBlendMode = "multiply, normal";
+            box.style.backgroundClip = "padding-box, border-box";
+            dump = internals.dumpDisplayList();
+        },
+        steps: [
+            {
+                name: "decorations painted",
+                check: equal => {
+                    equal(dump.includes("StrokePath"), true, "dashed border painted");
+                    equal(dump.includes("PaintOuterBoxShadow"), true, "shadow painted");
+                    equal(dump.includes("DrawIsolatedGroup"), true, "blended layers painted");
+                },
+                expect: ``,
+            },
+            {
+                name: "border style",
+                mutate: () => { box.style.borderStyle = "dotted"; },
+                expect: `
+                    update DIRTY-PATH
+                `,
+            },
+            {
+                name: "box shadow",
+                mutate: () => { box.style.boxShadow = "2px 2px 2px rgba(0, 0, 0, 0.5)"; },
+                expect: ``,
+            },
+            {
+                name: "outline",
+                mutate: () => {
+                    box.style.outlineStyle = "dashed";
+                    box.style.outlineWidth = "5px";
+                    box.style.outlineOffset = "4px";
+                },
+                expect: ``,
+            },
+            {
+                name: "background blending and clip",
+                mutate: () => {
+                    box.style.backgroundBlendMode = "normal, multiply";
+                    box.style.backgroundClip = "border-box, padding-box";
+                },
+                expect: ``,
+            },
+        ],
+    });
+</script>

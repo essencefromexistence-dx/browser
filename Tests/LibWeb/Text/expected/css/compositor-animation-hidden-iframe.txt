@@ -1,0 +1,4 @@
+compositor animations:
+  opacity div#target
+child rendering samples: []
+explicit style observation remains current: true

@@ -1,0 +1,52 @@
+<!doctype html>
+<script src="../../include.js"></script>
+<script>
+    // An autofocus candidate with a cross-origin ancestor is excluded, however that ancestor is hosted. A grandchild
+    // same origin with the top document under an isolated iframe therefore does not autofocus.
+    // This page is served over HTTP so that the grandchild can be same origin with it.
+    promiseTest(async () => {
+        const httpServer = httpTestServer();
+        const childHostname = uniqueLocalhostHostname("oop-grandchild-autofocus");
+
+        const grandchildUrl = await httpServer.createEcho("GET", "/oop-grandchild-autofocus-grandchild", {
+            status: 200,
+            headers: { "Content-Type": "text/html" },
+            body: `<!DOCTYPE html><input id="target" autofocus><script>
+                let gotFocus = false;
+                target.addEventListener("focus", () => (gotFocus = true));
+                addEventListener("message", () => parent.postMessage(gotFocus ? "focused" : "not-focused", "*"));
+                addEventListener("load", () => parent.postMessage("loaded", "*"));
+            <\/script>`,
+        });
+
+        const childUrl = new URL(
+            await httpServer.createEcho("GET", "/oop-grandchild-autofocus-child", {
+                status: 200,
+                headers: { "Content-Type": "text/html" },
+                body: `<!DOCTYPE html><iframe src="${grandchildUrl}"></iframe><script>
+                    addEventListener("message", event => {
+                        if (event.data === "report")
+                            frames[0].postMessage("report", "*");
+                        else
+                            parent.postMessage(event.data, "*");
+                    });
+                <\/script>`,
+            })
+        );
+        childUrl.hostname = childHostname;
+
+        const received = [];
+        window.addEventListener("message", event => received.push(event.data));
+        const waitFor = what => waitForCondition(() => received.includes(what));
+
+        const iframe = document.createElement("iframe");
+        iframe.src = childUrl;
+        document.body.appendChild(iframe);
+        println(`grandchild loaded: ${await waitFor("loaded")}`);
+
+        frames[0].postMessage("report", "*");
+        println(`grandchild reported: ${await waitFor("not-focused")}`);
+        println(`grandchild autofocused: ${received.includes("focused")}`);
+        println(internals.dumpSiteIsolationProcessTree().trimEnd());
+    });
+</script>

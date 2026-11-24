@@ -1,0 +1,40 @@
+Harness status: OK
+
+Found 35 tests
+
+35 Pass
+Pass	SVGFEBlendElement.prototype.mode, getter, initial value
+Pass	SVGFEBlendElement.prototype.mode, getter, invalid value
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "normal"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "multiply"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "screen"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "darken"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "lighten"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "overlay"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "color-dodge"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "color-burn"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "hard-light"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "soft-light"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "difference"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "exclusion"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "hue"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "saturation"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "color"
+Pass	SVGFEBlendElement.prototype.mode, getter, numeric value for "luminosity"
+Pass	SVGFEBlendElement.prototype.mode, setter, invalid value
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "normal"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "multiply"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "screen"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "darken"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "lighten"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "overlay"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "color-dodge"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "color-burn"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "hard-light"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "soft-light"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "difference"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "exclusion"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "hue"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "saturation"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "color"
+Pass	SVGFEBlendElement.prototype.mode, setter, numeric value for "luminosity"

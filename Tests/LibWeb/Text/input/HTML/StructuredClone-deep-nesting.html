@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script>
+    test(() => {
+        const deep = [];
+        let current = deep;
+        for (let i = 0; i < 100_000; i++) {
+            current[0] = [];
+            current = current[0];
+        }
+
+        // Whether this nesting exhausts the stack depends on the stack's size, so either outcome passes.
+        try {
+            structuredClone(deep);
+        } catch (e) {
+            if (e.name !== "InternalError") {
+                println(`FAIL: ${e.name}: ${e.message}`);
+                return;
+            }
+        }
+        println("PASS: Did not crash");
+    });
+</script>

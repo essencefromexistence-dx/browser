@@ -1,0 +1,3 @@
+CompileError: malformed module: unexpected end of section or function
+CompileError: invalid module: unknown type
+PASS! (Didn't crash)

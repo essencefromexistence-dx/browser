@@ -1,0 +1,33 @@
+PASS: nested displays list-item > table-row-group
+PASS: nested displays list-item > table-header-group
+PASS: nested displays list-item > table-footer-group
+PASS: nested displays list-item > table-row
+PASS: nested displays list-item > table-cell
+PASS: nested displays list-item > table-column-group
+PASS: nested displays list-item > table-column
+PASS: nested displays list-item > table-caption
+PASS: nested displays math > run-in
+PASS: nested displays math > list-item
+PASS: nested displays math > inline list-item
+PASS: nested displays math > flex
+PASS: nested displays math > inline-flex
+PASS: nested displays math > grid
+PASS: nested displays math > inline-grid
+PASS: nested displays math > table
+PASS: nested displays table-column-group > block grid
+PASS: nested displays table-column-group > inline grid
+PASS: nested displays table-column-group > block table
+PASS: nested displays table-column-group > inline table
+PASS: nested displays table-column-group > block flow list-item
+PASS: nested displays table-column-group > inline flow list-item
+PASS: nested displays table-column-group > none
+PASS: nested displays table-column-group > contents
+PASS: nested displays inline flex > table-footer-group
+PASS: nested displays inline flex > table-row
+PASS: nested displays inline flex > table-cell
+PASS: nested displays inline flex > table-column-group
+PASS: nested displays inline flex > table-column
+PASS: nested displays inline flex > table-caption
+PASS: nested displays inline flex > block flow
+PASS: nested displays inline flex > inline flow
+32 cases; 32 matched; 0 mismatched

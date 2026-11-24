@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #cb { position: relative; width: 300px; height: 300px; }
+    #container { width: 200px; height: 100px; }
+    #container.scrolls { overflow: scroll; }
+    #anchor { anchor-name: --a; width: 20px; height: 20px; }
+    #spacer { height: 500px; }
+    #target { position: absolute; position-anchor: --a; top: anchor(bottom); left: anchor(left); width: 20px; height: 20px; }
+</style>
+<div id="cb">
+    <div id="container"><div id="anchor"></div><div id="spacer"></div></div>
+    <div id="target"></div>
+</div>
+<script>
+    visualContextTest({
+        setup: async () => {
+            internals.forceIncompatibleVisualContextTreeRebuild();
+            while (internals.frameSchedulerState() !== "idle")
+                await new Promise(resolve => setTimeout(resolve, 0));
+        },
+        steps: [
+            {
+                name: "scroll container added",
+                mutate: () => container.classList.add("scrolls"),
+                expect: `
+                    update DIRTY-PATH
+                      div#container.scrolls clip ALLOCATED
+                      div#container.scrolls scroll ALLOCATED
+                      div#target anchor shift ALLOCATED
+                      recording NEEDED
+                `,
+            },
+            {
+                name: "container scrolled",
+                mutate: () => { container.scrollTop = 50; },
+                check: equal => equal(target.getBoundingClientRect().top, -30, "anchored box top"),
+                expect: ``,
+            },
+            {
+                name: "scroll container removed",
+                mutate: () => container.classList.remove("scrolls"),
+                check: equal => equal(target.getBoundingClientRect().top, 20, "anchored box top"),
+                expect: `
+                    update DIRTY-PATH
+                      div#container scroll RELEASED
+                      div#container clip RELEASED
+                      div#target anchor shift RELEASED
+                      epoch NEW
+                      recording NEEDED
+                `,
+            },
+        ],
+    });
+</script>

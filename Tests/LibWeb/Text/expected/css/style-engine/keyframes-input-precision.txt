@@ -1,0 +1,6 @@
+insert restyled: [target]
+insert opacity: 0.5
+edit restyled: []
+edit opacity: 0.25
+delete restyled: []
+delete opacity: 1

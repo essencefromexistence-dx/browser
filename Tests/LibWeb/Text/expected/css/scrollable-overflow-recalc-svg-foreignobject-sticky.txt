@@ -1,0 +1,2 @@
+sticky position stable across partial SVG relayout: true
+layout passes: PARTIAL SVGSVGBox<svg>

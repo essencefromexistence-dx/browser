@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    .item { display: list-item; list-style: none; }
+    .visible .item { display: block; color: blue; }
+</style>
+<div id="host"></div>
+<script>
+    test(() => {
+        const host = document.getElementById("host");
+        internals.updateStyle();
+        for (let index = 0; index < 12; ++index) {
+            const item = document.createElement("li");
+            item.className = "item";
+            host.appendChild(item);
+            internals.updateStyle();
+        }
+        host.className = "visible";
+        internals.updateStyle();
+        println(`display: ${getComputedStyle(host.lastElementChild).display}`);
+        println(`color: ${getComputedStyle(host.lastElementChild).color}`);
+    });
+</script>

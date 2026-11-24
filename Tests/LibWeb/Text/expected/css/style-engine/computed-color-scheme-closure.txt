@@ -1,0 +1,2 @@
+background: rgb(0, 0, 0)
+inherited background: rgb(0, 0, 0)

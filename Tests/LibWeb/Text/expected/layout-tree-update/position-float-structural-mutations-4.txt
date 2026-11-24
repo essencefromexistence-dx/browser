@@ -1,0 +1,77 @@
+PASS: remove middle sibling run, fixed run-in siblings in none
+PASS: move node to end, float-inline-start table-row-group siblings in none
+PASS: remove subtree, fixed inline-block siblings in contents
+PASS: replace sibling run, float-inline-start -webkit-inline-box siblings in contents
+PASS: clear with innerHTML, fixed table-row-group siblings in block
+PASS: remove all siblings forwards, float-inline-start -webkit-box siblings in block
+PASS: move sibling run across parents, fixed -webkit-inline-box siblings in inline
+PASS: remove middle sibling run, float-inline-start math siblings in inline
+PASS: move node to end, fixed -webkit-box siblings in flow-root
+PASS: remove subtree, float-inline-start inline-table siblings in flow-root
+PASS: replace sibling run, fixed math siblings in inline-block
+PASS: clear with innerHTML, float-inline-start inline flow siblings in inline-block
+PASS: remove all siblings forwards, fixed inline-table siblings in run-in
+PASS: move sibling run across parents, float-inline-start block flow siblings in run-in
+PASS: remove middle sibling run, fixed table siblings in list-item
+PASS: move node to end, float-inline-start table-caption siblings in list-item
+PASS: remove subtree, fixed inline-grid siblings in inline list-item
+PASS: replace sibling run, float-inline-start table-column siblings in inline list-item
+PASS: clear with innerHTML, fixed table-caption siblings in flex
+PASS: remove all siblings forwards, float-inline-start table-column-group siblings in flex
+PASS: move sibling run across parents, fixed table-column siblings in inline-flex
+PASS: remove middle sibling run, float-inline-start table-cell siblings in inline-flex
+PASS: move node to end, fixed table-column-group siblings in grid
+PASS: remove subtree, float-inline-start table-row siblings in grid
+PASS: replace sibling run, fixed table-cell siblings in inline-grid
+PASS: clear with innerHTML, float-inline-start block table siblings in inline-grid
+PASS: remove all siblings forwards, fixed table-row siblings in table
+PASS: move sibling run across parents, float-inline-start inline grid siblings in table
+PASS: remove middle sibling run, fixed table-footer-group siblings in inline-table
+PASS: move node to end, float-inline-start block grid siblings in inline-table
+PASS: remove subtree, fixed table-header-group siblings in math
+PASS: replace sibling run, float-inline-start inline flex siblings in math
+PASS: clear with innerHTML, fixed block grid siblings in -webkit-box
+PASS: remove all siblings forwards, float-inline-start block flex siblings in -webkit-box
+PASS: move sibling run across parents, fixed inline flex siblings in -webkit-inline-box
+PASS: remove middle sibling run, float-inline-start inline flow-root siblings in -webkit-inline-box
+PASS: move node to end, fixed block flex siblings in table-row-group
+PASS: remove subtree, float-inline-start block flow-root siblings in table-row-group
+PASS: replace sibling run, fixed inline flow-root siblings in table-header-group
+PASS: clear with innerHTML, float-inline-start inline siblings in table-header-group
+PASS: remove all siblings forwards, fixed block flow-root siblings in table-footer-group
+PASS: move sibling run across parents, float-inline-start block siblings in table-footer-group
+PASS: remove middle sibling run, fixed inline flow siblings in table-row
+PASS: move node to end, float-inline-start contents siblings in table-row
+PASS: remove subtree, fixed block flow siblings in table-cell
+PASS: replace sibling run, float-inline-start none siblings in table-cell
+PASS: clear with innerHTML, fixed contents siblings in table-column-group
+PASS: remove all siblings forwards, float-inline-start inline flow list-item siblings in table-column-group
+PASS: move sibling run across parents, fixed none siblings in table-column
+PASS: remove middle sibling run, float-inline-start block flow list-item siblings in table-column
+PASS: move node to end, fixed inline flow list-item siblings in table-caption
+PASS: remove subtree, float-inline-start inline table siblings in table-caption
+PASS: replace sibling run, fixed block flow list-item siblings in block flow
+PASS: clear with innerHTML, float-inline-start inline-flex siblings in block flow
+PASS: remove all siblings forwards, fixed inline table siblings in inline flow
+PASS: move sibling run across parents, float-inline-start flex siblings in inline flow
+PASS: remove middle sibling run, fixed block table siblings in block flow-root
+PASS: move node to end, float-inline-start inline list-item siblings in block flow-root
+PASS: remove subtree, fixed inline grid siblings in inline flow-root
+PASS: replace sibling run, float-inline-start list-item siblings in inline flow-root
+PASS: clear with innerHTML, fixed inline list-item siblings in block flex
+PASS: remove all siblings forwards, float-inline-start run-in siblings in block flex
+PASS: move sibling run across parents, fixed list-item siblings in inline flex
+PASS: remove middle sibling run, float-inline-start inline-block siblings in inline flex
+PASS: move node to end, fixed run-in siblings in block grid
+PASS: remove subtree, float-inline-start flow-root siblings in block grid
+PASS: replace sibling run, fixed inline-block siblings in inline grid
+PASS: clear with innerHTML, float-inline-start -webkit-inline-box siblings in inline grid
+PASS: remove all siblings forwards, fixed flow-root siblings in block table
+PASS: move sibling run across parents, float-inline-start -webkit-box siblings in block table
+PASS: remove middle sibling run, fixed inline siblings in inline table
+PASS: move node to end, float-inline-start math siblings in inline table
+PASS: remove subtree, fixed block siblings in block flow list-item
+PASS: replace sibling run, float-inline-start inline-table siblings in block flow list-item
+PASS: clear with innerHTML, fixed math siblings in inline flow list-item
+PASS: remove all siblings forwards, float-inline-start table siblings in inline flow list-item
+76 cases; 76 matched; 0 mismatched

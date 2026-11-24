@@ -1,0 +1,17 @@
+Harness status: OK
+
+Found 11 tests
+
+2 Pass
+9 Fail
+Pass	.min-width-flexbox 1
+Fail	.min-width-flexbox 2
+Fail	.min-width-flexbox 3
+Fail	.min-width-flexbox 4
+Fail	.min-width-flexbox 5
+Fail	.min-width-flexbox 6
+Fail	.min-width-flexbox 7
+Pass	.min-width-flexbox 8
+Fail	.min-width-flexbox 9
+Fail	.min-width-flexbox 10
+Fail	.min-width-flexbox 11

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<div id="child" style="width: 50px; height: 50px;"></div>
+<script>
+    // A transform change must also refresh the viewport's scrollable overflow, so that
+    // document scroll metrics and the maximum window scroll position stay correct.
+    test(() => {
+        const child = document.getElementById("child");
+        const initialHeight = document.documentElement.scrollHeight;
+        let heightAfterChange;
+        let scrollYAfterGrow;
+        const work = layoutWork(() => {
+            child.style.transform = "translateY(2000px)";
+            heightAfterChange = document.documentElement.scrollHeight;
+            window.scrollTo(0, 100000);
+            scrollYAfterGrow = window.scrollY;
+        });
+        println(`viewport scrollHeight grew: ${heightAfterChange > initialHeight}`);
+        println(`scrollY clamped to grown max: ${scrollYAfterGrow > 0 && scrollYAfterGrow === heightAfterChange - window.innerHeight}`);
+        println(`layout passes: ${work.passes().join(" | ") || "(no layout)"}`);
+    });
+</script>

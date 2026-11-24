@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script>
+    function countFaces(family) {
+        return [...document.fonts].filter(face => face.family === family).length;
+    }
+
+    function environmentChanges() {
+        return `[${internals.takeRenderingTrace().split("\n").filter(line => line.startsWith("style environment changed")).join(", ")}]`;
+    }
+
+    function printEnvironmentChanges(label, callback) {
+        internals.updateStyle();
+        internals.beginRenderingTrace();
+        callback();
+        println(`${label}: ${environmentChanges()}`);
+    }
+
+    promiseTest(async () => {
+        let style = document.createElement("style");
+
+        printEnvironmentChanges("append unloaded CSS-connected face", () => {
+            style.textContent = '@font-face { font-family: "UnloadedSheetFace"; src: url("unloaded-sheet-face.woff"); }';
+            document.head.appendChild(style);
+        });
+        println(`UnloadedSheetFace count after append: ${countFaces("UnloadedSheetFace")}`);
+
+        internals.updateStyle();
+        const cssConnectedFace = [...document.fonts].find(face => face.family === "UnloadedSheetFace");
+        internals.beginRenderingTrace();
+        println(`public delete CSS-connected face: ${document.fonts.delete(cssConnectedFace)}`);
+        println(`public delete CSS-connected face environment changes: ${environmentChanges()}`);
+        println(`UnloadedSheetFace count after public delete: ${countFaces("UnloadedSheetFace")}`);
+
+        printEnvironmentChanges("remove unloaded CSS-connected face", () => {
+            style.remove();
+        });
+        println(`UnloadedSheetFace count after removal: ${countFaces("UnloadedSheetFace")}`);
+
+        const scriptFace = new FontFace("ScriptFace", 'url("../../../Assets/HashSans.woff")');
+        printEnvironmentChanges("add unloaded script-created face", () => {
+            document.fonts.add(scriptFace);
+        });
+        println(`ScriptFace count after add: ${countFaces("ScriptFace")}`);
+
+        await scriptFace.load();
+        await document.fonts.ready;
+        println(`ScriptFace status before removal: ${scriptFace.status}`);
+
+        printEnvironmentChanges("delete loaded script-created face", () => {
+            document.fonts.delete(scriptFace);
+        });
+        println(`ScriptFace count after delete: ${countFaces("ScriptFace")}`);
+
+        const loadedStyle = document.createElement("style");
+        loadedStyle.textContent = `
+            @font-face {
+                font-family: "LoadedSheetFace";
+                src: url("../../../Assets/HashSans.woff");
+            }
+        `;
+        document.head.appendChild(loadedStyle);
+        await document.fonts.load("16px LoadedSheetFace", "A");
+        await document.fonts.ready;
+        println(`LoadedSheetFace status before removal: ${[...document.fonts].find(face => face.family === "LoadedSheetFace").status}`);
+
+        printEnvironmentChanges("remove loaded CSS-connected face", () => {
+            loadedStyle.remove();
+        });
+        println(`LoadedSheetFace count after removal: ${countFaces("LoadedSheetFace")}`);
+
+        const constructedSheet = new CSSStyleSheet();
+        constructedSheet.replaceSync(`
+            @font-face {
+                font-family: "ConstructedSheetFace";
+                src: url("../../../Assets/HashSans.woff");
+            }
+        `);
+
+        printEnvironmentChanges("adopt constructed CSS-connected face", () => {
+            document.adoptedStyleSheets = [constructedSheet];
+        });
+        println(`ConstructedSheetFace count after adoption: ${countFaces("ConstructedSheetFace")}`);
+
+        await document.fonts.load("16px ConstructedSheetFace", "A");
+        await document.fonts.ready;
+        println(`ConstructedSheetFace status before removal: ${[...document.fonts].find(face => face.family === "ConstructedSheetFace").status}`);
+
+        printEnvironmentChanges("unadopt constructed CSS-connected face", () => {
+            document.adoptedStyleSheets = [];
+        });
+        println(`ConstructedSheetFace count after removal: ${countFaces("ConstructedSheetFace")}`);
+    });
+</script>

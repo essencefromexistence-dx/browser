@@ -1,0 +1,40 @@
+PASS: display transition inline -> table-column
+PASS: display transition inline -> table-caption
+PASS: display transition inline -> block flow
+PASS: display transition inline -> inline flow
+PASS: display transition inline -> block flow-root
+PASS: display transition inline -> inline flow-root
+PASS: display transition inline -> block flex
+PASS: display transition inline -> inline flex
+PASS: display transition grid -> inline-grid
+PASS: display transition grid -> table
+PASS: display transition grid -> inline-table
+PASS: display transition grid -> math
+PASS: display transition grid -> -webkit-box
+PASS: display transition grid -> -webkit-inline-box
+PASS: display transition grid -> table-row-group
+PASS: display transition grid -> table-header-group
+PASS: display transition table-header-group -> none
+PASS: display transition table-header-group -> contents
+PASS: display transition table-header-group -> block
+PASS: display transition table-header-group -> inline
+PASS: display transition table-header-group -> flow-root
+PASS: display transition table-header-group -> inline-block
+PASS: display transition table-header-group -> run-in
+PASS: display transition table-header-group -> list-item
+PASS: display transition inline flow -> block flow
+PASS: display transition inline flow -> block flow-root
+PASS: display transition inline flow -> inline flow-root
+PASS: display transition inline flow -> block flex
+PASS: display transition inline flow -> inline flex
+PASS: display transition inline flow -> block grid
+PASS: display transition inline flow -> inline grid
+PASS: display transition inline table -> inline-table
+PASS: display transition inline table -> math
+PASS: display transition inline table -> -webkit-box
+PASS: display transition inline table -> -webkit-inline-box
+PASS: display transition inline table -> table-row-group
+PASS: display transition inline table -> table-header-group
+PASS: display transition inline table -> table-footer-group
+PASS: display transition inline table -> table-row
+39 cases; 39 matched; 0 mismatched

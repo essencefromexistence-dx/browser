@@ -1,0 +1,2 @@
+ordinary item: rgb(20, 24, 28)
+sentinel: rgb(10, 100, 200)

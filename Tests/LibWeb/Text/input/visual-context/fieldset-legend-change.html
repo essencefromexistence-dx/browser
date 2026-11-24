@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    fieldset { margin: 0; padding: 20px; border: 4px solid black; width: 200px; }
+    legend { font-size: 16px; }
+</style>
+<fieldset id="fieldset"><legend id="legend">Legend</legend><div id="content" style="height: 40px"></div></fieldset>
+<script>
+    let legendRect;
+    visualContextTest({
+        setup: () => { legendRect = legend.getBoundingClientRect(); },
+        steps: [
+            {
+                name: "legend grows",
+                mutate: () => { legend.style.fontSize = "32px"; },
+                check: equal => {
+                    const grownRect = legend.getBoundingClientRect();
+                    equal(grownRect.width > legendRect.width && grownRect.height > legendRect.height, true, "legend grew");
+                    equal(document.elementFromPoint(legendRect.x + 2, legendRect.y + 2).id, "legend", "legend hit");
+                    equal(document.elementFromPoint(grownRect.x + grownRect.width - 2, grownRect.y + 2).id, "legend", "grown legend hit");
+                    equal(document.elementFromPoint(30, grownRect.y + grownRect.height + 30).id, "content", "content hit");
+                },
+                expect: `
+                    update DIRTY-PATH
+                `,
+            },
+        ],
+    });
+</script>

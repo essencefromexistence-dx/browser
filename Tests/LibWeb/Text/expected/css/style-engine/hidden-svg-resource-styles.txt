@@ -1,0 +1,11 @@
+style records after hiding:
+div#ancestor record 1
+  div#inheritance-parent record 2
+    svg record 3
+      filter#filter record 4
+        feflood#flood record 5
+      lineargradient#gradient record 6
+        stop#stop record 7
+  span#ordinary no record
+hidden styles disagreeing with a cold pass: []
+hidden inherited color: rgb(0, 128, 0)

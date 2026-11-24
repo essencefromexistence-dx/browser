@@ -1,0 +1,6 @@
+unrelated reads sample: []
+related reads in one task sample: [animated]
+related read in a later task samples: [animated]
+ancestor style read samples: [overflow-animated]
+ancestor geometry read samples: [animated]
+ancestor geometry read sees the sampled transform: true

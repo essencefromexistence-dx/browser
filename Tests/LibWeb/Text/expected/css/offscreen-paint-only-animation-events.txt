@@ -1,0 +1,11 @@
+finite and infinite offscreen paint animations sample: []
+frame requests with animation listeners: []
+offscreen paint animations on the compositor:
+  wakeup timer armed
+early wake-up frame requests: []
+finite and infinite offscreen animations dispatch iteration: true
+iteration samples: []
+finite offscreen animations dispatch their end events: true
+finite offscreen animation finishes: true
+finite offscreen animation applies its final color: true
+offscreen animation dispatches cancellation: true

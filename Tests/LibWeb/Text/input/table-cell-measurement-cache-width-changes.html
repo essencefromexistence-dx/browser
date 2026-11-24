@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<script src="include.js"></script>
+<script src="work-test.js"></script>
+<style>
+    body { margin: 0; }
+    table { border-collapse: collapse; }
+    td { padding: 0 4px; font: 12px monospace; vertical-align: top; }
+</style>
+<table id="table"><tbody id="rows"></tbody></table>
+<script>
+    test(() => {
+        const ROWS = 20;
+        const parts = [];
+        for (let i = 0; i < ROWS; ++i)
+            parts.push(`<tr><td class="index">${i}</td><td class="words">some words that wrap in a narrow column ${i}</td><td class="markup">text with <b>markup</b> ${i}</td></tr>`);
+        document.getElementById("rows").innerHTML = parts.join("");
+        const table = document.getElementById("table");
+
+        // Each cell is laid out once, by the run that commits it, however its contents are aligned in its row.
+        const measure = width => {
+            const work = layoutWork(() => table.style.width = `${width}px`);
+            const cellRuns = action => work.count(event => event.event === "run" && event.box.startsWith("BlockContainer<TD>") && event.action === action);
+            println(`${width}px: ${cellRuns("RUN")} laid out, ${cellRuns("REPLAY FRAGMENTS")} replayed, height ${table.offsetHeight}`);
+        };
+
+        layoutWork(() => table.style.width = "1000px");
+        measure(900);
+        measure(950);
+        measure(400);
+        measure(350);
+        measure(1000);
+    });
+</script>

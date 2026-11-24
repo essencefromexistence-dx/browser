@@ -1,0 +1,4 @@
+scroller.scrollTop after the first step: 100
+scroller removed: true
+window.scrollY after the second step: 0
+window.scrollY after the third step: 100

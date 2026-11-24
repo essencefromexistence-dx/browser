@@ -1,0 +1,46 @@
+PASS: append element in inline
+PASS: append text in list-item
+PASS: prepend element in grid
+PASS: insertBefore first in math
+PASS: insertBefore middle in table-header-group
+PASS: before element in table-column-group
+PASS: after element in inline flow
+PASS: append mixed nodes in inline flex
+PASS: prepend mixed nodes in inline table
+PASS: remove first in contents
+PASS: remove middle in inline-block
+PASS: remove last in flex
+PASS: removeChild in table
+PASS: replaceChild in -webkit-inline-box
+PASS: replaceWith in table-row
+PASS: replaceWith empty in table-caption
+PASS: replaceChildren mixed in inline flow-root
+PASS: replaceChildren empty in inline grid
+PASS: innerHTML replace in inline flow list-item
+PASS: innerHTML clear in inline
+PASS: outerHTML replace in list-item
+PASS: outerHTML remove in grid
+PASS: textContent replace in math
+PASS: textContent clear in table-header-group
+PASS: move first to end in table-column-group
+PASS: move last to start in inline flow
+PASS: move middle across parents in inline flex
+PASS: append DocumentFragment in inline table
+PASS: insertAdjacentHTML beforebegin in contents
+PASS: insertAdjacentHTML afterbegin in inline-block
+PASS: insertAdjacentHTML beforeend in flex
+PASS: insertAdjacentHTML afterend in table
+PASS: insertAdjacentElement in -webkit-inline-box
+PASS: insertAdjacentText in table-row
+PASS: splitText in table-caption
+PASS: CharacterData replaceData in inline flow-root
+PASS: normalize adjacent text in inline grid
+PASS: Range insertNode in inline flow list-item
+PASS: Range deleteContents in inline
+PASS: Range extractContents in list-item
+PASS: Range surroundContents in grid
+PASS: append imported subtree in math
+PASS: append cloned subtree in table-header-group
+PASS: append template contents in table-column-group
+PASS: append DOMParser subtree in inline flow
+45 cases; 45 matched; 0 mismatched

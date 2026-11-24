@@ -1,0 +1,9 @@
+Harness status: OK
+
+Found 4 tests
+
+4 Pass
+Pass	sibling-index() in @container width query
+Pass	sibling-count() in @container width query
+Pass	sibling-index() in @container style() query
+Pass	sibling-count() in @container style() query

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    ol:has(> :is(.active > li)) { color: rgb(1, 2, 3); }
+</style>
+<main id="fixture"></main>
+<script>
+    test(() => {
+        for (let index = 0; index < 32; ++index) {
+            const list = document.createElement("ol");
+            for (let child = 0; child < 16; ++child)
+                list.appendChild(document.createElement("li"));
+            fixture.appendChild(list);
+        }
+
+        const lists = fixture.querySelectorAll("ol");
+        internals.updateStyle();
+
+
+        for (let index = 0; index < lists.length; index += 2)
+            lists[index].classList.add("active");
+        internals.updateStyle();
+        println(`changed anchors gain the relational style: ${getComputedStyle(lists[0]).color === "rgb(1, 2, 3)"}`);
+        println(`unchanged anchors do not gain the relational style: ${getComputedStyle(lists[1]).color === "rgb(0, 0, 0)"}`);
+
+        for (let index = 0; index < lists.length; index += 2)
+            lists[index].classList.remove("active");
+        internals.updateStyle();
+        println(`changed anchors lose the relational style: ${getComputedStyle(lists[0]).color === "rgb(0, 0, 0)"}`);
+    });
+</script>

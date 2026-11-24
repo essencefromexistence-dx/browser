@@ -1,0 +1,4 @@
+scrollHeight after transform change: 490
+scrollTop in grown range: 300
+sticky box sticks to scrollport top: true
+layout passes: (no layout)

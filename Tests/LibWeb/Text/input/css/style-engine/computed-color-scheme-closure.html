@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    .before { color-scheme: light; background-color: light-dark(white, black) }
+    .after { color-scheme: dark; background-color: light-dark(white, black) }
+</style>
+<div id="target" class="before"><span id="child"></span></div>
+<style>#child { background-color: light-dark(white, black) }</style>
+<script>
+    test(() => {
+        internals.updateStyle();
+
+        target.className = "after";
+        internals.updateStyle();
+
+        println(`background: ${getComputedStyle(target).backgroundColor}`);
+        println(`inherited background: ${getComputedStyle(child).backgroundColor}`);
+    });
+</script>

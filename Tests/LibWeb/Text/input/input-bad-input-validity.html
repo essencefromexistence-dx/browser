@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<script src="include.js"></script>
+<script>
+    test(() => {
+        function check(type, text) {
+            const input = document.body.appendChild(document.createElement("input"));
+            input.type = type;
+            input.focus();
+            internals.sendText(input, text);
+            println(`${type} "${text}": value="${input.value}" badInput=${input.validity.badInput}`);
+            input.remove();
+        }
+
+        check("number", "2026");
+        check("number", "2026 JUN");
+        check("date", "06082026");
+        check("date", "02312026");
+        check("month", "062026");
+        check("month", "06");
+        check("week", "232026");
+        check("week", "532027");
+        check("time", "1230p");
+        check("time", "12");
+        check("datetime-local", "060820261230p");
+        check("datetime-local", "0608");
+    });
+</script>

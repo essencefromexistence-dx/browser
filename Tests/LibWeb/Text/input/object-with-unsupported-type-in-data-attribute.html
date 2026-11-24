@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<script src="include.js"></script>
+<object id="object" data="data:application/x-unknown,ERROR">
+    <div id="fallback">Fallback</div>
+</object>
+<script>
+    asyncTest(done => {
+        // Fetching the object's data delays the load event, so the fallback representation is chosen by then.
+        window.addEventListener("load", () => {
+            println(document.body.innerText);
+            done();
+        });
+    });
+</script>

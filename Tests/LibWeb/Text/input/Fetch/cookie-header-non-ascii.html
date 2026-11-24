@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script>
+    // Cookie names and values may contain non-ASCII characters. They must reach the server as the same characters, and
+    // must never turn into bytes that end the Cookie field (U+010D and U+010A would narrow to CR and LF), or into an
+    // ASCII name that the cookie was never allowed to have (U+015F would narrow to "_").
+    const utf8AsLatin1 = string => unescape(encodeURIComponent(string));
+
+    async function requestHeadersAfterSettingCookie(name, cookie) {
+        const httpServer = httpTestServer();
+        const path = new URL(httpServer.echoURL(`/${name}/`)).pathname;
+        const setURL = await httpServer.createEcho("GET", `/${name}/set`, {
+            status: 200,
+            headers: { "Set-Cookie": utf8AsLatin1(`${cookie}; Path=${path}`) },
+        });
+        await fetch(setURL);
+
+        const reflectURL = await httpServer.createEcho("GET", `/${name}/reflect`, {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+            reflect_headers_in_body: true,
+        });
+        return await (await fetch(reflectURL)).json();
+    }
+
+    promiseTest(async () => {
+        const injection = await requestHeadersAfterSettingCookie("cookie-header-non-ascii-value", "injected=ačĊX-Injected: 1");
+        println(`Injected header reached the server: ${"X-Injected" in injection}`);
+        println(`Value arrived as UTF-8: ${(injection["Cookie"] ?? []).includes(utf8AsLatin1("injected=ačĊX-Injected: 1"))}`);
+
+        const prefix = await requestHeadersAfterSettingCookie("cookie-header-non-ascii-name", "ş_Host-session=attacker");
+        println(`__Host- name reached the server: ${(prefix["Cookie"] ?? []).some(cookie => cookie.includes("__Host-session"))}`);
+        println(`Name arrived as UTF-8: ${(prefix["Cookie"] ?? []).includes(utf8AsLatin1("ş_Host-session=attacker"))}`);
+    });
+</script>

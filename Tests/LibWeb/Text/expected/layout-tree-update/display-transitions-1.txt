@@ -1,0 +1,38 @@
+PASS: display transition none -> contents
+PASS: display transition none -> block
+PASS: display transition none -> inline
+PASS: display transition none -> flow-root
+PASS: display transition none -> inline-block
+PASS: display transition none -> run-in
+PASS: display transition none -> list-item
+PASS: display transition inline list-item -> block flow
+PASS: display transition inline list-item -> inline flow
+PASS: display transition inline list-item -> block flow-root
+PASS: display transition inline list-item -> inline flow-root
+PASS: display transition inline list-item -> block flex
+PASS: display transition inline list-item -> inline flex
+PASS: display transition inline list-item -> block grid
+PASS: display transition inline list-item -> inline grid
+PASS: display transition -webkit-box -> inline-table
+PASS: display transition -webkit-box -> math
+PASS: display transition -webkit-box -> -webkit-inline-box
+PASS: display transition -webkit-box -> table-row-group
+PASS: display transition -webkit-box -> table-header-group
+PASS: display transition -webkit-box -> table-footer-group
+PASS: display transition -webkit-box -> table-row
+PASS: display transition table-column -> block
+PASS: display transition table-column -> inline
+PASS: display transition table-column -> flow-root
+PASS: display transition table-column -> inline-block
+PASS: display transition table-column -> run-in
+PASS: display transition table-column -> list-item
+PASS: display transition table-column -> inline list-item
+PASS: display transition table-column -> flex
+PASS: display transition block grid -> block flow-root
+PASS: display transition block grid -> inline flow-root
+PASS: display transition block grid -> block flex
+PASS: display transition block grid -> inline flex
+PASS: display transition block grid -> inline grid
+PASS: display transition block grid -> block table
+PASS: display transition block grid -> inline table
+37 cases; 37 matched; 0 mismatched

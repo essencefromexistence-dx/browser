@@ -1,0 +1,8 @@
+callback count while hidden: 0
+rendering while hidden:
+  request, coalesced
+callback count after visible opportunity: 1
+rendering after the visible opportunity:
+  opportunity
+  request, coalesced
+  update

@@ -1,0 +1,41 @@
+PASS: display transition flow-root -> block grid
+PASS: display transition flow-root -> inline grid
+PASS: display transition flow-root -> block table
+PASS: display transition flow-root -> inline table
+PASS: display transition flow-root -> block flow list-item
+PASS: display transition flow-root -> inline flow list-item
+PASS: display transition flow-root -> none
+PASS: display transition flow-root -> contents
+PASS: display transition inline-grid -> table-footer-group
+PASS: display transition inline-grid -> table-row
+PASS: display transition inline-grid -> table-cell
+PASS: display transition inline-grid -> table-column-group
+PASS: display transition inline-grid -> table-column
+PASS: display transition inline-grid -> table-caption
+PASS: display transition inline-grid -> block flow
+PASS: display transition inline-grid -> inline flow
+PASS: display transition table-footer-group -> inline list-item
+PASS: display transition table-footer-group -> flex
+PASS: display transition table-footer-group -> inline-flex
+PASS: display transition table-footer-group -> grid
+PASS: display transition table-footer-group -> inline-grid
+PASS: display transition table-footer-group -> table
+PASS: display transition table-footer-group -> inline-table
+PASS: display transition table-footer-group -> math
+PASS: display transition block flow-root -> block table
+PASS: display transition block flow-root -> inline table
+PASS: display transition block flow-root -> block flow list-item
+PASS: display transition block flow-root -> inline flow list-item
+PASS: display transition block flow-root -> none
+PASS: display transition block flow-root -> contents
+PASS: display transition block flow-root -> block
+PASS: display transition block flow-root -> inline
+PASS: display transition block flow list-item -> table-cell
+PASS: display transition block flow list-item -> table-column-group
+PASS: display transition block flow list-item -> table-column
+PASS: display transition block flow list-item -> table-caption
+PASS: display transition block flow list-item -> block flow
+PASS: display transition block flow list-item -> inline flow
+PASS: display transition block flow list-item -> block flow-root
+PASS: display transition block flow list-item -> inline flow-root
+40 cases; 40 matched; 0 mismatched

@@ -1,0 +1,3 @@
+PASS: clip-path added (work)
+PASS: clip-path removed (work)
+PASS: moved with a clip-path again (work + checks)

@@ -1,0 +1,22 @@
+Without a user style:
+object align=center: -libweb-baseline-middle
+embed align=center: -libweb-baseline-middle
+input image align=center: -libweb-baseline-middle
+iframe align=center: -libweb-baseline-middle
+img align=center: -libweb-baseline-middle
+object align=middle: -libweb-baseline-middle
+embed align=middle: -libweb-baseline-middle
+input image align=middle: -libweb-baseline-middle
+iframe align=middle: -libweb-baseline-middle
+img align=middle: -libweb-baseline-middle
+With a user style:
+object align=center: -libweb-baseline-middle
+embed align=center: -libweb-baseline-middle
+input image align=center: -libweb-baseline-middle
+iframe align=center: -libweb-baseline-middle
+img align=center: -libweb-baseline-middle
+object align=middle: -libweb-baseline-middle
+embed align=middle: -libweb-baseline-middle
+input image align=middle: -libweb-baseline-middle
+iframe align=middle: -libweb-baseline-middle
+img align=middle: -libweb-baseline-middle

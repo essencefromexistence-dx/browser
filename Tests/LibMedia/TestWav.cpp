@@ -1,0 +1,95 @@
+/*
+ * Copyright (c) 2024, Lee Hanken <github-12-2017-ds8@leehanken.uk>
+ * Copyright (c) 2025, Gregory Bertilson <gregory@ladybird.org>
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+#include <LibMedia/DecodeAudioStream.h>
+#include <LibMedia/DecoderRegistrations.h>
+#include <Tests/LibMedia/TestMediaCommon.h>
+
+// 5 seconds, 16-bit audio samples
+
+TEST_SETUP
+{
+    Media::install_video_decoders({ Media::hardware_video_decoders(), Media::ffmpeg_video_decoders() });
+    Media::install_audio_decoders({ Media::audio_decoders() });
+}
+
+TEST_CASE(mono_8khz)
+{
+    decode_audio("WAV/tone_8000_mono.wav"sv, 8000, 1, 40000);
+}
+
+TEST_CASE(stereo_8khz)
+{
+    decode_audio("WAV/tone_8000_stereo.wav"sv, 8000, 2, 40000);
+}
+
+TEST_CASE(mono_11khz)
+{
+    decode_audio("WAV/tone_11025_mono.wav"sv, 11025, 1, 55125);
+}
+
+TEST_CASE(stereo_11khz)
+{
+    decode_audio("WAV/tone_11025_stereo.wav"sv, 11025, 2, 55125);
+}
+
+TEST_CASE(mono_16khz)
+{
+    decode_audio("WAV/tone_16000_mono.wav"sv, 16000, 1, 80000);
+}
+
+TEST_CASE(stereo_16khz)
+{
+    decode_audio("WAV/tone_16000_stereo.wav"sv, 16000, 2, 80000);
+}
+
+TEST_CASE(mono_22khz)
+{
+    decode_audio("WAV/tone_22050_mono.wav"sv, 22050, 1, 110250);
+}
+
+TEST_CASE(stereo_22khz)
+{
+    decode_audio("WAV/tone_22050_stereo.wav"sv, 22050, 2, 110250);
+}
+
+TEST_CASE(mono_44khz)
+{
+    decode_audio("WAV/tone_44100_mono.wav"sv, 44100, 1, 220500);
+}
+
+TEST_CASE(stereo_44khz)
+{
+    decode_audio("WAV/tone_44100_stereo.wav"sv, 44100, 2, 220500);
+}
+
+TEST_CASE(stereo_8khz_24bit)
+{
+    decode_audio("WAV/voices_8000_stereo_int24.wav"sv, 8000, 2, 23493);
+}
+
+TEST_CASE(underspecified_5_1_44khz)
+{
+    decode_audio("WAV/tone_44100_5_1_underspecified.wav"sv, 44100, 6, 44100, Audio::ChannelMap::surround_5_1());
+}
+
+TEST_CASE(decoding_an_entire_stream_refuses_audio_past_the_size_limit)
+{
+    auto file = MUST(Core::File::open("WAV/tone_8000_mono.wav"sv, Core::File::OpenMode::Read));
+    auto data = MUST(file->read_until_eof());
+    auto decode_with_limit = [&](size_t maximum_decoded_byte_count) {
+        return Media::decode_entire_audio_stream(Media::IncrementallyPopulatedStream::create_from_buffer(data), {}, maximum_decoded_byte_count);
+    };
+
+    static constexpr size_t decoded_byte_count = 40000 * sizeof(float);
+    auto decoded = decode_with_limit(decoded_byte_count);
+    EXPECT(!decoded.is_error());
+    EXPECT_EQ(decoded.value().channels.first().size(), 40000u);
+
+    auto refused = decode_with_limit(decoded_byte_count - sizeof(float));
+    EXPECT_EQ(refused.error().category(), Media::DecoderErrorCategory::Memory);
+}

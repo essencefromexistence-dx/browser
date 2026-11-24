@@ -1,0 +1,88 @@
+$aa58c23f switch-scoping.js:15:1
+  Registers: 9
+  Blocks:    1
+  Constants:
+    [0] = Undefined
+    [1] = Int32(1)
+    [2] = Int32(2)
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] GetGlobal value_feedback:0, dst:reg6, `console`
+  [   c] GetById dst:reg7, base:reg6, `log`
+  [  13] GetGlobal value_feedback:1, dst:reg8, `switchWithBlockDecl`
+  [  1b] Call call_feedback:0, dst:reg8, callee:reg8, this_value:Undefined, arguments:[Int32(1)]
+  [  23] Call call_feedback:1, dst:reg5, callee:reg7, this_value:reg6, arguments:[reg8]
+  [  2b] GetGlobal value_feedback:2, dst:reg6, `console`
+  [  33] GetById dst:reg7, base:reg6, `log`
+  [  3a] GetGlobal value_feedback:3, dst:reg8, `switchWithBlockDecl`
+  [  42] Call call_feedback:2, dst:reg8, callee:reg8, this_value:Undefined, arguments:[Int32(2)]
+  [  4a] Call call_feedback:3, dst:reg5, callee:reg7, this_value:reg6, arguments:[reg8]
+  [  52] End value:reg5
+
+
+switchWithBlockDecl$ea43eb57 switch-scoping.js:2:9
+  Registers: 8
+  Blocks:    6
+  Locals:    result~0
+  Constants:
+    [0] = Undefined
+    [1] = Int32(1)
+    [2] = Int32(2)
+    [3] = String("one")
+    [4] = String("two")
+
+block0:
+  [   0] Enter
+  [   1] GetLexicalEnvironment dst:reg4
+  [   3] Mov dst:result~0, src:Undefined
+  [   6] Mov dst:reg5, src:arg0
+  [   9] CreateLexicalEnvironment dst:reg6, parent:reg4, capacity:2, is_catch_environment:false
+  [  15] CreateVariable `a`, is_immutable:false, is_global:false, is_strict:false
+  [  1c] CreateVariable `b`, is_immutable:false, is_global:false, is_strict:false
+  [  23] JumpStrictlyEquals arith_feedback:0, lhs:Int32(1), rhs:reg5, true_target:block3, false_target:block1
+
+block1:
+  [  30] JumpStrictlyEquals arith_feedback:1, lhs:Int32(2), rhs:reg5, true_target:block4, false_target:block2
+
+block2:
+  [  3d] Jump target:block5
+
+block3:
+  [  42] InitializeLexicalBinding `a`, src:String("one")
+  [  49] NewFunction dst:result~0, shared_function_data_index:0 (result)
+  [  50] Jump target:block5
+
+block4:
+  [  55] InitializeLexicalBinding `b`, src:String("two")
+  [  5c] NewFunction dst:result~0, shared_function_data_index:1 (result)
+
+block5:
+  [  63] SetLexicalEnvironment environment:reg4
+  [  65] Call call_feedback:0, dst:reg5, callee:result~0, this_value:Undefined
+  [  6c] Return value:reg5
+
+
+result$7c25c1e0 switch-scoping.js:6:22
+  Registers: 6
+  Blocks:    1
+
+block0:
+  [   0] Enter
+  [   1] GetBinding value_feedback:0, dst:reg5, `a`
+  [   a] Return value:reg5
+
+
+result$c70ef1ac switch-scoping.js:10:22
+  Registers: 6
+  Blocks:    1
+
+block0:
+  [   0] Enter
+  [   1] GetBinding value_feedback:0, dst:reg5, `b`
+  [   a] Return value:reg5
+
+
+"one"
+"two"

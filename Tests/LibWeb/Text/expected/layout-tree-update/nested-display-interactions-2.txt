@@ -1,0 +1,41 @@
+PASS: nested displays contents > inline list-item
+PASS: nested displays contents > flex
+PASS: nested displays contents > inline-flex
+PASS: nested displays contents > grid
+PASS: nested displays contents > inline-grid
+PASS: nested displays contents > table
+PASS: nested displays contents > inline-table
+PASS: nested displays contents > math
+PASS: nested displays flex > block table
+PASS: nested displays flex > inline table
+PASS: nested displays flex > block flow list-item
+PASS: nested displays flex > inline flow list-item
+PASS: nested displays flex > none
+PASS: nested displays flex > contents
+PASS: nested displays flex > block
+PASS: nested displays flex > inline
+PASS: nested displays -webkit-inline-box > table-cell
+PASS: nested displays -webkit-inline-box > table-column-group
+PASS: nested displays -webkit-inline-box > table-column
+PASS: nested displays -webkit-inline-box > table-caption
+PASS: nested displays -webkit-inline-box > block flow
+PASS: nested displays -webkit-inline-box > inline flow
+PASS: nested displays -webkit-inline-box > block flow-root
+PASS: nested displays -webkit-inline-box > inline flow-root
+PASS: nested displays table-caption > inline-flex
+PASS: nested displays table-caption > grid
+PASS: nested displays table-caption > inline-grid
+PASS: nested displays table-caption > table
+PASS: nested displays table-caption > inline-table
+PASS: nested displays table-caption > math
+PASS: nested displays table-caption > -webkit-box
+PASS: nested displays table-caption > -webkit-inline-box
+PASS: nested displays inline grid > block flow list-item
+PASS: nested displays inline grid > inline flow list-item
+PASS: nested displays inline grid > none
+PASS: nested displays inline grid > contents
+PASS: nested displays inline grid > block
+PASS: nested displays inline grid > inline
+PASS: nested displays inline grid > flow-root
+PASS: nested displays inline grid > inline-block
+40 cases; 40 matched; 0 mismatched

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<div id="container" class="guard-64"></div>
+<script>
+    const style = document.createElement("style");
+    style.textContent = `
+        .changed {
+            --tone: rgb(1, 2, 3);
+        }
+    `;
+    for (let i = 0; i < 128; ++i)
+        style.textContent += `.guard-${i} > :not(.never-${i}) { color: var(--tone); }\n`;
+    document.head.appendChild(style);
+
+    const container = document.getElementById("container");
+    for (let i = 0; i < 256; ++i)
+        container.appendChild(document.createElement("span"));
+
+    test(() => {
+        internals.updateStyle();
+
+        container.classList.add("changed");
+        internals.updateStyle();
+
+        println(`first target: ${getComputedStyle(container.firstElementChild).color}`);
+        println(`last target: ${getComputedStyle(container.lastElementChild).color}`);
+    });
+</script>

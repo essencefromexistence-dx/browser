@@ -1,0 +1,4 @@
+compositor animations:
+  transform div#animated
+unrelated observation samples: []
+descendant observation samples: [div#animated]

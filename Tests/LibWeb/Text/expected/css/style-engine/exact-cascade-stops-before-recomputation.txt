@@ -1,0 +1,4 @@
+unchanged color: rgb(255, 0, 0)
+changed color: rgb(0, 0, 255)
+pseudo content: "same"
+state background: rgb(0, 128, 0)

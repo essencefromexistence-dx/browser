@@ -1,0 +1,11 @@
+frame requests with offscreen SVG and pseudo-element event listeners: []
+offscreen SVG and pseudo-element animations sample: []
+compositor animations:
+  wakeup timer armed
+SVG dispatches its iteration event: true
+pseudo-element dispatches its iteration event: true
+SVG dispatches its end event: true
+pseudo-element dispatches its end event: true
+both animations finish: true
+SVG applies its final opacity: true
+pseudo-element applies its final background position: true

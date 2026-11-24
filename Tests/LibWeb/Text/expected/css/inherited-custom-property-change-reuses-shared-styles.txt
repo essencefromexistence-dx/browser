@@ -1,0 +1,5 @@
+margin after change: 2px
+every child keeps its own margin: true
+every child inherits the new theme: true
+restyled: [outer]
+children that only took the moved environment: 20

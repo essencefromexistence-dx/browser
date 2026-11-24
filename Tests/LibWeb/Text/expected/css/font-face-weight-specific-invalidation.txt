@@ -1,0 +1,2 @@
+restyled: [span.regular]
+regular face loaded: loaded

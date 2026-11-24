@@ -1,0 +1,5 @@
+inert: span @0
+hidden: span @0
+no-pointer-events: span @0
+transparent: span @0
+plain: span @0

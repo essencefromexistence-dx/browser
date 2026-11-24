@@ -1,0 +1,5 @@
+initial length: 1
+initial [0]: 5
+same wrapper: true
+new index: IndexSizeError: List index out of bounds
+wrong type: TypeError: Value must be an SVGLength

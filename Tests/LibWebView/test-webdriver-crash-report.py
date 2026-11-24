@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+#
+# Copyright (c) 2026-present, the Ladybird developers.
+#
+# SPDX-License-Identifier: BSD-2-Clause
+
+import argparse
+import importlib
+import os
+import re
+import shlex
+import signal
+import subprocess
+import tempfile
+import time
+
+from pathlib import Path
+
+webdriver_helpers = importlib.import_module("test-webdriver-delete-session")
+
+
+def wait_for_compositor(port, session):
+    # The Compositor takes a screenshot, so once one succeeds, the Compositor is done starting up and waiting in its
+    # event loop. A signal sent while it's still starting can land in a system library built without frame pointers,
+    # which leaves the report with a single frame. Until then, taking a screenshot fails with "unable to capture screen".
+    deadline = time.monotonic() + webdriver_helpers.EVENT_TIMEOUT_SECONDS
+    while True:
+        status, _, body = webdriver_helpers.request(port, "GET", f"/session/{session}/screenshot")
+        if status == 200:
+            return
+        assert "unable to capture screen" in body, body
+        if time.monotonic() >= deadline:
+            raise AssertionError("The Compositor never took a screenshot")
+        time.sleep(0.05)
+
+
+def crash_helper(webdriver_pid, process_name):
+    rows = subprocess.check_output(["ps", "-axo", "pid=,ppid=,command="], text=True).splitlines()
+    children = {}
+    for row in rows:
+        fields = row.strip().split(None, 2)
+        pid, parent = fields[:2]
+        command = fields[2] if len(fields) == 3 else ""
+        children.setdefault(int(parent), []).append((int(pid), command))
+    pending = [webdriver_pid]
+    targets = []
+    while pending:
+        for pid, command in children.get(pending.pop(), []):
+            arguments = shlex.split(command)
+            # A helper's own children, such as its file broker, carry the helper's command line but are not the helper.
+            if arguments and Path(arguments[0]).name == process_name:
+                assert "--crash-report-fd" in arguments, f"{process_name} has no capture descriptor"
+                assert "--disable-sandbox" not in arguments, f"{process_name} is not sandboxed"
+                targets.append(pid)
+            else:
+                pending.append(pid)
+    assert len(targets) == 1, f"Expected one {process_name} child, found {len(targets)}"
+    os.kill(targets[0], signal.SIGSEGV)
+
+
+def run_test(webdriver_binary, process_name):
+    with tempfile.TemporaryDirectory(prefix="ladybird-crash-report-") as temporary:
+        environment = os.environ.copy()
+        for variable, directory in (
+            ("XDG_DATA_HOME", "data"),
+            ("XDG_CONFIG_HOME", "config"),
+            ("XDG_CACHE_HOME", "cache"),
+        ):
+            environment[variable] = str(Path(temporary) / directory)
+        profile = Path(temporary) / "profile"
+        webdriver, port = webdriver_helpers.launch_webdriver(
+            webdriver_binary, "--headless", f"--profile-path={profile}", env=environment
+        )
+        try:
+            status, payload, body = webdriver_helpers.request(
+                port,
+                "POST",
+                "/session",
+                {"capabilities": {"alwaysMatch": {"ladybird:headless": True, "ladybird:enableTestHooks": True}}},
+            )
+            assert status == 200, body
+            session = payload["value"]["sessionId"]
+            status, _, body = webdriver_helpers.request(
+                port,
+                "POST",
+                f"/session/{session}/url",
+                {"url": "data:text/html,<title>PRIVATE_CRASH_TITLE</title>PRIVATE_CRASH_CONTENT"},
+            )
+            assert status == 200, body
+            if process_name == "WebContent":
+                status, _, body = webdriver_helpers.request(
+                    port, "POST", f"/session/{session}/ladybird/crash-current-page", {}
+                )
+                assert status == 200, body
+            else:
+                if process_name == "ImageDecoder":
+                    # A process gets its decoder when it first has an image to decode.
+                    status, payload, body = webdriver_helpers.request(
+                        port,
+                        "POST",
+                        f"/session/{session}/execute/async",
+                        {
+                            "script": """
+                            const done = arguments[0];
+                            window.image = new Image();
+                            image.onload = () => done();
+                            image.onerror = () => done('image failed');
+                            image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                        """,
+                            "args": [],
+                        },
+                    )
+                    assert status == 200 and payload == {"value": None}, body
+                elif process_name == "Compositor":
+                    wait_for_compositor(port, session)
+                crash_helper(webdriver.pid, process_name)
+            directory = profile / "data/CrashReports"
+            deadline = time.monotonic() + webdriver_helpers.EVENT_TIMEOUT_SECONDS
+            while True:
+                reports = list(directory.glob(f"*-{process_name}-*.txt"))
+                if reports:
+                    text = reports[0].read_text()
+                    if "Stacks may be partial." in text:
+                        break
+                if time.monotonic() >= deadline:
+                    raise AssertionError("No complete crash report was saved")
+                time.sleep(0.05)
+            assert re.fullmatch(
+                rf"\d{{4}}-\d{{2}}-\d{{2}}T\d{{2}}-\d{{2}}-\d{{2}}Z-{process_name}-[A-Za-z0-9]{{6}}\.txt",
+                reports[0].name,
+            ), reports[0].name
+            assert f"Process: {process_name}\n" in text, text
+            assert re.search(r"^Crashed at: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$", text, re.MULTILINE), text
+            captured_signal = re.search(r"^Captured signal: (.+)$", text, re.MULTILINE)
+            assert captured_signal is not None, text
+            assert f"Termination signal: {captured_signal.group(1)}\n" in text, text
+            if process_name == "WebContent":
+                assert "Verification failed: false at Services/WebContent/WebDriverConnection.cpp:" in text, text
+            else:
+                assert "Verification failed:" not in text and "Assertion failed:" not in text, text
+            assert "Executable build ID:" in text, text
+            assert re.search(r"^Git commit: ([0-9a-f]{40}|[0-9a-f]{64}|unknown)$", text, re.MULTILINE), text
+            assert "C++ compiler:" in text and "C++ flags:" in text and "Build options:" in text, text
+            assert "#0 " in text and "#1 " in text, text
+            # A frame names its binary by build ID and gives the object address, which is what resolving it afterwards
+            # takes. Whether the browser also attached a symbol depends on where the helper was when the signal landed:
+            # it symbolicates a frame only through an image it has loaded itself, so a frame in the helper's own
+            # executable never gets one, and a helper killed from outside may be anywhere in its own code.
+            assert re.search(r"^#\d+ [0-9a-f]{16,64} 0x[0-9a-f]+", text, re.MULTILINE), text
+            assert "PRIVATE_CRASH" not in text, text
+            assert temporary not in text and str(Path.home()) not in text, text
+            assert reports[0].stat().st_mode & 0o777 == 0o400
+            assert directory.stat().st_mode & 0o777 == 0o700
+            webdriver_helpers.request(port, "DELETE", f"/session/{session}")
+        finally:
+            webdriver.terminate()
+            try:
+                webdriver.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                webdriver.kill()
+                webdriver.wait()
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("webdriver_binary")
+    parser.add_argument(
+        "--process",
+        default="WebContent",
+        choices=["WebContent", "RequestServer", "ImageDecoder", "Compositor"],
+    )
+    args = parser.parse_args()
+    run_test(args.webdriver_binary, args.process)

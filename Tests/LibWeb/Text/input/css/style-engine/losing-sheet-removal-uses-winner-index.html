@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    .item { color: black !important; }
+</style>
+<style id="losing"></style>
+<div id="root"></div>
+<script>
+    test(() => {
+        const root = document.getElementById("root");
+        for (let index = 0; index < 100; ++index) {
+            const item = document.createElement("div");
+            item.className = "item";
+            root.appendChild(item);
+        }
+        root.lastElementChild.id = "sentinel";
+
+        const losing = document.getElementById("losing");
+        losing.textContent =
+            Array.from({ length: 100 }, () => ".item { color: red; }").join("\n") +
+            "\n#sentinel { outline: 0 solid green; }";
+        internals.updateStyle();
+
+        losing.remove();
+        internals.updateStyle();
+
+        println(`ordinary item: ${getComputedStyle(root.firstElementChild).color}`);
+        println(`sentinel: ${getComputedStyle(root.lastElementChild).outlineStyle}`);
+    });
+</script>

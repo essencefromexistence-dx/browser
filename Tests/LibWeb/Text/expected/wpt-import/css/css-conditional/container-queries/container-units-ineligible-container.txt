@@ -1,0 +1,14 @@
+Harness status: OK
+
+Found 9 tests
+
+9 Pass
+Pass	/* basic */
+Pass	display: table
+Pass	display: table-cell
+Pass	display: inline
+Pass	display: contents
+Pass	display: none
+Pass	container-type: normal
+Pass	container-type: inline-size
+Pass	container-type: inline-size; writing-mode: vertical-lr

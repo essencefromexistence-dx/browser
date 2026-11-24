@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<style>
+    body {
+        margin: 0;
+    }
+
+    #spacer {
+        height: 2000px;
+    }
+</style>
+<div id="spacer"></div>
+<script>
+    function printOutputAndDisplayList(output) {
+        const displayList = internals.dumpDisplayList();
+        for (const line of output)
+            println(line);
+        println("display list:");
+        println(displayList);
+    }
+
+    promiseTest(async () => {
+        await animationFrame();
+        await animationFrame();
+        const output = [];
+        const before = internals.compositorScrollState();
+        output.push(`before routing admission: ${before.wheelRoutingAdmission}`);
+
+        // The compositor hears of the listener at once, and holds every wheel step back until a frame shows where the
+        // listener is.
+        document.addEventListener("wheel", event => event.preventDefault(), { passive: false });
+        output.push(`routing admission before the next frame: ${internals.compositorScrollState().wheelRoutingAdmission}`);
+
+        await animationFrame();
+        await animationFrame();
+        const after = internals.compositorScrollState();
+        output.push(`listener generation increased: ${after.wheelEventListenerStateGeneration > before.wheelEventListenerStateGeneration}`);
+        output.push(`after routing admission: ${after.wheelRoutingAdmission}`);
+        printOutputAndDisplayList(output);
+    });
+</script>

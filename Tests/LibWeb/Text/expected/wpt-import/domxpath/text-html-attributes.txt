@@ -1,0 +1,20 @@
+Harness status: OK
+
+Found 15 tests
+
+15 Pass
+Pass	Select html element based on attribute
+Pass	Select html element based on attribute mixed case
+Pass	Select both HTML and SVG elements based on attribute
+Pass	Select HTML element with non-ascii attribute 1
+Pass	Select HTML element with non-ascii attribute 2
+Pass	Select HTML element with non-ascii attribute 3
+Pass	Select SVG element based on mixed case attribute
+Pass	Select both HTML and SVG elements based on mixed case attribute
+Pass	Select SVG elements with refX attribute
+Pass	Select SVG elements with refX attribute incorrect case
+Pass	Select SVG elements with refX attribute lowercase
+Pass	Select SVG element with non-ascii attribute 1
+Pass	Select SVG element with non-ascii attribute 2
+Pass	xmlns attribute
+Pass	svg element with XLink attribute

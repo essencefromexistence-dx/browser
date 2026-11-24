@@ -1,0 +1,337 @@
+PRESERVED: content-visibility auto -> visible on inline list-item in inline list-item | fixture ancestor
+PRESERVED: content-visibility auto -> visible on inline list-item in inline list-item | distant sibling
+PRESERVED: content-visibility auto -> visible on inline list-item in inline list-item | distant sibling descendant
+PRESERVED: content-visibility auto -> visible on inline list-item in inline list-item | DOM parent
+PRESERVED: content-visibility auto -> visible on inline list-item in inline list-item | preceding sibling
+PRESERVED: content-visibility auto -> visible on inline list-item in inline list-item | preceding sibling descendant
+RECREATED: content-visibility auto -> visible on inline list-item in inline list-item | target
+RECREATED: content-visibility auto -> visible on inline list-item in inline list-item | target descendant
+PRESERVED: content-visibility auto -> visible on inline list-item in inline list-item | following sibling
+PRESERVED: content-visibility auto -> visible on inline list-item in inline list-item | following sibling descendant
+STATS: content-visibility auto -> visible on inline list-item in inline list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: content-visibility auto -> visible on inline list-item in inline list-item | incremental tree matches full rebuild
+PRESERVED: content-visibility hidden -> visible on table-row-group in list-item | fixture ancestor
+PRESERVED: content-visibility hidden -> visible on table-row-group in list-item | distant sibling
+PRESERVED: content-visibility hidden -> visible on table-row-group in list-item | distant sibling descendant
+PRESERVED: content-visibility hidden -> visible on table-row-group in list-item | DOM parent
+PRESERVED: content-visibility hidden -> visible on table-row-group in list-item | preceding sibling
+PRESERVED: content-visibility hidden -> visible on table-row-group in list-item | preceding sibling descendant
+RECREATED: content-visibility hidden -> visible on table-row-group in list-item | target
+CREATED: content-visibility hidden -> visible on table-row-group in list-item | target descendant
+PRESERVED: content-visibility hidden -> visible on table-row-group in list-item | following sibling
+PRESERVED: content-visibility hidden -> visible on table-row-group in list-item | following sibling descendant
+STATS: content-visibility hidden -> visible on table-row-group in list-item | rebuilt [ListItemBox<SECTION>#DOM-parent]
+PASS: content-visibility hidden -> visible on table-row-group in list-item | incremental tree matches full rebuild
+PRESERVED: overflow-x visible -> clip on block flow-root in list-item | fixture ancestor
+PRESERVED: overflow-x visible -> clip on block flow-root in list-item | distant sibling
+PRESERVED: overflow-x visible -> clip on block flow-root in list-item | distant sibling descendant
+PRESERVED: overflow-x visible -> clip on block flow-root in list-item | DOM parent
+PRESERVED: overflow-x visible -> clip on block flow-root in list-item | preceding sibling
+PRESERVED: overflow-x visible -> clip on block flow-root in list-item | preceding sibling descendant
+PRESERVED: overflow-x visible -> clip on block flow-root in list-item | target
+PRESERVED: overflow-x visible -> clip on block flow-root in list-item | target descendant
+PRESERVED: overflow-x visible -> clip on block flow-root in list-item | following sibling
+PRESERVED: overflow-x visible -> clip on block flow-root in list-item | following sibling descendant
+STATS: overflow-x visible -> clip on block flow-root in list-item | no layout tree build
+PASS: overflow-x visible -> clip on block flow-root in list-item | incremental tree matches full rebuild
+PRESERVED: overflow-x visible -> auto on none in inline-flex | fixture ancestor
+PRESERVED: overflow-x visible -> auto on none in inline-flex | distant sibling
+PRESERVED: overflow-x visible -> auto on none in inline-flex | distant sibling descendant
+PRESERVED: overflow-x visible -> auto on none in inline-flex | DOM parent
+PRESERVED: overflow-x visible -> auto on none in inline-flex | preceding sibling
+PRESERVED: overflow-x visible -> auto on none in inline-flex | preceding sibling descendant
+ABSENT: overflow-x visible -> auto on none in inline-flex | target
+ABSENT: overflow-x visible -> auto on none in inline-flex | target descendant
+PRESERVED: overflow-x visible -> auto on none in inline-flex | following sibling
+PRESERVED: overflow-x visible -> auto on none in inline-flex | following sibling descendant
+STATS: overflow-x visible -> auto on none in inline-flex | no layout tree build
+PASS: overflow-x visible -> auto on none in inline-flex | incremental tree matches full rebuild
+PRESERVED: overflow-x hidden -> scroll on inline-flex in inline-flex | fixture ancestor
+PRESERVED: overflow-x hidden -> scroll on inline-flex in inline-flex | distant sibling
+PRESERVED: overflow-x hidden -> scroll on inline-flex in inline-flex | distant sibling descendant
+PRESERVED: overflow-x hidden -> scroll on inline-flex in inline-flex | DOM parent
+PRESERVED: overflow-x hidden -> scroll on inline-flex in inline-flex | preceding sibling
+PRESERVED: overflow-x hidden -> scroll on inline-flex in inline-flex | preceding sibling descendant
+PRESERVED: overflow-x hidden -> scroll on inline-flex in inline-flex | target
+PRESERVED: overflow-x hidden -> scroll on inline-flex in inline-flex | target descendant
+PRESERVED: overflow-x hidden -> scroll on inline-flex in inline-flex | following sibling
+PRESERVED: overflow-x hidden -> scroll on inline-flex in inline-flex | following sibling descendant
+STATS: overflow-x hidden -> scroll on inline-flex in inline-flex | no layout tree build
+PASS: overflow-x hidden -> scroll on inline-flex in inline-flex | incremental tree matches full rebuild
+PRESERVED: overflow-x clip -> visible on table-footer-group in flex | fixture ancestor
+PRESERVED: overflow-x clip -> visible on table-footer-group in flex | distant sibling
+PRESERVED: overflow-x clip -> visible on table-footer-group in flex | distant sibling descendant
+PRESERVED: overflow-x clip -> visible on table-footer-group in flex | DOM parent
+PRESERVED: overflow-x clip -> visible on table-footer-group in flex | preceding sibling
+PRESERVED: overflow-x clip -> visible on table-footer-group in flex | preceding sibling descendant
+PRESERVED: overflow-x clip -> visible on table-footer-group in flex | target
+PRESERVED: overflow-x clip -> visible on table-footer-group in flex | target descendant
+PRESERVED: overflow-x clip -> visible on table-footer-group in flex | following sibling
+PRESERVED: overflow-x clip -> visible on table-footer-group in flex | following sibling descendant
+STATS: overflow-x clip -> visible on table-footer-group in flex | no layout tree build
+PASS: overflow-x clip -> visible on table-footer-group in flex | incremental tree matches full rebuild
+PRESERVED: overflow-x clip -> auto on block flex in flex | fixture ancestor
+PRESERVED: overflow-x clip -> auto on block flex in flex | distant sibling
+PRESERVED: overflow-x clip -> auto on block flex in flex | distant sibling descendant
+PRESERVED: overflow-x clip -> auto on block flex in flex | DOM parent
+PRESERVED: overflow-x clip -> auto on block flex in flex | preceding sibling
+PRESERVED: overflow-x clip -> auto on block flex in flex | preceding sibling descendant
+PRESERVED: overflow-x clip -> auto on block flex in flex | target
+PRESERVED: overflow-x clip -> auto on block flex in flex | target descendant
+PRESERVED: overflow-x clip -> auto on block flex in flex | following sibling
+PRESERVED: overflow-x clip -> auto on block flex in flex | following sibling descendant
+STATS: overflow-x clip -> auto on block flex in flex | no layout tree build
+PASS: overflow-x clip -> auto on block flex in flex | incremental tree matches full rebuild
+PRESERVED: overflow-x scroll -> hidden on block in inline-grid | fixture ancestor
+PRESERVED: overflow-x scroll -> hidden on block in inline-grid | distant sibling
+PRESERVED: overflow-x scroll -> hidden on block in inline-grid | distant sibling descendant
+PRESERVED: overflow-x scroll -> hidden on block in inline-grid | DOM parent
+PRESERVED: overflow-x scroll -> hidden on block in inline-grid | preceding sibling
+PRESERVED: overflow-x scroll -> hidden on block in inline-grid | preceding sibling descendant
+PRESERVED: overflow-x scroll -> hidden on block in inline-grid | target
+PRESERVED: overflow-x scroll -> hidden on block in inline-grid | target descendant
+PRESERVED: overflow-x scroll -> hidden on block in inline-grid | following sibling
+PRESERVED: overflow-x scroll -> hidden on block in inline-grid | following sibling descendant
+STATS: overflow-x scroll -> hidden on block in inline-grid | no layout tree build
+PASS: overflow-x scroll -> hidden on block in inline-grid | incremental tree matches full rebuild
+PRESERVED: overflow-x auto -> visible on inline-grid in inline-grid | fixture ancestor
+PRESERVED: overflow-x auto -> visible on inline-grid in inline-grid | distant sibling
+PRESERVED: overflow-x auto -> visible on inline-grid in inline-grid | distant sibling descendant
+PRESERVED: overflow-x auto -> visible on inline-grid in inline-grid | DOM parent
+PRESERVED: overflow-x auto -> visible on inline-grid in inline-grid | preceding sibling
+PRESERVED: overflow-x auto -> visible on inline-grid in inline-grid | preceding sibling descendant
+PRESERVED: overflow-x auto -> visible on inline-grid in inline-grid | target
+PRESERVED: overflow-x auto -> visible on inline-grid in inline-grid | target descendant
+PRESERVED: overflow-x auto -> visible on inline-grid in inline-grid | following sibling
+PRESERVED: overflow-x auto -> visible on inline-grid in inline-grid | following sibling descendant
+STATS: overflow-x auto -> visible on inline-grid in inline-grid | no layout tree build
+PASS: overflow-x auto -> visible on inline-grid in inline-grid | incremental tree matches full rebuild
+PRESERVED: overflow-x auto -> clip on table-cell in grid | fixture ancestor
+PRESERVED: overflow-x auto -> clip on table-cell in grid | distant sibling
+PRESERVED: overflow-x auto -> clip on table-cell in grid | distant sibling descendant
+PRESERVED: overflow-x auto -> clip on table-cell in grid | DOM parent
+PRESERVED: overflow-x auto -> clip on table-cell in grid | preceding sibling
+PRESERVED: overflow-x auto -> clip on table-cell in grid | preceding sibling descendant
+PRESERVED: overflow-x auto -> clip on table-cell in grid | target
+PRESERVED: overflow-x auto -> clip on table-cell in grid | target descendant
+PRESERVED: overflow-x auto -> clip on table-cell in grid | following sibling
+PRESERVED: overflow-x auto -> clip on table-cell in grid | following sibling descendant
+STATS: overflow-x auto -> clip on table-cell in grid | no layout tree build
+PASS: overflow-x auto -> clip on table-cell in grid | incremental tree matches full rebuild
+PRESERVED: overflow-y visible -> clip on block grid in grid | fixture ancestor
+PRESERVED: overflow-y visible -> clip on block grid in grid | distant sibling
+PRESERVED: overflow-y visible -> clip on block grid in grid | distant sibling descendant
+PRESERVED: overflow-y visible -> clip on block grid in grid | DOM parent
+PRESERVED: overflow-y visible -> clip on block grid in grid | preceding sibling
+PRESERVED: overflow-y visible -> clip on block grid in grid | preceding sibling descendant
+PRESERVED: overflow-y visible -> clip on block grid in grid | target
+PRESERVED: overflow-y visible -> clip on block grid in grid | target descendant
+PRESERVED: overflow-y visible -> clip on block grid in grid | following sibling
+PRESERVED: overflow-y visible -> clip on block grid in grid | following sibling descendant
+STATS: overflow-y visible -> clip on block grid in grid | no layout tree build
+PASS: overflow-y visible -> clip on block grid in grid | incremental tree matches full rebuild
+PRESERVED: overflow-y visible -> auto on flow-root in inline-table | fixture ancestor
+PRESERVED: overflow-y visible -> auto on flow-root in inline-table | distant sibling
+PRESERVED: overflow-y visible -> auto on flow-root in inline-table | distant sibling descendant
+PRESERVED: overflow-y visible -> auto on flow-root in inline-table | DOM parent
+PRESERVED: overflow-y visible -> auto on flow-root in inline-table | preceding sibling
+PRESERVED: overflow-y visible -> auto on flow-root in inline-table | preceding sibling descendant
+PRESERVED: overflow-y visible -> auto on flow-root in inline-table | target
+PRESERVED: overflow-y visible -> auto on flow-root in inline-table | target descendant
+PRESERVED: overflow-y visible -> auto on flow-root in inline-table | following sibling
+PRESERVED: overflow-y visible -> auto on flow-root in inline-table | following sibling descendant
+STATS: overflow-y visible -> auto on flow-root in inline-table | no layout tree build
+PASS: overflow-y visible -> auto on flow-root in inline-table | incremental tree matches full rebuild
+PRESERVED: overflow-y hidden -> scroll on inline-table in inline-table | fixture ancestor
+PRESERVED: overflow-y hidden -> scroll on inline-table in inline-table | distant sibling
+PRESERVED: overflow-y hidden -> scroll on inline-table in inline-table | distant sibling descendant
+PRESERVED: overflow-y hidden -> scroll on inline-table in inline-table | DOM parent
+PRESERVED: overflow-y hidden -> scroll on inline-table in inline-table | preceding sibling
+PRESERVED: overflow-y hidden -> scroll on inline-table in inline-table | preceding sibling descendant
+PRESERVED: overflow-y hidden -> scroll on inline-table in inline-table | target
+PRESERVED: overflow-y hidden -> scroll on inline-table in inline-table | target descendant
+PRESERVED: overflow-y hidden -> scroll on inline-table in inline-table | following sibling
+PRESERVED: overflow-y hidden -> scroll on inline-table in inline-table | following sibling descendant
+STATS: overflow-y hidden -> scroll on inline-table in inline-table | no layout tree build
+PASS: overflow-y hidden -> scroll on inline-table in inline-table | incremental tree matches full rebuild
+PRESERVED: overflow-y clip -> visible on table-column in table | fixture ancestor
+PRESERVED: overflow-y clip -> visible on table-column in table | distant sibling
+PRESERVED: overflow-y clip -> visible on table-column in table | distant sibling descendant
+PRESERVED: overflow-y clip -> visible on table-column in table | DOM parent
+PRESERVED: overflow-y clip -> visible on table-column in table | preceding sibling
+PRESERVED: overflow-y clip -> visible on table-column in table | preceding sibling descendant
+PRESERVED: overflow-y clip -> visible on table-column in table | target
+ABSENT: overflow-y clip -> visible on table-column in table | target descendant
+PRESERVED: overflow-y clip -> visible on table-column in table | following sibling
+PRESERVED: overflow-y clip -> visible on table-column in table | following sibling descendant
+STATS: overflow-y clip -> visible on table-column in table | no layout tree build
+PASS: overflow-y clip -> visible on table-column in table | incremental tree matches full rebuild
+PRESERVED: overflow-y clip -> auto on block table in table | fixture ancestor
+PRESERVED: overflow-y clip -> auto on block table in table | distant sibling
+PRESERVED: overflow-y clip -> auto on block table in table | distant sibling descendant
+PRESERVED: overflow-y clip -> auto on block table in table | DOM parent
+PRESERVED: overflow-y clip -> auto on block table in table | preceding sibling
+PRESERVED: overflow-y clip -> auto on block table in table | preceding sibling descendant
+PRESERVED: overflow-y clip -> auto on block table in table | target
+PRESERVED: overflow-y clip -> auto on block table in table | target descendant
+PRESERVED: overflow-y clip -> auto on block table in table | following sibling
+PRESERVED: overflow-y clip -> auto on block table in table | following sibling descendant
+STATS: overflow-y clip -> auto on block table in table | no layout tree build
+PASS: overflow-y clip -> auto on block table in table | incremental tree matches full rebuild
+PRESERVED: overflow-y scroll -> hidden on run-in in -webkit-box | fixture ancestor
+PRESERVED: overflow-y scroll -> hidden on run-in in -webkit-box | distant sibling
+PRESERVED: overflow-y scroll -> hidden on run-in in -webkit-box | distant sibling descendant
+PRESERVED: overflow-y scroll -> hidden on run-in in -webkit-box | DOM parent
+PRESERVED: overflow-y scroll -> hidden on run-in in -webkit-box | preceding sibling
+PRESERVED: overflow-y scroll -> hidden on run-in in -webkit-box | preceding sibling descendant
+PRESERVED: overflow-y scroll -> hidden on run-in in -webkit-box | target
+PRESERVED: overflow-y scroll -> hidden on run-in in -webkit-box | target descendant
+PRESERVED: overflow-y scroll -> hidden on run-in in -webkit-box | following sibling
+PRESERVED: overflow-y scroll -> hidden on run-in in -webkit-box | following sibling descendant
+STATS: overflow-y scroll -> hidden on run-in in -webkit-box | no layout tree build
+PASS: overflow-y scroll -> hidden on run-in in -webkit-box | incremental tree matches full rebuild
+PRESERVED: overflow-y auto -> visible on -webkit-box in -webkit-box | fixture ancestor
+PRESERVED: overflow-y auto -> visible on -webkit-box in -webkit-box | distant sibling
+PRESERVED: overflow-y auto -> visible on -webkit-box in -webkit-box | distant sibling descendant
+PRESERVED: overflow-y auto -> visible on -webkit-box in -webkit-box | DOM parent
+PRESERVED: overflow-y auto -> visible on -webkit-box in -webkit-box | preceding sibling
+PRESERVED: overflow-y auto -> visible on -webkit-box in -webkit-box | preceding sibling descendant
+PRESERVED: overflow-y auto -> visible on -webkit-box in -webkit-box | target
+PRESERVED: overflow-y auto -> visible on -webkit-box in -webkit-box | target descendant
+PRESERVED: overflow-y auto -> visible on -webkit-box in -webkit-box | following sibling
+PRESERVED: overflow-y auto -> visible on -webkit-box in -webkit-box | following sibling descendant
+STATS: overflow-y auto -> visible on -webkit-box in -webkit-box | no layout tree build
+PASS: overflow-y auto -> visible on -webkit-box in -webkit-box | incremental tree matches full rebuild
+PRESERVED: overflow-y auto -> clip on block flow in math | fixture ancestor
+PRESERVED: overflow-y auto -> clip on block flow in math | distant sibling
+PRESERVED: overflow-y auto -> clip on block flow in math | distant sibling descendant
+PRESERVED: overflow-y auto -> clip on block flow in math | DOM parent
+PRESERVED: overflow-y auto -> clip on block flow in math | preceding sibling
+PRESERVED: overflow-y auto -> clip on block flow in math | preceding sibling descendant
+PRESERVED: overflow-y auto -> clip on block flow in math | target
+PRESERVED: overflow-y auto -> clip on block flow in math | target descendant
+PRESERVED: overflow-y auto -> clip on block flow in math | following sibling
+PRESERVED: overflow-y auto -> clip on block flow in math | following sibling descendant
+STATS: overflow-y auto -> clip on block flow in math | no layout tree build
+PASS: overflow-y auto -> clip on block flow in math | incremental tree matches full rebuild
+PRESERVED: text-transform none -> lowercase on block flow list-item in math | fixture ancestor
+PRESERVED: text-transform none -> lowercase on block flow list-item in math | distant sibling
+PRESERVED: text-transform none -> lowercase on block flow list-item in math | distant sibling descendant
+PRESERVED: text-transform none -> lowercase on block flow list-item in math | DOM parent
+PRESERVED: text-transform none -> lowercase on block flow list-item in math | preceding sibling
+PRESERVED: text-transform none -> lowercase on block flow list-item in math | preceding sibling descendant
+RECREATED: text-transform none -> lowercase on block flow list-item in math | target
+RECREATED: text-transform none -> lowercase on block flow list-item in math | target descendant
+PRESERVED: text-transform none -> lowercase on block flow list-item in math | following sibling
+PRESERVED: text-transform none -> lowercase on block flow list-item in math | following sibling descendant
+STATS: text-transform none -> lowercase on block flow list-item in math | rebuilt [InlineNode<SECTION>#DOM-parent]
+PASS: text-transform none -> lowercase on block flow list-item in math | incremental tree matches full rebuild
+PRESERVED: text-transform uppercase -> none on inline list-item in table-row-group | fixture ancestor
+PRESERVED: text-transform uppercase -> none on inline list-item in table-row-group | distant sibling
+PRESERVED: text-transform uppercase -> none on inline list-item in table-row-group | distant sibling descendant
+PRESERVED: text-transform uppercase -> none on inline list-item in table-row-group | DOM parent
+PRESERVED: text-transform uppercase -> none on inline list-item in table-row-group | preceding sibling
+PRESERVED: text-transform uppercase -> none on inline list-item in table-row-group | preceding sibling descendant
+RECREATED: text-transform uppercase -> none on inline list-item in table-row-group | target
+RECREATED: text-transform uppercase -> none on inline list-item in table-row-group | target descendant
+PRESERVED: text-transform uppercase -> none on inline list-item in table-row-group | following sibling
+PRESERVED: text-transform uppercase -> none on inline list-item in table-row-group | following sibling descendant
+STATS: text-transform uppercase -> none on inline list-item in table-row-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: text-transform uppercase -> none on inline list-item in table-row-group | incremental tree matches full rebuild
+PRESERVED: text-transform lowercase -> none on table-row-group in table-row-group | fixture ancestor
+PRESERVED: text-transform lowercase -> none on table-row-group in table-row-group | distant sibling
+PRESERVED: text-transform lowercase -> none on table-row-group in table-row-group | distant sibling descendant
+PRESERVED: text-transform lowercase -> none on table-row-group in table-row-group | DOM parent
+PRESERVED: text-transform lowercase -> none on table-row-group in table-row-group | preceding sibling
+PRESERVED: text-transform lowercase -> none on table-row-group in table-row-group | preceding sibling descendant
+RECREATED: text-transform lowercase -> none on table-row-group in table-row-group | target
+RECREATED: text-transform lowercase -> none on table-row-group in table-row-group | target descendant
+PRESERVED: text-transform lowercase -> none on table-row-group in table-row-group | following sibling
+PRESERVED: text-transform lowercase -> none on table-row-group in table-row-group | following sibling descendant
+STATS: text-transform lowercase -> none on table-row-group in table-row-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: text-transform lowercase -> none on table-row-group in table-row-group | incremental tree matches full rebuild
+PRESERVED: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | fixture ancestor
+PRESERVED: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | distant sibling
+PRESERVED: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | distant sibling descendant
+PRESERVED: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | DOM parent
+PRESERVED: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | preceding sibling
+PRESERVED: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | preceding sibling descendant
+RECREATED: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | target
+RECREATED: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | target descendant
+PRESERVED: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | following sibling
+PRESERVED: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | following sibling descendant
+STATS: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | rebuilt [Box<SECTION>#DOM-parent]
+PASS: text-transform lowercase -> capitalize on block flow-root in -webkit-inline-box | incremental tree matches full rebuild
+PRESERVED: text-transform capitalize -> lowercase on none in table-row | fixture ancestor
+PRESERVED: text-transform capitalize -> lowercase on none in table-row | distant sibling
+PRESERVED: text-transform capitalize -> lowercase on none in table-row | distant sibling descendant
+PRESERVED: text-transform capitalize -> lowercase on none in table-row | DOM parent
+PRESERVED: text-transform capitalize -> lowercase on none in table-row | preceding sibling
+PRESERVED: text-transform capitalize -> lowercase on none in table-row | preceding sibling descendant
+ABSENT: text-transform capitalize -> lowercase on none in table-row | target
+ABSENT: text-transform capitalize -> lowercase on none in table-row | target descendant
+PRESERVED: text-transform capitalize -> lowercase on none in table-row | following sibling
+PRESERVED: text-transform capitalize -> lowercase on none in table-row | following sibling descendant
+STATS: text-transform capitalize -> lowercase on none in table-row | rebuilt [Box<SECTION>#DOM-parent]
+PASS: text-transform capitalize -> lowercase on none in table-row | incremental tree matches full rebuild
+PRESERVED: content normal -> "replacement" on inline-flex in table-footer-group | fixture ancestor
+PRESERVED: content normal -> "replacement" on inline-flex in table-footer-group | distant sibling
+PRESERVED: content normal -> "replacement" on inline-flex in table-footer-group | distant sibling descendant
+PRESERVED: content normal -> "replacement" on inline-flex in table-footer-group | DOM parent
+PRESERVED: content normal -> "replacement" on inline-flex in table-footer-group | preceding sibling
+PRESERVED: content normal -> "replacement" on inline-flex in table-footer-group | preceding sibling descendant
+RECREATED: content normal -> "replacement" on inline-flex in table-footer-group | target
+RECREATED: content normal -> "replacement" on inline-flex in table-footer-group | target descendant
+PRESERVED: content normal -> "replacement" on inline-flex in table-footer-group | following sibling
+PRESERVED: content normal -> "replacement" on inline-flex in table-footer-group | following sibling descendant
+STATS: content normal -> "replacement" on inline-flex in table-footer-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: content normal -> "replacement" on inline-flex in table-footer-group | incremental tree matches full rebuild
+PRESERVED: content none -> "replacement" on table-footer-group in table-footer-group | fixture ancestor
+PRESERVED: content none -> "replacement" on table-footer-group in table-footer-group | distant sibling
+PRESERVED: content none -> "replacement" on table-footer-group in table-footer-group | distant sibling descendant
+PRESERVED: content none -> "replacement" on table-footer-group in table-footer-group | DOM parent
+PRESERVED: content none -> "replacement" on table-footer-group in table-footer-group | preceding sibling
+PRESERVED: content none -> "replacement" on table-footer-group in table-footer-group | preceding sibling descendant
+RECREATED: content none -> "replacement" on table-footer-group in table-footer-group | target
+RECREATED: content none -> "replacement" on table-footer-group in table-footer-group | target descendant
+PRESERVED: content none -> "replacement" on table-footer-group in table-footer-group | following sibling
+PRESERVED: content none -> "replacement" on table-footer-group in table-footer-group | following sibling descendant
+STATS: content none -> "replacement" on table-footer-group in table-footer-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: content none -> "replacement" on table-footer-group in table-footer-group | incremental tree matches full rebuild
+PRESERVED: content "replacement" -> normal on block flex in table-header-group | fixture ancestor
+PRESERVED: content "replacement" -> normal on block flex in table-header-group | distant sibling
+PRESERVED: content "replacement" -> normal on block flex in table-header-group | distant sibling descendant
+PRESERVED: content "replacement" -> normal on block flex in table-header-group | DOM parent
+PRESERVED: content "replacement" -> normal on block flex in table-header-group | preceding sibling
+PRESERVED: content "replacement" -> normal on block flex in table-header-group | preceding sibling descendant
+RECREATED: content "replacement" -> normal on block flex in table-header-group | target
+RECREATED: content "replacement" -> normal on block flex in table-header-group | target descendant
+PRESERVED: content "replacement" -> normal on block flex in table-header-group | following sibling
+PRESERVED: content "replacement" -> normal on block flex in table-header-group | following sibling descendant
+STATS: content "replacement" -> normal on block flex in table-header-group | rebuilt [Box<SECTION>#DOM-parent]
+PASS: content "replacement" -> normal on block flex in table-header-group | incremental tree matches full rebuild
+PRESERVED: content open-quote "replacement" close-quote -> normal on block in table-column-group | fixture ancestor
+PRESERVED: content open-quote "replacement" close-quote -> normal on block in table-column-group | distant sibling
+PRESERVED: content open-quote "replacement" close-quote -> normal on block in table-column-group | distant sibling descendant
+PRESERVED: content open-quote "replacement" close-quote -> normal on block in table-column-group | DOM parent
+ABSENT: content open-quote "replacement" close-quote -> normal on block in table-column-group | preceding sibling
+ABSENT: content open-quote "replacement" close-quote -> normal on block in table-column-group | preceding sibling descendant
+ABSENT: content open-quote "replacement" close-quote -> normal on block in table-column-group | target
+ABSENT: content open-quote "replacement" close-quote -> normal on block in table-column-group | target descendant
+ABSENT: content open-quote "replacement" close-quote -> normal on block in table-column-group | following sibling
+ABSENT: content open-quote "replacement" close-quote -> normal on block in table-column-group | following sibling descendant
+STATS: content open-quote "replacement" close-quote -> normal on block in table-column-group | rebuilt []
+PASS: content open-quote "replacement" close-quote -> normal on block in table-column-group | incremental tree matches full rebuild
+PRESERVED: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | fixture ancestor
+PRESERVED: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | distant sibling
+PRESERVED: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | distant sibling descendant
+PRESERVED: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | DOM parent
+PRESERVED: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | preceding sibling
+PRESERVED: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | preceding sibling descendant
+RECREATED: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | target
+RECREATED: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | target descendant
+PRESERVED: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | following sibling
+PRESERVED: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | following sibling descendant
+STATS: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | rebuilt [BlockContainer<SECTION>#DOM-parent]
+PASS: content open-quote "replacement" close-quote -> "replacement" on inline-grid in table-cell | incremental tree matches full rebuild
+28 cases; 28 matched; 0 mismatched

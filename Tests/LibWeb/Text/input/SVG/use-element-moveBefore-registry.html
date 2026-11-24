@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script>
+    asyncTest((done) => {
+        const SVG_NS = "http://www.w3.org/2000/svg";
+
+        function createSVGElement(localName) {
+            return document.createElementNS(SVG_NS, localName);
+        }
+
+        function createReferencedRect(id) {
+            const rect = createSVGElement("rect");
+            rect.id = id;
+            rect.setAttribute("width", "10");
+            rect.setAttribute("height", "10");
+            return rect;
+        }
+
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                const svg = createSVGElement("svg");
+                document.body.appendChild(svg);
+                const host = document.createElement("div");
+                document.body.appendChild(host);
+                host.attachShadow({ mode: "open" });
+                const shadowSvg = createSVGElement("svg");
+                host.shadowRoot.appendChild(shadowSvg);
+
+                {
+                    const use = createSVGElement("use");
+                    use.setAttribute("href", "#moveOutSource");
+                    svg.appendChild(use);
+
+                    shadowSvg.moveBefore(use, null);
+                    svg.appendChild(createReferencedRect("moveOutSource"));
+
+                    println(`Use moved into shadow tree, width once its target exists: ${use.getBBox().width}`);
+                }
+
+                {
+                    const use = createSVGElement("use");
+                    use.setAttribute("href", "#moveInSource");
+                    shadowSvg.appendChild(use);
+
+                    svg.moveBefore(use, null);
+                    svg.appendChild(createReferencedRect("moveInSource"));
+
+                    println(`Use moved into document tree, width once its target exists: ${use.getBBox().width}`);
+                }
+
+                done();
+            }, 0);
+        }, { once: true });
+    });
+</script>

@@ -1,0 +1,11 @@
+Harness status: OK
+
+Found 5 tests
+
+1 Pass
+4 Fail
+Fail	.floating-flexbox 1
+Fail	.floating-flexbox 2
+Pass	.floating-flexbox 3
+Fail	.floating-flexbox 4
+Fail	.floating-flexbox 5

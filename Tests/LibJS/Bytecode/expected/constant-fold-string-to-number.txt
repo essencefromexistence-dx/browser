@@ -1,0 +1,18 @@
+$563356ff constant-fold-string-to-number.js:1:5
+  Registers: 6
+  Blocks:    1
+  Constants:
+    [0] = Undefined
+    [1] = Int32(12345)
+    [2] = Int32(123450)
+    [3] = Int32(-42)
+    [4] = Int32(-6)
+
+block0:
+  [   0] Enter
+  [   1] Mov dst:reg5, src:Undefined
+  [   4] SetGlobal `a`, src:Int32(12345)
+  [   a] SetGlobal `b`, src:Int32(123450)
+  [  10] SetGlobal `c`, src:Int32(-42)
+  [  16] SetGlobal `d`, src:Int32(-6)
+  [  1c] End value:reg5

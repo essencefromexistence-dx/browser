@@ -1,0 +1,1 @@
+PASS: the scroller grows and scrolls (work + checks)

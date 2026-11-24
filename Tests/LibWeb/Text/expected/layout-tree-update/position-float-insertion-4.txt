@@ -1,0 +1,115 @@
+PASS: insert fixed inline at start of block
+PASS: insert float-right list-item at middle of block
+PASS: insert relative-float-left grid at end of block
+PASS: insert fixed math at start of block
+PASS: insert float-right table-header-group at middle of block
+PASS: insert relative-float-left table-column-group at end of block
+PASS: insert fixed inline flow at start of block
+PASS: insert float-right inline flex at middle of block
+PASS: insert relative-float-left inline table at end of block
+PASS: insert absolute contents at end of inline
+PASS: insert float-left-clear-both inline-block at start of inline
+PASS: insert float-inline-end flex at middle of inline
+PASS: insert absolute table at end of inline
+PASS: insert float-left-clear-both -webkit-inline-box at start of inline
+PASS: insert float-inline-end table-row at middle of inline
+PASS: insert absolute table-caption at end of inline
+PASS: insert float-left-clear-both inline flow-root at start of inline
+PASS: insert float-inline-end inline grid at middle of inline
+PASS: insert absolute inline flow list-item at end of inline
+PASS: insert float-left inline at end of contents
+PASS: insert float-inline-start list-item at start of contents
+PASS: insert relative grid at middle of contents
+PASS: insert float-left math at end of contents
+PASS: insert float-inline-start table-header-group at start of contents
+PASS: insert relative table-column-group at middle of contents
+PASS: insert float-left inline flow at end of contents
+PASS: insert float-inline-start inline flex at start of contents
+PASS: insert relative inline table at middle of contents
+PASS: insert sticky contents at middle of flow-root
+PASS: insert float-right-clear-both inline-block at end of flow-root
+PASS: insert static flex at start of flow-root
+PASS: insert sticky table at middle of flow-root
+PASS: insert float-right-clear-both -webkit-inline-box at end of flow-root
+PASS: insert static table-row at start of flow-root
+PASS: insert sticky table-caption at middle of flow-root
+PASS: insert float-right-clear-both inline flow-root at end of flow-root
+PASS: insert static inline grid at start of flow-root
+PASS: insert sticky inline flow list-item at middle of flow-root
+PASS: insert float-right inline at middle of flex
+PASS: insert relative-float-left list-item at end of flex
+PASS: insert fixed grid at start of flex
+PASS: insert float-right math at middle of flex
+PASS: insert relative-float-left table-header-group at end of flex
+PASS: insert fixed table-column-group at start of flex
+PASS: insert float-right inline flow at middle of flex
+PASS: insert relative-float-left inline flex at end of flex
+PASS: insert fixed inline table at start of flex
+PASS: insert float-left-clear-both contents at start of grid
+PASS: insert float-inline-end inline-block at middle of grid
+PASS: insert absolute flex at end of grid
+PASS: insert float-left-clear-both table at start of grid
+PASS: insert float-inline-end -webkit-inline-box at middle of grid
+PASS: insert absolute table-row at end of grid
+PASS: insert float-left-clear-both table-caption at start of grid
+PASS: insert float-inline-end inline flow-root at middle of grid
+PASS: insert absolute inline grid at end of grid
+PASS: insert float-left-clear-both inline flow list-item at start of grid
+PASS: insert float-inline-start inline at start of table
+PASS: insert relative list-item at middle of table
+PASS: insert float-left grid at end of table
+PASS: insert float-inline-start math at start of table
+PASS: insert relative table-header-group at middle of table
+PASS: insert float-left table-column-group at end of table
+PASS: insert float-inline-start inline flow at start of table
+PASS: insert relative inline flex at middle of table
+PASS: insert float-left inline table at end of table
+PASS: insert float-right-clear-both contents at end of inline-table
+PASS: insert static inline-block at start of inline-table
+PASS: insert sticky flex at middle of inline-table
+PASS: insert float-right-clear-both table at end of inline-table
+PASS: insert static -webkit-inline-box at start of inline-table
+PASS: insert sticky table-row at middle of inline-table
+PASS: insert float-right-clear-both table-caption at end of inline-table
+PASS: insert static inline flow-root at start of inline-table
+PASS: insert sticky inline grid at middle of inline-table
+PASS: insert float-right-clear-both inline flow list-item at end of inline-table
+PASS: insert relative-float-left inline at end of table-row
+PASS: insert fixed list-item at start of table-row
+PASS: insert float-right grid at middle of table-row
+PASS: insert relative-float-left math at end of table-row
+PASS: insert fixed table-header-group at start of table-row
+PASS: insert float-right table-column-group at middle of table-row
+PASS: insert relative-float-left inline flow at end of table-row
+PASS: insert fixed inline flex at start of table-row
+PASS: insert float-right inline table at middle of table-row
+PASS: insert float-inline-end contents at middle of table-cell
+PASS: insert absolute inline-block at end of table-cell
+PASS: insert float-left-clear-both flex at start of table-cell
+PASS: insert float-inline-end table at middle of table-cell
+PASS: insert absolute -webkit-inline-box at end of table-cell
+PASS: insert float-left-clear-both table-row at start of table-cell
+PASS: insert float-inline-end table-caption at middle of table-cell
+PASS: insert absolute inline flow-root at end of table-cell
+PASS: insert float-left-clear-both inline grid at start of table-cell
+PASS: insert float-inline-end inline flow list-item at middle of table-cell
+PASS: insert float-inline-end math at start of inline-block
+PASS: insert static list-item at middle of list-item
+PASS: insert sticky inline-grid at start of inline list-item
+PASS: insert float-inline-start table-header-group at middle of inline-flex
+PASS: insert float-left-clear-both table-row at start of math
+PASS: insert float-inline-start table-caption at middle of -webkit-box
+PASS: insert static table-row-group at start of table-row-group
+PASS: insert fixed table-cell at middle of table-header-group
+PASS: insert static table-column-group at end of table-column-group
+PASS: insert relative table-caption at middle of table-column
+PASS: insert static block flow at end of block flow
+PASS: insert float-left-clear-both inline grid at start of inline flow
+PASS: insert float-inline-start inline flow list-item at middle of block flow-root
+PASS: insert static block flex at start of block flex
+PASS: insert fixed block table at middle of inline flex
+PASS: insert static inline grid at start of inline grid
+PASS: insert float-right-clear-both flow-root at start of block table
+PASS: insert relative-float-left inline list-item at middle of inline table
+PASS: insert absolute contents at start of inline flow list-item
+114 cases; 114 matched; 0 mismatched

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<script src="structural-matrix.js"></script>
+<script>
+    test(() => {
+        const style = addStyle(document.head, `.leaf { ${MATCH_DECLARATION} }`);
+
+        internals.updateStyle();
+
+        function leafOutcomesWhileAdding(build) {
+            const box = makeElement("section");
+            build(box);
+            const work = styleWork(() => document.body.append(box));
+            const leaves = work.events.filter(event => event.event === "restyle" && event.element.includes(".leaf"));
+            const outcomes = ["computed", "shared", "reused"]
+                .map(outcome => `${outcome} ${leaves.filter(event => event.outcome === outcome).length}`)
+                .join(", ");
+            const probe = readProbe(box.firstChild);
+            box.remove();
+            internals.updateStyle();
+            return { outcomes, probe };
+        }
+
+        // Ten siblings with the same rules, the same parent and nothing of their own to say: one of
+        // them computes a style and the other nine take it.
+        const alike = leafOutcomesWhileAdding(box => {
+            for (let i = 0; i < 10; i++) box.appendChild(makeElement("div", { className: "leaf" }));
+        });
+        println(`alike siblings: ${alike.outcomes}`);
+        assertEqual("the shared style is the matched one", alike.probe, MATCH);
+
+        // Ten siblings whose own declarations all differ share nothing with each other.
+        const differing = leafOutcomesWhileAdding(box => {
+            for (let i = 0; i < 10; i++)
+                box.appendChild(makeElement("div", { className: "leaf", attributes: { style: `--i: ${i}` } }));
+        });
+        println(`siblings with declarations of their own: ${differing.outcomes}`);
+        assertEqual("an unshared style is still the matched one", differing.probe, MATCH);
+
+        style.remove();
+    });
+</script>

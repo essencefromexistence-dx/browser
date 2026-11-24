@@ -1,0 +1,6 @@
+if (NOT WIN32)
+    ladybird_python_test(test-ipc-generator.py)
+    ladybird_python_test(test-js-runner.py)
+    ladybird_python_test(test-lint-environment.py)
+    ladybird_python_test(test-xctrace-time-profile.py)
+endif()

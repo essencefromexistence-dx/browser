@@ -1,0 +1,91 @@
+add_subdirectory("test-web")
+
+if (BUILD_TESTING AND NOT WIN32)
+    ladybird_python_test(test-webdriver-http-error-responses.py ARGS $<TARGET_FILE:WebDriver>)
+endif()
+
+if (BUILD_BROWSER_TESTS_ONLY)
+    return()
+endif()
+
+ladybird_test_suite(LibWeb)
+
+set(TEST_SOURCES
+    TestBlobBytes.cpp
+    TestContentBlocker.cpp
+    TestCSSDecodeBytes.cpp
+    TestCSSIDSpeed.cpp
+    TestCSSPropertyList.cpp
+    TestEventLoop.cpp
+    TestFaviconDecoding.cpp
+    TestFetchAlgorithms.cpp
+    TestFetchBodyDeliveryGate.cpp
+    TestFetchBodyStream.cpp
+    TestFetchByteChannel.cpp
+    TestFetchController.cpp
+    TestFetchControllerRegistry.cpp
+    TestFetchEngineMessages.cpp
+    TestFetchEngineRecord.cpp
+    TestFetchExecutor.cpp
+    TestFetchResponse.cpp
+    TestFetchTaskDestination.cpp
+    TestFetchURL.cpp
+    TestHighResolutionTime.cpp
+    TestHTMLTokenizer.cpp
+    TestImageData.cpp
+    TestInlineStyle.cpp
+    TestLoaderConfig.cpp
+    TestMimeSniff.cpp
+    TestNumbers.cpp
+    TestSecureContexts.cpp
+    TestSessionHistoryEntry.cpp
+    TestSharedCompiledStyleSheet.cpp
+    TestSimpleRealm.cpp
+    TestSourceHighlighter.cpp
+    TestStructuredSerializeCorpus.cpp
+    TestStructuredSerializeDurability.cpp
+    TestStructuredSerializeFormat.cpp
+    TestStructuredSerializeHardening.cpp
+    TestStructuredSerializeSharedArrayBuffer.cpp
+    TestStyleEngineBridge.cpp
+    TestWebIDLBuffers.cpp
+    TestWindowProxyWorld.cpp
+    TestWorldCallback.cpp
+    TestWrapperWorld.cpp
+)
+
+if (NOT WIN32)
+    list(APPEND TEST_SOURCES
+        # These call Rust FFI symbols directly, which the lagom-web DLL does not export.
+        TestCSSSyntaxParser.cpp
+        TestLengthAbsolutizeParity.cpp
+        TestStylePropertyMetadataParity.cpp
+    )
+endif()
+
+target_sources(TestLibWeb PRIVATE
+    ${TEST_SOURCES}
+    ${LADYBIRD_SOURCE_DIR}/Libraries/LibWeb/DOM/IDLEventListener.cpp
+    ${LADYBIRD_SOURCE_DIR}/Libraries/LibWeb/WebIDL/CallbackType.cpp
+)
+target_link_libraries(TestLibWeb PRIVATE LibCompositing LibCrypto LibFileSystem LibGC LibGfx LibHTTP LibIPC LibJS LibRequests LibThreading LibURL LibWeb LibWebCommon LibWebView)
+
+# NB: This one needs a process of its own: its agents must not share one with the persistent main-thread VM of the suite.
+ladybird_test(TestAgentThreads.cpp LibWeb LIBS LibCore LibGC LibGfx LibIPC LibJS LibThreading LibURL LibWeb LibWebCommon)
+
+# The check reads the symbols of the build's objects with nm, which can't see into an LTO build's bitcode objects and
+# isn't the toolchain's symbol reader on Windows.
+if (BUILD_TESTING AND NOT WIN32 AND NOT CMAKE_INTERPROCEDURAL_OPTIMIZATION)
+    ladybird_python_test("${LADYBIRD_SOURCE_DIR}/Meta/check-dead-rust-exports.py"
+        NAME TestDeadRustExports
+        ARGS
+            --nm ${CMAKE_NM}
+            --compile-commands ${CMAKE_BINARY_DIR}/compile_commands.json
+            --source-root ${LADYBIRD_SOURCE_DIR}
+            $<TARGET_FILE:libweb_bindings_rust>
+            $<TARGET_FILE:libweb_content_blocker_rust>)
+endif()
+
+
+add_subdirectory("AccessibilityBridge")
+add_subdirectory("AccessibilityBridgeMac")

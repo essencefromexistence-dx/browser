@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script>
+    promiseTest(async () => {
+        const httpServer = httpTestServer();
+        const body = `<!DOCTYPE html><body><div id="first">first</div>${" ".repeat(1700)}<div id="last">last</div>`;
+        const url = await httpServer.createEcho("GET", "/parser-streams-bytes", {
+            status: 200,
+            headers: {
+                "Content-Type": "text/html",
+            },
+            body,
+        });
+
+        const frame = document.createElement("iframe");
+        let loaded = false;
+        const loadPromise = new Promise(resolve => {
+            frame.onload = () => {
+                loaded = true;
+                resolve();
+            };
+        });
+
+        const token = crypto.randomUUID();
+        frame.src = `${url}?chunks=1500&chunk_unblock_tokens=${token}`;
+        document.body.appendChild(frame);
+
+        while (!loaded && !frame.contentDocument.getElementById("first"))
+            await new Promise(resolve => setTimeout(resolve, 0));
+        const parsedBeforeLoad = !loaded && !frame.contentDocument.getElementById("last");
+
+        await fetch(new URL(`/unblock/${token}`, url));
+        await loadPromise;
+        println(parsedBeforeLoad ? "PASS: iframe body parsed before load" : "FAIL: iframe body was not parsed before load");
+    });
+</script>

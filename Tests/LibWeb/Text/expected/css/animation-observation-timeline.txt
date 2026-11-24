@@ -1,0 +1,4 @@
+getters in one task:
+  animation timeline synchronized
+getter in the next task:
+  animation timeline synchronized

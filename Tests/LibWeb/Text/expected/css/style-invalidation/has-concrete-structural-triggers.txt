@@ -1,0 +1,13 @@
+PASS: inserted class argument invalidates descendant fanout
+PASS: removed class argument invalidates descendant fanout
+PASS: inserted id argument invalidates descendant fanout
+PASS: removed id argument invalidates descendant fanout
+PASS: inserted attribute argument invalidates descendant fanout
+PASS: removed attribute argument invalidates descendant fanout
+PASS: inserted tag argument invalidates descendant fanout
+PASS: removed tag argument invalidates descendant fanout
+PASS: inserted nested class argument invalidates descendant fanout
+PASS: inserted fragment class argument invalidates descendant fanout
+PASS: inserted :is class argument invalidates descendant fanout
+PASS: inserted :where attribute argument invalidates descendant fanout
+PASS: inserted compound class attribute argument invalidates descendant fanout

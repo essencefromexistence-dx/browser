@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<style>
+    #decorationInheritor {
+        text-decoration-line: inherit;
+    }
+    #transformInheritor {
+        transform: inherit;
+    }
+</style>
+<div id="plainContainer">
+    <div><span>a</span></div>
+    <div><span>b</span></div>
+</div>
+<div id="decorationContainer">
+    <div id="decorationInheritor"><span>c</span></div>
+</div>
+<div id="transformContainer">
+    <div id="transformInheritor"><span>d</span></div>
+</div>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<script>
+    promiseTest(async () => {
+        const keyframes = [{ transform: "translateY(0)" }, { transform: "translateY(-100px)" }];
+
+        // What the style engine styled for an animation update of `container`, which composes the animated
+        // values over the record of the container itself without restyling it.
+        async function restyledDuringAnimationUpdate(container) {
+            const animation = container.animate(keyframes, { duration: 1000 });
+            animation.pause();
+            animation.currentTime = 250;
+            await animation.ready;
+            await animationFrame();
+            const work = styleWork(() => {
+                animation.currentTime = 500;
+                getComputedStyle(container).transform;
+            }, internals, { flush: false });
+            animation.cancel();
+            return `[${work.restyled().map(shortStyleName).join(", ")}]`;
+        }
+
+        const output = [];
+        output.push(`plain descendants restyled: ${await restyledDuringAnimationUpdate(plainContainer)}`);
+        // FIXME: This should style nothing, as the inheritor inherits text-decoration-line, which the
+        //     animation does not move, but the style engine restyles an element inheriting a property explicitly
+        //     whenever its parent's record changes, whichever properties change.
+        output.push(`text-decoration-line inheritor restyled: ${await restyledDuringAnimationUpdate(decorationContainer)}`);
+        output.push(`transform inheritor restyled: ${await restyledDuringAnimationUpdate(transformContainer)}`);
+        for (const line of output)
+            println(line);
+    });
+</script>

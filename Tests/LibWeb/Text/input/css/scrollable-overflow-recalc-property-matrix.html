@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<div id="scroller" style="overflow: scroll; width: 100px; height: 100px;">
+    <div id="child" style="width: 90px; height: 90px; padding: 10px; box-sizing: border-box;"></div>
+</div>
+<script>
+    // Each transform-family property must trigger scrollable overflow recalculation on its own,
+    // without performing layout.
+    test(() => {
+        const scroller = document.getElementById("scroller");
+        const child = document.getElementById("child");
+        const results = [`initial: scrollWidth=${scroller.scrollWidth} scrollHeight=${scroller.scrollHeight}`];
+        const step = (name, change) => {
+            let width;
+            let height;
+            const work = layoutWork(() => {
+                change();
+                width = scroller.scrollWidth;
+                height = scroller.scrollHeight;
+            });
+            results.push(`${name}: scrollWidth=${width} scrollHeight=${height} layout=${work.passes().join(" | ") || "(no layout)"}`);
+        };
+
+        step("translate", () => {
+            child.style.translate = "0px 300px";
+        });
+
+        step("rotate", () => {
+            child.style.translate = "";
+            child.style.rotate = "45deg";
+        });
+
+        step("scale", () => {
+            child.style.rotate = "";
+            child.style.scale = "5";
+        });
+
+        step("transform", () => {
+            child.style.scale = "";
+            child.style.transform = "rotate(45deg)";
+        });
+
+        step("transform-origin", () => {
+            child.style.transformOrigin = "0 0";
+        });
+
+        step("transform-box", () => {
+            child.style.transformBox = "content-box";
+        });
+
+        for (const result of results)
+            println(result);
+    });
+</script>

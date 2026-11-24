@@ -1,0 +1,14 @@
+frame requests with ancestor listeners: []
+compositor animations:
+  transform svg#spinner
+  wakeup timer armed
+early wake-up frame requests: []
+iteration frame requests: [animation frame pump request]
+iteration samples: []
+events: start 0, iteration 1000
+next iteration re-arms the wake-up: iteration 2000, frame requests: [animation frame pump request]
+adjusted iteration early wake-up frame requests: []
+negative delay, iteration start, and playback rate are respected: iteration 750, frame requests: [animation frame pump request]
+paused animation wake-up frame requests: []
+paused animation armed timers: []
+cancellation still dispatches: true

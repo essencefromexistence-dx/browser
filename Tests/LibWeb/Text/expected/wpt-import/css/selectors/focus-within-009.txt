@@ -1,0 +1,17 @@
+Harness status: OK
+
+Found 12 tests
+
+12 Pass
+Pass	Initial State
+Pass	Focus 'target1'
+Pass	Focus 'target2'
+Pass	Focus 'target1' again
+Pass	Focus 'target2' again
+Pass	Focus 'target1' once again
+Pass	Detach 'container1' from the document
+Pass	Try to focus 'target1'
+Pass	Focus 'target2' once again
+Pass	Attach 'container1' in 'container2'
+Pass	Focus 'target1' for the last time
+Pass	Move 'target1' in 'container2'

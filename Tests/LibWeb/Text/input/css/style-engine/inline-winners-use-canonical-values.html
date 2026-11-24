@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<div id="root"></div>
+<script>
+    test(() => {
+        const root = document.getElementById("root");
+        for (let index = 0; index < 100; ++index) {
+            const item = document.createElement("div");
+            item.style.setProperty("color", "black", "important");
+            root.appendChild(item);
+        }
+
+        internals.updateStyle();
+
+        root.firstElementChild.style.setProperty("color", "#000", "important");
+        internals.updateStyle();
+        println(`ordinary item: ${getComputedStyle(root.firstElementChild).color}`);
+    });
+</script>

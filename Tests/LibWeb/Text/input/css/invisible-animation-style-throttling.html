@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    @keyframes spin {
+        from { transform: translateX(0%); }
+        to { transform: translateX(100%); }
+    }
+
+    .animated {
+        animation: spin 100s linear infinite;
+        transform-origin: center center 1px;
+    }
+</style>
+<script>
+    function nextFrame() {
+        return new Promise(resolve => requestAnimationFrame(resolve));
+    }
+
+    function sampledElements() {
+        const events = parseStyleTrace(internals.takeStyleTrace()).filter(event => event.outcome?.startsWith("sampled"));
+        return `[${[...new Set(events.map(event => event.element))].join(", ")}]`;
+    }
+
+    function frameRequests() {
+        const lines = internals.takeRenderingTrace().split("\n").filter(line => line.startsWith("animation frame pump request"));
+        return `[${[...new Set(lines.map(line => line.replace(/ x\d+$/, "")))].join(", ")}]`;
+    }
+
+    async function traceOverFrames(frameCount) {
+        internals.beginStyleTrace();
+        internals.beginRenderingTrace();
+        for (let i = 0; i < frameCount; ++i)
+            await nextFrame();
+        return { sampled: sampledElements(), frameRequests: frameRequests() };
+    }
+
+    asyncTest(async done => {
+        internals.updateStyle();
+        const hidden = document.createElement("div");
+        hidden.id = "hidden";
+        hidden.className = "animated";
+        hidden.style.visibility = "hidden";
+        document.body.append(hidden);
+        for (let i = 0; i < 4; ++i)
+            await nextFrame();
+
+        let trace = await traceOverFrames(4);
+        println(`hidden animation samples: ${trace.sampled}`);
+        println(`hidden animation frame requests: ${trace.frameRequests}`);
+
+        hidden.getAnimations()[0].currentTime = 250000;
+        let animationIterationEvents = 0;
+        const animationIterationListener = () => ++animationIterationEvents;
+        hidden.addEventListener("animationiteration", animationIterationListener);
+        internals.updateLayoutForTesting();
+        trace = await traceOverFrames(4);
+        const armedTimers = internals.dumpCompositorAnimations().split("\n").filter(line => line.endsWith("timer armed"));
+        println(`animation event listener uses iteration wake-ups: frame requests ${trace.frameRequests}, armed timers [${armedTimers.join(", ")}]`);
+        println(`animation event listener skips past events: ${animationIterationEvents}`);
+        hidden.removeEventListener("animationiteration", animationIterationListener);
+        // The lines printed above left layout dirty, and a hidden animation can't skip its tick until layout is
+        // redone. So redo it before counting, as the listener phase above does.
+        internals.updateLayoutForTesting();
+        trace = await traceOverFrames(4);
+        println(`frame requests after removing the animation event listener: ${trace.frameRequests}`);
+
+        internals.beginStyleTrace();
+        getComputedStyle(hidden).transform;
+        println(`computed style samples: ${sampledElements()}`);
+
+        const offscreenClip = document.createElement("div");
+        offscreenClip.style.cssText = "position: absolute; top: 200vh; width: 100px; height: 100px; overflow: hidden";
+        const offscreenAnimation = document.createElement("div");
+        offscreenAnimation.id = "offscreen";
+        offscreenAnimation.className = "animated";
+        offscreenClip.append(offscreenAnimation);
+        document.body.append(offscreenClip);
+        for (let i = 0; i < 4; ++i)
+            await nextFrame();
+        trace = await traceOverFrames(4);
+        println(`offscreen clipped animation samples: ${trace.sampled}`);
+        println(`offscreen clipped animation frame requests: ${trace.frameRequests}`);
+        internals.beginStyleTrace();
+        internals.beginRenderingTrace();
+        offscreenClip.scrollIntoView();
+        await new Promise(resolve => setTimeout(() => setTimeout(resolve, 0), 0));
+        println(`revealed clipped animation samples: ${sampledElements()}`);
+        println(`revealed clipped animation frame requests: ${frameRequests()}`);
+        offscreenAnimation.getAnimations()[0].cancel();
+        offscreenClip.remove();
+        scrollTo(0, 0);
+        await nextFrame();
+
+        const sampled = document.createElement("div");
+        sampled.style.visibility = "hidden";
+        document.body.append(sampled);
+        const timeline = internals.createInternalAnimationTimeline();
+        const sampledAnimation = new Animation(new KeyframeEffect(sampled, [
+            { transform: "translateX(0px)" },
+            { transform: "translateX(100px)" },
+        ], { duration: 100, iterations: Infinity }), timeline);
+        sampledAnimation.play();
+        timeline.setTime(0);
+        for (let i = 0; i < 4; ++i)
+            await nextFrame();
+
+        timeline.setTimeForObservation(50);
+        const sampledProgress = sampledAnimation.effect.getComputedTiming().progress;
+        const initialTransform = new DOMMatrix(getComputedStyle(sampled).transform);
+        const initialRect = sampled.getBoundingClientRect();
+        await new Promise(resolve => setTimeout(resolve, 0));
+        timeline.setTimeForObservation(75);
+        const sampledRect = sampled.getBoundingClientRect();
+        const sampledTransform = new DOMMatrix(getComputedStyle(sampled).transform);
+        println(`computed style uses current timeline sample: ${initialTransform.e === 50 && sampledTransform.e === 75}`);
+        println(`computed timing uses current timeline sample: ${sampledProgress === 0.5}`);
+        println(`geometry uses current timeline sample: ${sampledRect.x - initialRect.x === 25}`);
+        sampled.remove();
+
+        const visibilityTarget = document.createElement("div");
+        visibilityTarget.id = "visibility-target";
+        visibilityTarget.style.cssText = "visibility: hidden; transform-origin: center center 1px";
+        document.body.append(visibilityTarget);
+        const visibilityTimeline = internals.createInternalAnimationTimeline();
+        const visibilityAnimation = new Animation(new KeyframeEffect(visibilityTarget, [
+            { transform: "translateX(0px)" },
+            { transform: "translateX(100px)" },
+        ], { duration: 100, iterations: Infinity }), visibilityTimeline);
+        visibilityAnimation.play();
+        visibilityTimeline.setTime(0);
+        for (let i = 0; i < 4; ++i)
+            await nextFrame();
+        getComputedStyle(visibilityTarget).transform;
+        await new Promise(resolve => setTimeout(resolve, 0));
+        await setSystemVisibilityState("hidden");
+        visibilityTimeline.setTimeForObservation(50);
+        internals.beginStyleTrace();
+        await setSystemVisibilityState("visible");
+        await new Promise(resolve => setTimeout(resolve, 0));
+        internals.updateStyle();
+        println(`becoming visible flushes throttled animations: ${sampledElements()}`);
+        visibilityAnimation.cancel();
+        visibilityTarget.remove();
+
+        const detached = document.createElement("div");
+        detached.style.transformOrigin = "center center 1px";
+        document.body.append(detached);
+        const detachedAnimation = detached.animate([
+            { transform: "translateX(0%)" },
+            { transform: "translateX(100%)" },
+        ], { duration: 100000, iterations: Infinity });
+        for (let i = 0; i < 4; ++i)
+            await nextFrame();
+        detached.remove();
+        for (let i = 0; i < 4; ++i)
+            await nextFrame();
+        const detachedTimeBeforeWait = detachedAnimation.currentTime;
+        internals.beginRenderingTrace();
+        await new Promise(resolve => setTimeout(resolve, 120));
+        println(`detached animation frame requests: ${frameRequests()}`);
+        println(`detached animation current time advances: ${detachedAnimation.currentTime > detachedTimeBeforeWait}`);
+
+        const visible = document.createElement("div");
+        visible.id = "visible";
+        visible.className = "animated";
+        document.body.append(visible);
+        for (let i = 0; i < 4; ++i)
+            await nextFrame();
+        println(`visible animation beside a throttled hidden one samples: ${(await traceOverFrames(4)).sampled}`);
+
+        internals.beginStyleTrace();
+        getComputedStyle(hidden).transform;
+        println(`computed style beside a visible animation samples: ${sampledElements()}`);
+        visible.remove();
+
+        const styleOnlyVisibilityChange = document.createElement("div");
+        styleOnlyVisibilityChange.id = "style-only-visibility-change";
+        styleOnlyVisibilityChange.className = "animated";
+        styleOnlyVisibilityChange.style.visibility = "hidden";
+        document.body.append(styleOnlyVisibilityChange);
+        for (let i = 0; i < 4; ++i)
+            await nextFrame();
+        internals.beginStyleTrace();
+        styleOnlyVisibilityChange.style.visibility = "visible";
+        await new Promise(resolve => setTimeout(resolve, 0));
+        println(`style-only visibility change samples: ${sampledElements()}`);
+        styleOnlyVisibilityChange.remove();
+
+        const visibleChild = document.createElement("div");
+        visibleChild.style.visibility = "visible";
+        hidden.append(visibleChild);
+        await nextFrame();
+
+        println(`visible descendant keeps animation updating: ${(await traceOverFrames(4)).sampled}`);
+
+        hidden.remove();
+        done();
+    });
+</script>

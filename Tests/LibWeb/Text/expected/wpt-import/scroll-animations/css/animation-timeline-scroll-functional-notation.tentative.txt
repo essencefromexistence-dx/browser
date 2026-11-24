@@ -1,0 +1,12 @@
+Harness status: OK
+
+Found 7 tests
+
+7 Pass
+Pass	animation-timeline: scroll(nearest)
+Pass	animation-timeline: scroll(root)
+Pass	animation-timeline: scroll(self)
+Pass	animation-timeline: scroll(self), on non-scroller
+Pass	animation-timeline: scroll(inline)
+Pass	animation-timeline: scroll(x)
+Pass	animation-timeline: scroll(y)

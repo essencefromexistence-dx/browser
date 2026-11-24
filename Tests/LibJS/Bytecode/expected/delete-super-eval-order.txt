@@ -1,0 +1,59 @@
+$c1fe9c05 delete-super-eval-order.js:4:1
+  Registers: 8
+  Blocks:    4
+  Constants:
+    [0] = Undefined
+    [1] = String("m")
+    [2] = String("x")
+
+block0:
+  [   0] Enter
+  [   1] GetLexicalEnvironment dst:reg4
+  [   3] Mov dst:reg5, src:Undefined
+  [   6] CreateLexicalEnvironment dst:reg7, parent:reg4, capacity:1, is_catch_environment:false
+  [  12] CreateVariable `A`, is_immutable:true, is_global:false, is_strict:true
+  [  19] SetLexicalEnvironment environment:reg4
+  [  1b] NewClass dst:reg6, class_environment:reg7, class_blueprint_index:0, element_keys_are_in_array:false, element_keys:[element_keys:String("m")]
+  [  2a] DynamicInitializeLexicalBinding `A`, src:reg6
+  [  30] Mov dst:reg5, src:Undefined
+
+block1:
+  [  33] GetGlobal value_feedback:0, dst:reg6, `A`
+  [  3b] CallConstruct call_feedback:0, dst:reg6, callee:reg6
+  [  41] GetById dst:reg7, base:reg6, `m`
+  [  48] Call call_feedback:1, dst:reg5, callee:reg7, this_value:reg6, arguments:[String("x")]
+  [  50] Jump target:block3
+
+block2:
+  [  55] Catch value_feedback:1, dst:reg6
+  [  59] SetLexicalEnvironment environment:reg4
+  [  5b] Mov dst:reg5, src:Undefined
+  [  5e] Jump target:block3
+
+block3:
+  [  63] End value:reg5
+
+Exception handlers:
+  [  33 ..   55] => handler block2
+
+
+A$5e284e97
+  Registers: 5
+  Blocks:    1
+  Constants:
+    [0] = Undefined
+
+block0:
+  [   0] Enter
+  [   1] End value:Undefined
+
+
+m$48fdd61e delete-super-eval-order.js:6:9
+  Registers: 6
+  Blocks:    1
+
+block0:
+  [   0] Enter
+  [   1] ResolveSuperBase dst:reg5
+  [   3] NewReferenceError dst:reg5, Can't delete a property on 'super'
+  [   7] Throw src:reg5

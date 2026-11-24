@@ -1,0 +1,9 @@
+insert restyled: [div, div.other]
+insert target opacity: 0.5
+insert other opacity: 0.75
+delete restyled: [div]
+delete target opacity: 0.25
+delete other opacity: 0.75
+declaration restyled: [div, div.other]
+declaration target opacity: 0.75
+declaration other opacity: 0.125

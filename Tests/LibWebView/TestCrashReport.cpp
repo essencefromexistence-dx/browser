@@ -1,0 +1,517 @@
+/*
+ * Copyright (c) 2026-present, the Ladybird developers.
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+#include <AK/AssertionFailure.h>
+#include <AK/ScopeGuard.h>
+#include <LibCore/CrashHandler.h>
+#include <LibCore/CrashReportData.h>
+#include <LibCore/DirIterator.h>
+#include <LibCore/StandardPaths.h>
+#include <LibCore/System.h>
+#include <LibFileSystem/FileSystem.h>
+#include <LibTest/TestCase.h>
+#include <LibWebView/CrashReport.h>
+#include <LibWebView/ProcessManager.h>
+#include <fcntl.h>
+#include <pthread.h>
+#include <signal.h>
+#include <sys/resource.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+#if defined(TEST_CRASH_REPORT_LATE_LIBRARY)
+#    include <dlfcn.h>
+#endif
+
+#if defined(AK_OS_LINUX)
+TEST_CASE(crash_scratch_has_fixed_size_and_allows_report_writes)
+{
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+    auto fd = report->fd();
+    // NB: Depending on vm.memfd_noexec, the kernel can also add F_SEAL_EXEC.
+    auto seals = MUST(Core::System::fcntl(fd, F_GET_SEALS, static_cast<uintptr_t>(0)));
+    auto required_seals = F_SEAL_SHRINK | F_SEAL_GROW | F_SEAL_SEAL;
+    EXPECT_EQ(seals & required_seals, required_seals);
+    EXPECT_EQ(seals & F_SEAL_WRITE, 0);
+    EXPECT(MUST(Core::System::fcntl(fd, F_GETFD, static_cast<uintptr_t>(0))) & FD_CLOEXEC);
+
+    auto metadata = MUST(Core::System::fstat(fd));
+    EXPECT_EQ(metadata.st_nlink, 0u);
+    EXPECT_EQ(metadata.st_mode & 0777, 0600u);
+    auto size = metadata.st_size;
+    // NB: The record holds the header, the frames, and a build description of at most 16 KiB after its length.
+    auto description_offset = sizeof(Core::CrashReportData::ReportHeader) + Core::CrashReportData::maximum_frames * sizeof(Core::CrashReportData::ReportFrame);
+    EXPECT_EQ(size, static_cast<off_t>(description_offset + sizeof(u32) + 16 * KiB));
+
+    auto shrink_result = ftruncate(fd, 0);
+    auto shrink_error = errno;
+    EXPECT_EQ(shrink_result, -1);
+    EXPECT_EQ(shrink_error, EPERM);
+    auto grow_result = ftruncate(fd, size + 1);
+    auto grow_error = errno;
+    EXPECT_EQ(grow_result, -1);
+    EXPECT_EQ(grow_error, EPERM);
+
+    Core::CrashReportData::ReportHeader header;
+    EXPECT_EQ(pwrite(fd, &header, sizeof(header), 0), static_cast<ssize_t>(sizeof(header)));
+    Core::CrashReportData::ReportHeader recorded;
+    EXPECT_EQ(pread(fd, &recorded, sizeof(recorded), 0), static_cast<ssize_t>(sizeof(recorded)));
+    EXPECT_EQ(recorded.magic, header.magic);
+
+    auto description = WebView::CrashReport::describe_current_build(WebView::ProcessType::WebContent);
+    MUST(report->record_build_description(description));
+    u32 recorded_length = 0;
+    EXPECT_EQ(pread(fd, &recorded_length, sizeof(recorded_length), description_offset), static_cast<ssize_t>(sizeof(recorded_length)));
+    EXPECT_EQ(recorded_length, description.length());
+    auto recorded_description = MUST(ByteBuffer::create_uninitialized(recorded_length));
+    EXPECT_EQ(pread(fd, recorded_description.data(), recorded_length, description_offset + sizeof(recorded_length)), static_cast<ssize_t>(recorded_length));
+    EXPECT_EQ(StringView { recorded_description.bytes() }, description.view());
+}
+#endif
+
+static ByteString test_directory()
+{
+    return ByteString::formatted("{}/test-crash-report-{}", Core::StandardPaths::tempfile_directory(), getpid());
+}
+
+static Vector<ByteString> report_paths()
+{
+    Vector<ByteString> paths;
+    Core::DirIterator iterator(test_directory(), Core::DirIterator::SkipDots);
+    while (iterator.has_next())
+        paths.append(iterator.next_full_path());
+    return paths;
+}
+
+static void cleanup()
+{
+    if (FileSystem::exists(test_directory()))
+        MUST(FileSystem::remove(test_directory(), FileSystem::RecursionMode::Allowed));
+}
+
+enum class CrashThread {
+    Main,
+    Worker,
+};
+
+template<typename Crash>
+static int crash_child_running(WebView::CrashReport& report, Crash crash)
+{
+    auto pid = fork();
+    VERIFY(pid >= 0);
+    if (pid == 0) {
+        struct rlimit limit { 0, 0 };
+        setrlimit(RLIMIT_CORE, &limit);
+        MUST(Core::CrashHandler::initialize(report.fd()));
+        crash();
+        _exit(0);
+    }
+    int status;
+    VERIFY(waitpid(pid, &status, 0) == pid);
+    return status;
+}
+
+static int crash_child(WebView::CrashReport& report, int signal, CrashThread thread = CrashThread::Main)
+{
+    return crash_child_running(report, [&] {
+        if (thread == CrashThread::Worker) {
+            auto crash_worker = [](void* argument) -> void* {
+                raise(*static_cast<int*>(argument));
+                return nullptr;
+            };
+            pthread_t worker;
+            VERIFY(pthread_create(&worker, nullptr, crash_worker, &signal) == 0);
+            VERIFY(pthread_join(worker, nullptr) == 0);
+        } else {
+            raise(signal);
+        }
+    });
+}
+
+#if defined(TEST_CRASH_REPORT_LATE_LIBRARY)
+TEST_CASE(unresolved_frames_do_not_skip_stack_search)
+{
+    for (size_t frame_count : { 3uz, Core::CrashReportData::maximum_frames }) {
+        auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::Compositor));
+        auto status = crash_child_running(*report, [&] {
+            auto* library = dlopen(TEST_CRASH_REPORT_LATE_LIBRARY, RTLD_NOW | RTLD_LOCAL);
+            VERIFY(library);
+            auto crash = reinterpret_cast<void (*)(size_t)>(dlsym(library, "crash_with_unresolved_frames"));
+            VERIFY(crash);
+            crash(frame_count);
+        });
+        EXPECT(WIFSIGNALED(status));
+        EXPECT_EQ(WTERMSIG(status), SIGILL);
+        Core::CrashReportData::ReportHeader header;
+        EXPECT_EQ(pread(report->fd(), &header, sizeof(header), 0), static_cast<ssize_t>(sizeof(header)));
+        EXPECT(header.frame_count >= frame_count);
+        EXPECT(header.frame_count <= Core::CrashReportData::maximum_frames);
+        bool has_binary_identity = false;
+        for (size_t i = 0; i < header.frame_count; ++i) {
+            Core::CrashReportData::ReportFrame frame;
+            EXPECT_EQ(pread(report->fd(), &frame, sizeof(frame), sizeof(header) + i * sizeof(frame)), static_cast<ssize_t>(sizeof(frame)));
+            if (i < min(frame_count, Core::CrashReportData::maximum_frames - 1))
+                EXPECT_EQ(frame.binary.size, 0u);
+            has_binary_identity |= frame.binary.size != 0;
+        }
+        EXPECT(has_binary_identity);
+    }
+}
+#endif
+
+TEST_CASE(capture_native_crash_without_personal_data)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    for (int signal : { SIGSEGV, SIGBUS, SIGILL, SIGABRT, SIGFPE, SIGTRAP }) {
+        auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+        auto status = crash_child(*report, signal);
+        EXPECT(WIFSIGNALED(status));
+        EXPECT_EQ(WTERMSIG(status), signal);
+        MUST(report->save(status, test_directory()));
+    }
+    auto paths = report_paths();
+    EXPECT_EQ(paths.size(), 6u);
+    for (auto const& path : paths) {
+        auto file = MUST(Core::File::open(path, Core::File::OpenMode::Read));
+        auto contents = MUST(file->read_until_eof());
+        StringView text { contents };
+        EXPECT(text.contains("\nCrashed at: 20"sv));
+        EXPECT(text.contains("Captured signal:"sv));
+        EXPECT(text.contains("Executable build ID:"sv));
+        EXPECT(text.contains("#0 "sv));
+        EXPECT(text.contains("#1 "sv));
+        EXPECT(text.contains(" + 0x"sv));
+        EXPECT(!text.contains(Core::StandardPaths::home_directory()));
+        EXPECT(!text.contains(test_directory()));
+        EXPECT(!text.contains("/Users/"sv));
+        EXPECT(!text.contains("/home/"sv));
+        EXPECT_EQ(MUST(file->stat()).st_mode & 0777u, 0400u);
+    }
+    EXPECT_EQ(MUST(Core::System::stat(test_directory())).st_mode & 0777u, 0700u);
+}
+
+TEST_CASE(worker_crash_preserves_signal_termination)
+{
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+    auto status = crash_child(*report, SIGABRT, CrashThread::Worker);
+    EXPECT(WIFSIGNALED(status));
+    EXPECT_EQ(WTERMSIG(status), SIGABRT);
+}
+
+TEST_CASE(normal_exit_does_not_create_a_report)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+    MUST(report->save(0, test_directory()));
+    EXPECT(!FileSystem::exists(test_directory()));
+}
+
+TEST_CASE(intentional_termination_does_not_create_a_report)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    for (int signal : { SIGTERM, SIGKILL }) {
+        auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+        auto status = crash_child(*report, signal);
+        EXPECT(WIFSIGNALED(status));
+        EXPECT_EQ(WTERMSIG(status), signal);
+        MUST(report->save(status, test_directory()));
+        EXPECT(!FileSystem::exists(test_directory()));
+    }
+}
+
+TEST_CASE(missing_or_malformed_capture_produces_a_minimal_report)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+    constexpr auto private_text = "https://private.example/secret user@example.com /Users/private"sv;
+    VERIFY(pwrite(report->fd(), private_text.characters_without_null_termination(), private_text.length(), 0) == static_cast<ssize_t>(private_text.length()));
+    MUST(report->save(SIGSEGV, test_directory()));
+    auto paths = report_paths();
+    EXPECT_EQ(paths.size(), 1u);
+    auto file = MUST(Core::File::open(paths[0], Core::File::OpenMode::Read));
+    auto contents = MUST(file->read_until_eof());
+    StringView text { contents };
+    EXPECT(text.contains("Termination signal: SIGSEGV\nTermination signal number: 11\n"sv));
+    EXPECT(text.contains("Unavailable:"sv));
+    EXPECT(!text.contains(private_text));
+}
+
+TEST_CASE(helper_reports_carry_the_platform_features_they_were_launched_with)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::Compositor));
+    constexpr auto description = "Platform features: [{\"id\":\"gpu_painting\",\"state\":\"Enabled\"}]\nGPU device: NVIDIA GeForce RTX 3090 (10de:2204)\nPlatform facts: {\"gpu\":{\"vendor_id\":4318}}\n"sv;
+    report->set_platform_features_description(description);
+    MUST(report->save(SIGSEGV, test_directory()));
+    auto paths = report_paths();
+    EXPECT_EQ(paths.size(), 1u);
+    auto file = MUST(Core::File::open(paths[0], Core::File::OpenMode::Read));
+    auto contents = MUST(file->read_until_eof());
+    EXPECT(StringView { contents }.contains(description));
+}
+
+TEST_CASE(reports_of_processes_without_platform_features_say_so)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+    MUST(report->save(SIGSEGV, test_directory()));
+    auto paths = report_paths();
+    EXPECT_EQ(paths.size(), 1u);
+    auto file = MUST(Core::File::open(paths[0], Core::File::OpenMode::Read));
+    auto contents = MUST(file->read_until_eof());
+    EXPECT(StringView { contents }.contains("\nPlatform features: []\n"sv));
+}
+
+TEST_CASE(invalid_frame_lengths_are_ignored)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+    Core::CrashReportData::ReportHeader header;
+    header.frame_count = 1;
+    header.executable.size = 0xffffffff;
+    header.assertion.kind = 1;
+    header.assertion.length = 0xffffffff;
+    Core::CrashReportData::ReportFrame frame;
+    frame.binary.size = 0xffffffff;
+    VERIFY(pwrite(report->fd(), &header, sizeof(header), 0) == sizeof(header));
+    VERIFY(pwrite(report->fd(), &frame, sizeof(frame), sizeof(header)) == sizeof(frame));
+    MUST(report->save(SIGSEGV, test_directory()));
+    auto paths = report_paths();
+    EXPECT_EQ(paths.size(), 1u);
+    auto file = MUST(Core::File::open(paths[0], Core::File::OpenMode::Read));
+    auto contents = MUST(file->read_until_eof());
+    EXPECT(StringView { contents }.contains("#0 unavailable"sv));
+    EXPECT(!StringView { contents }.contains("Verification failed:"sv));
+}
+
+TEST_CASE(frames_beyond_the_captured_count_are_ignored)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+    Core::CrashReportData::ReportHeader header;
+    header.frame_count = 1;
+    Core::CrashReportData::ReportFrame frame;
+    VERIFY(pwrite(report->fd(), &header, sizeof(header), 0) == sizeof(header));
+    VERIFY(pwrite(report->fd(), &frame, sizeof(frame), sizeof(header)) == sizeof(frame));
+    VERIFY(pwrite(report->fd(), &frame, sizeof(frame), sizeof(header) + sizeof(frame)) == sizeof(frame));
+    MUST(report->save(SIGSEGV, test_directory()));
+    auto file = MUST(Core::File::open(report_paths()[0], Core::File::OpenMode::Read));
+    auto contents = MUST(file->read_until_eof());
+    EXPECT(StringView { contents }.contains("#0 unavailable"sv));
+    EXPECT(!StringView { contents }.contains("#1"sv));
+}
+
+[[gnu::noinline]] static int exhaust_stack(size_t depth)
+{
+    if (depth == NumericLimits<size_t>::max())
+        return 0;
+    u8 volatile buffer[4096];
+    buffer[depth % sizeof(buffer)] = static_cast<u8>(depth);
+    auto result = exhaust_stack(depth + 1);
+    return result + buffer[depth % sizeof(buffer)];
+}
+
+TEST_CASE(main_thread_stack_overflow)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+    auto pid = fork();
+    VERIFY(pid >= 0);
+    if (pid == 0) {
+        struct rlimit limit { 0, 0 };
+        setrlimit(RLIMIT_CORE, &limit);
+        MUST(Core::CrashHandler::initialize(report->fd()));
+        _exit(exhaust_stack(0));
+    }
+    int status;
+    VERIFY(waitpid(pid, &status, 0) == pid);
+    EXPECT(WIFSIGNALED(status));
+    MUST(report->save(status, test_directory()));
+    auto paths = report_paths();
+    EXPECT_EQ(paths.size(), 1u);
+    auto file = MUST(Core::File::open(paths[0], Core::File::OpenMode::Read));
+    auto contents = MUST(file->read_until_eof());
+    EXPECT(StringView { contents }.contains("Captured signal:"sv));
+    EXPECT(StringView { contents }.contains("#0 "sv));
+}
+
+TEST_CASE(helper_process_names)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    for (auto type : { WebView::ProcessType::WebContent, WebView::ProcessType::RequestServer, WebView::ProcessType::ImageDecoder, WebView::ProcessType::MediaServer, WebView::ProcessType::Compositor }) {
+        auto report = MUST(WebView::CrashReport::create(type));
+        MUST(report->save(SIGSEGV, test_directory()));
+    }
+    auto paths = report_paths();
+    EXPECT_EQ(paths.size(), 5u);
+    for (auto const& path : paths) {
+        auto file = MUST(Core::File::open(path, Core::File::OpenMode::Read));
+        auto contents = MUST(file->read_until_eof());
+        auto basename = LexicalPath::basename(path);
+        auto name = basename.substring_view(21).split_view('-')[0];
+        EXPECT(StringView { contents }.contains(ByteString::formatted("Process: {}\n", name)));
+    }
+}
+
+static ByteString assertion_report(AK::AssertionFailureKind kind, char const* message, ByteString* terminal_output = nullptr)
+{
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+    int stderr_pipe[2];
+    if (terminal_output)
+        VERIFY(pipe(stderr_pipe) == 0);
+    auto pid = fork();
+    VERIFY(pid >= 0);
+    if (pid == 0) {
+        if (terminal_output) {
+            close(stderr_pipe[0]);
+            VERIFY(dup2(stderr_pipe[1], STDERR_FILENO) == STDERR_FILENO);
+            close(stderr_pipe[1]);
+        }
+        struct rlimit limit { 0, 0 };
+        setrlimit(RLIMIT_CORE, &limit);
+        MUST(Core::CrashHandler::initialize(report->fd()));
+        if (kind == AK::AssertionFailureKind::Verification)
+            ak_verification_failed(message);
+        ak_assertion_failed(message);
+    }
+    if (terminal_output) {
+        close(stderr_pipe[1]);
+        auto terminal = MUST(Core::File::adopt_fd(stderr_pipe[0], Core::File::OpenMode::Read));
+        auto contents = MUST(terminal->read_until_eof());
+        *terminal_output = ByteString { StringView { contents } };
+    }
+    int status;
+    VERIFY(waitpid(pid, &status, 0) == pid);
+    EXPECT(WIFSIGNALED(status));
+    MUST(report->save(status, test_directory()));
+    auto paths = report_paths();
+    VERIFY(paths.size() == 1);
+    auto file = MUST(Core::File::open(paths[0], Core::File::OpenMode::Read));
+    auto contents = MUST(file->read_until_eof());
+    return ByteString { StringView { contents } };
+}
+
+TEST_CASE(assertion_text_and_source_location)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    ByteString terminal;
+    auto text = assertion_report(AK::AssertionFailureKind::Verification, "value != 0 at " __FILE__ ":123", &terminal);
+    EXPECT(text.contains("Verification failed: value != 0 at Tests/LibWebView/TestCrashReport.cpp:123\n"sv));
+    EXPECT(text.contains("Captured signal:"sv));
+    EXPECT(text.contains("#0 "sv));
+    EXPECT(!text.contains(Core::StandardPaths::home_directory()));
+#if defined(TEST_HAS_CPPTRACE)
+    EXPECT(text.contains("assertion_report"sv));
+    EXPECT_EQ(text.count("(inlined)"sv), terminal.count("(inlined)"sv));
+    EXPECT_EQ(text.count("\n#"sv), terminal.count("\n#"sv));
+    auto stack = text.substring_view(text.find("Native stack"sv).value());
+    EXPECT(stack.contains(" at Tests/LibWebView/TestCrashReport.cpp:"sv));
+    EXPECT(!stack.contains("ak_trap"sv));
+#endif
+}
+
+static void report_sandbox_violation(int, siginfo_t* info, void* context)
+{
+    Core::CrashHandler::handle_sandbox_violation(info, context, "disallowed syscall fcntl (72), args [0x5, 0x406]");
+}
+
+TEST_CASE(sandbox_violations_name_the_refused_call)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto report = MUST(WebView::CrashReport::create(WebView::ProcessType::WebContent));
+    auto pid = fork();
+    VERIFY(pid >= 0);
+    if (pid == 0) {
+        struct rlimit limit { 0, 0 };
+        setrlimit(RLIMIT_CORE, &limit);
+        MUST(Core::CrashHandler::initialize(report->fd()));
+        struct sigaction action {};
+        action.sa_sigaction = report_sandbox_violation;
+        action.sa_flags = SA_SIGINFO;
+        sigemptyset(&action.sa_mask);
+        sigaction(SIGSYS, &action, nullptr);
+        raise(SIGSYS);
+        _exit(0);
+    }
+    int status;
+    VERIFY(waitpid(pid, &status, 0) == pid);
+    EXPECT(WIFSIGNALED(status));
+    EXPECT_EQ(WTERMSIG(status), SIGSYS);
+    MUST(report->save(status, test_directory()));
+    auto paths = report_paths();
+    VERIFY(paths.size() == 1);
+    auto file = MUST(Core::File::open(paths[0], Core::File::OpenMode::Read));
+    auto contents = MUST(file->read_until_eof());
+    EXPECT(StringView { contents }.contains("Sandbox violation: disallowed syscall fcntl (72), args [0x5, 0x406]\n"sv));
+    EXPECT(StringView { contents }.contains("Captured signal: SIGSYS"sv));
+}
+
+TEST_CASE(assertion_locations_outside_the_checkout)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto text = assertion_report(AK::AssertionFailureKind::Assertion, "value != 0 at /Users/private/build/Assertion.cpp:42");
+    EXPECT(text.contains("Assertion failed: value != 0 at Assertion.cpp:42\n"sv));
+    EXPECT(!text.contains("/Users/private"sv));
+}
+
+TEST_CASE(resolved_backtrace_descriptions_are_private_and_bounded)
+{
+    EXPECT(Core::CrashReportData::sanitize_backtrace_symbol("bad\nsymbol"sv).is_empty());
+    EXPECT(Core::CrashReportData::sanitize_backtrace_symbol("C:\\private\\file"sv).is_empty());
+    Core::CrashReportData::ReportFrame frame;
+    AK::AssertionBacktraceFrame resolved {
+        0, "private_function"sv, "/home/private/checkout/Tests/Example.cpp"sv, 42, 7, true
+    };
+    Core::CrashReportData::describe_backtrace_frame(frame, resolved);
+    EXPECT_EQ((StringView { frame.description.data(), frame.description_length }), "(inlined) private_function at Tests/Example.cpp:42:7"sv);
+
+    frame = {};
+    resolved.symbol = "generated</home/private/source.cpp>"sv;
+    resolved.filename = "/home/private/external/Example.cpp"sv;
+    resolved.is_inline = false;
+    Core::CrashReportData::describe_backtrace_frame(frame, resolved);
+    EXPECT_EQ((StringView { frame.description.data(), frame.description_length }), " at Example.cpp:42:7"sv);
+
+    frame = {};
+    auto long_symbol = ByteString::repeated('x', frame.description.size());
+    resolved.symbol = long_symbol;
+    Core::CrashReportData::describe_backtrace_frame(frame, resolved);
+    EXPECT_EQ(frame.description_length, frame.description.size());
+}
+
+TEST_CASE(long_assertion_text_is_bounded)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto message = ByteString::repeated('x', 4096);
+    auto text = assertion_report(AK::AssertionFailureKind::Verification, message.characters());
+    EXPECT(text.contains(" [truncated]\n"sv));
+    EXPECT(!text.contains(message));
+    EXPECT(text.contains("#0 "sv));
+}
+
+TEST_CASE(oversized_assertion_location_is_omitted)
+{
+    cleanup();
+    ScopeGuard guard = cleanup;
+    auto message = ByteString::formatted("value != 0 at /Users/private/{}:42", ByteString::repeated('x', 8192));
+    auto text = assertion_report(AK::AssertionFailureKind::Verification, message.characters());
+    EXPECT(text.contains("Verification failed: value != 0 at [location unavailable] [truncated]\n"sv));
+    EXPECT(!text.contains("/Users/private"sv));
+}

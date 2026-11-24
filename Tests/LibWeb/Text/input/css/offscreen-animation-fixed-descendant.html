@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<style>
+    @keyframes move {
+        from { width: 100px; }
+        to { width: 100px; }
+    }
+
+    #clip {
+        position: absolute;
+        top: 200vh;
+        width: 100px;
+        height: 100px;
+        overflow: hidden;
+    }
+
+    #target {
+        animation: move 100s linear infinite;
+    }
+
+    #fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+    }
+</style>
+<div id="clip"><div id="target"><div id="fixed"></div></div></div>
+<script>
+    asyncTest(async done => {
+        let resolveObservation;
+        const observation = new Promise(resolve => resolveObservation = resolve);
+        new IntersectionObserver(entries => resolveObservation(entries.at(-1))).observe(fixed);
+
+        for (let i = 0; i < 4; ++i)
+            await new Promise(requestAnimationFrame);
+        internals.beginRenderingTrace();
+        for (let i = 0; i < 4; ++i)
+            await new Promise(requestAnimationFrame);
+
+        const pumpRequests = internals.takeRenderingTrace().split("\n").filter(line => line.startsWith("animation frame pump request"));
+        println("compositor animations:");
+        for (const line of internals.dumpCompositorAnimations().split("\n").filter(Boolean))
+            println(`  ${line}`);
+        println(`frame requests: [${[...new Set(pumpRequests.map(line => line.replace(/ x\d+$/, "")))].join(", ")}]`);
+        println(`fixed descendant is intersecting: ${(await observation).isIntersecting}`);
+        done();
+    });
+</script>

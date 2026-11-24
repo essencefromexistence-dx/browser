@@ -1,0 +1,2 @@
+differing sibling: color rgb(0, 0, 255)
+identical sibling: color rgb(255, 0, 0)

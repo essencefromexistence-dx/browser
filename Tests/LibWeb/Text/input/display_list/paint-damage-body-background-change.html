@@ -1,0 +1,109 @@
+<!doctype html>
+<html id="html">
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; height: 2000px; background: white; }
+</style>
+<body id="body">
+<div id="content">content</div>
+<script>
+// The body background propagates to the canvas, and the canvas color is an input of every
+// producer, so changing it records the frame from scratch instead of assembling it.
+displayListTest({
+    setup: removeBodyWhitespace,
+    steps: [
+        {
+            name: "paint with overlays",
+            paintOverlay: true,
+            expect: `
+                @canvas RECORD
+                @viewport RECORD
+                  @viewport/preamble RECORD (empty)
+                  @viewport/scroll-metadata RECORD (empty)
+                  @viewport/background SKIP
+                  @viewport/border SKIP
+                  BlockContainer<HTML>#html/descendants(background-and-borders) RECORD
+                  @viewport/foreground RECORD (empty)
+                  BlockContainer<HTML>#html/descendants(foreground) RECORD
+                  BlockContainer<HTML>#html RECORD
+                    BlockContainer<HTML>#html/preamble RECORD (empty)
+                    BlockContainer<HTML>#html/scroll-metadata RECORD (empty)
+                    BlockContainer<HTML>#html/background RECORD
+                    BlockContainer<HTML>#html/border SKIP
+                    BlockContainer<BODY>#body/descendants(background-and-borders) RECORD
+                      BlockContainer<BODY>#body/scroll-metadata RECORD (empty)
+                      BlockContainer<BODY>#body/background SKIP
+                      BlockContainer<BODY>#body/border SKIP
+                      BlockContainer<DIV>#content/descendants(background-and-borders) RECORD
+                        BlockContainer<DIV>#content/scroll-metadata RECORD (empty)
+                        BlockContainer<DIV>#content/background SKIP
+                        BlockContainer<DIV>#content/border SKIP
+                    BlockContainer<HTML>#html/foreground RECORD (empty)
+                    BlockContainer<BODY>#body/descendants(foreground) RECORD
+                      BlockContainer<BODY>#body/foreground RECORD (empty)
+                      BlockContainer<DIV>#content/descendants(foreground) RECORD
+                        BlockContainer<DIV>#content/foreground RECORD
+                        BlockContainer<DIV>#content/outline SKIP
+                        BlockContainer<DIV>#content/overlay SKIP
+                      BlockContainer<BODY>#body/outline SKIP
+                      BlockContainer<BODY>#body/overlay SKIP
+                    BlockContainer<HTML>#html/outline SKIP
+                    BlockContainer<HTML>#html/overlay SKIP
+                  @viewport/outline SKIP
+                  @viewport/overlay RECORD (empty)
+            `
+        },
+        {
+            name: "change the body background",
+            paintOverlay: true,
+            mutate: () => { document.body.style.background = "black"; },
+            expect: `
+                @canvas RECORD
+                @viewport RECORD
+                  @viewport/preamble RECORD (empty)
+                  @viewport/scroll-metadata RECORD (empty)
+                  @viewport/background SKIP
+                  @viewport/border SKIP
+                  BlockContainer<HTML>#html/descendants(background-and-borders) RECORD
+                  @viewport/foreground RECORD (empty)
+                  BlockContainer<HTML>#html/descendants(foreground) RECORD
+                  BlockContainer<HTML>#html RECORD
+                    BlockContainer<HTML>#html/preamble RECORD (empty)
+                    BlockContainer<HTML>#html/scroll-metadata RECORD (empty)
+                    BlockContainer<HTML>#html/background RECORD
+                    BlockContainer<HTML>#html/border SKIP
+                    BlockContainer<BODY>#body/descendants(background-and-borders) RECORD
+                      BlockContainer<BODY>#body/scroll-metadata RECORD (empty)
+                      BlockContainer<BODY>#body/background SKIP
+                      BlockContainer<BODY>#body/border SKIP
+                      BlockContainer<DIV>#content/descendants(background-and-borders) RECORD
+                        BlockContainer<DIV>#content/scroll-metadata RECORD (empty)
+                        BlockContainer<DIV>#content/background SKIP
+                        BlockContainer<DIV>#content/border SKIP
+                    BlockContainer<HTML>#html/foreground RECORD (empty)
+                    BlockContainer<BODY>#body/descendants(foreground) RECORD
+                      BlockContainer<BODY>#body/foreground RECORD (empty)
+                      BlockContainer<DIV>#content/descendants(foreground) RECORD
+                        BlockContainer<DIV>#content/foreground RECORD
+                        BlockContainer<DIV>#content/outline SKIP
+                        BlockContainer<DIV>#content/overlay SKIP
+                      BlockContainer<BODY>#body/outline SKIP
+                      BlockContainer<BODY>#body/overlay SKIP
+                    BlockContainer<HTML>#html/outline SKIP
+                    BlockContainer<HTML>#html/overlay SKIP
+                  @viewport/outline SKIP
+                  @viewport/overlay RECORD (empty)
+            `
+        },
+        {
+            name: "quiet with overlays",
+            paintOverlay: true,
+            expect: `
+                @canvas RECORD
+                @viewport COPY
+            `
+        }
+    ]
+});
+</script>

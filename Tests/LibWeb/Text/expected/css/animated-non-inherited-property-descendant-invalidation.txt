@@ -1,0 +1,3 @@
+plain descendants restyled: []
+text-decoration-line inheritor restyled: [decorationInheritor]
+transform inheritor restyled: [transformInheritor]

@@ -1,0 +1,17 @@
+Harness status: OK
+
+Found 12 tests
+
+12 Pass
+Pass	No children, no label
+Pass	No children, empty label
+Pass	No children, label
+Pass	No children, namespaced label
+Pass	Single child, no label
+Pass	Single child, empty label
+Pass	Single child, label
+Pass	Single child, namespaced label
+Pass	Two children, no label
+Pass	Two children, empty label
+Pass	Two children, label
+Pass	Two children, namespaced label

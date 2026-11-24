@@ -1,0 +1,43 @@
+<!doctype html>
+<html id="html">
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #box { width: 100px; height: 100px; background: #dde; will-change: opacity; }
+    .child { width: 20px; height: 20px; background: #446; }
+</style>
+<body id="body">
+<div id="box"><div class="child"></div><div class="child"></div></div>
+<script>
+// will-change: opacity gives the box its effects node at opacity 1, so leaving 1, moving between
+// fractional values and returning to 1 all patch that node: nothing records again.
+const valueUpdate = `
+    update DIRTY-PATH
+      div#box effects UPDATED
+`;
+const quiet = `
+    @canvas RECORD (empty)
+    @viewport COPY
+`;
+displayListTest({
+    setup: async () => { removeBodyWhitespace(); },
+    steps: [
+        {
+            name: "opacity 1 to 0.5",
+            mutate: () => { box.style.opacity = "0.5"; },
+            expect: { visualContexts: valueUpdate, displayList: quiet },
+        },
+        {
+            name: "opacity 0.5 to 0.6",
+            mutate: () => { box.style.opacity = "0.6"; },
+            expect: { visualContexts: valueUpdate, displayList: quiet },
+        },
+        {
+            name: "opacity 0.6 to 1",
+            mutate: () => { box.style.opacity = ""; },
+            expect: { visualContexts: valueUpdate, displayList: quiet },
+        },
+    ],
+});
+</script>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script>
+    // The WebSocket handshake carries the user's cookies for the URL, HttpOnly ones included. The echo server is
+    // reached through a unique host name so that cookie tests running in parallel cannot delete the cookie.
+    promiseTest(async () => {
+        const httpServer = httpTestServer();
+        const setURL = await httpServer.createEcho("GET", "/websocket-handshake-cookie-set", {
+            status: 200,
+            headers: {
+                "Set-Cookie": "websockethandshakecookie=stored; Path=/; HttpOnly; SameSite=Strict",
+            },
+        });
+        await fetch(setURL);
+
+        const ws = new WebSocket(`ws://${location.host}/reflect-websocket-cookie`);
+        const cookie = await new Promise(resolve => {
+            ws.onmessage = e => resolve(e.data);
+            ws.onerror = () => resolve("error");
+        });
+        ws.close();
+        println(`Handshake Cookie: ${cookie}`);
+    });
+</script>

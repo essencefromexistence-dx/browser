@@ -1,0 +1,8 @@
+Harness status: OK
+
+Found 3 tests
+
+3 Pass
+Pass	scope-selector
+Pass	scope-selector 1
+Pass	querySelector() with ":scope" should return the document element, if present in the subtree

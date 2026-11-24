@@ -1,0 +1,1 @@
+scrollbar hit after invalidation: true

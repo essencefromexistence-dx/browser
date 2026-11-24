@@ -1,0 +1,8 @@
+opacity: 0.5
+width: 20px
+color: rgb(128, 128, 128)
+resampled opacity: 0.6
+resampled width: 25px
+resampled color: rgb(191, 191, 191)
+base-mutated width: 125px
+mutated width: 135px

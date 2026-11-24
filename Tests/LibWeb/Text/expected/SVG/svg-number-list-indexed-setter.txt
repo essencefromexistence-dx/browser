@@ -1,0 +1,4 @@
+initial length: 2
+initial [0]: 10
+same wrapper: true
+wrong type: TypeError: Value must be an SVGNumber

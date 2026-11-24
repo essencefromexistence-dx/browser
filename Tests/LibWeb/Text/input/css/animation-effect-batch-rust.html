@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<style>
+    #target {
+        opacity: 0.1;
+        width: 0;
+        color: black;
+    }
+</style>
+<div id="target"></div>
+<script src="../include.js"></script>
+<script>
+    test(() => {
+        const animations = [
+            target.animate({ opacity: [0.2, 0.4] }, 100),
+            target.animate(
+                [
+                    { opacity: 0.1, composite: "add" },
+                    { opacity: 0.3, composite: "add" },
+                ],
+                100
+            ),
+            target.animate({ width: ["10px", "30px"] }, { duration: 100, composite: "add" }),
+            target.animate({ color: ["black", "white"] }, 100),
+        ];
+        for (const animation of animations) {
+            animation.pause();
+            animation.currentTime = 50;
+        }
+
+        internals.updateStyle();
+        const style = getComputedStyle(target);
+        println(`opacity: ${style.opacity}`);
+        println(`width: ${style.width}`);
+        println(`color: ${style.color}`);
+
+        for (const animation of animations)
+            animation.currentTime = 75;
+
+        internals.updateStyle();
+        println(`resampled opacity: ${style.opacity}`);
+        println(`resampled width: ${style.width}`);
+        println(`resampled color: ${style.color}`);
+
+        target.style.width = "100px";
+        internals.updateStyle();
+        println(`base-mutated width: ${style.width}`);
+
+        animations[2].effect.setKeyframes({ width: ["20px", "40px"] });
+        internals.updateStyle();
+        println(`mutated width: ${style.width}`);
+    });
+</script>

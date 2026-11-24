@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<script src="include.js"></script>
+<style>
+    body {
+        margin: 0;
+        height: 2000px;
+    }
+    #scroller {
+        width: 100px;
+        height: 100px;
+        overflow: scroll;
+    }
+    #scroller > div {
+        height: 600px;
+    }
+</style>
+<div id="scroller"><div></div></div>
+<script>
+    promiseTest(async () => {
+        const scroller = document.getElementById("scroller");
+        let wheelEvents = 0;
+        scroller.addEventListener("wheel", () => {
+            if (++wheelEvents == 2) {
+                scroller.remove();
+                document.body.offsetHeight;
+            }
+        }, { passive: false });
+        await animationFrame();
+        await animationFrame();
+
+        // NB: These steps belong to one gesture for as long as its fingers rest, however long the test takes to reach the
+        //     next one. Wheel ticks with no phase stop belonging to it once enough time has passed between them.
+        await internals.wheel(50, 50, 0, 100, true, "ongoing");
+        println(`scroller.scrollTop after the first step: ${scroller.scrollTop}`);
+
+        // The page let the gesture through, so the compositor scrolls the latched scroller by this step before the
+        // listener removes the scroller.
+        await internals.wheel(50, 50, 0, 100, true, "ongoing");
+        println(`scroller removed: ${!scroller.isConnected}`);
+        println(`window.scrollY after the second step: ${window.scrollY}`);
+
+        // The scroller the gesture is latched to is gone, so the step is routed afresh, to the page.
+        await internals.wheel(50, 50, 0, 100, true, "ongoing");
+        println(`window.scrollY after the third step: ${window.scrollY}`);
+    });
+</script>

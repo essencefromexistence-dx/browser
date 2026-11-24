@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<style>
+    #target {
+        opacity: 0;
+        width: 10px;
+        transition: opacity 1s linear, width 1s linear;
+    }
+</style>
+<div id="target"></div>
+<script src="../include.js"></script>
+<script>
+    test(() => {
+        internals.updateStyle();
+        target.style.opacity = "1";
+        target.style.width = "20px";
+
+        internals.updateStyle();
+        const style = getComputedStyle(target);
+        println(`opacity: ${style.opacity}`);
+        println(`width: ${style.width}`);
+    });
+</script>

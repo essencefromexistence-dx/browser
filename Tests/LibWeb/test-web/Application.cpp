@@ -1,0 +1,174 @@
+/*
+ * Copyright (c) 2024-2025, Tim Flynn <trflynn89@ladybird.org>
+ *
+ * SPDX-License-Identifier: BSD-2-Clause
+ */
+
+#include "Application.h"
+#include "Fixture.h"
+
+#include <AK/LexicalPath.h>
+#include <LibCore/ArgsParser.h>
+#include <LibCore/Environment.h>
+#include <LibCore/File.h>
+#include <LibCore/StandardPaths.h>
+#include <LibCore/System.h>
+#include <LibGamepad/SDLGamepadSource.h>
+#include <LibWebCommon/Loader/DownloadFilename.h>
+#include <LibWebView/GamepadManager.h>
+#include <LibWebView/NotificationManager.h>
+#include <LibWebView/RecordingNotificationBackend.h>
+#include <LibWebView/TestSpellChecker.h>
+#include <LibWebView/TestTranslator.h>
+#include <LibWebView/WebContentPage.h>
+#include <errno.h>
+
+namespace TestWeb {
+
+Application::Application(Optional<ByteString> ladybird_binary_path)
+    : WebView::Application(move(ladybird_binary_path))
+    , test_concurrency(Core::System::hardware_concurrency())
+    , python_executable_path(LADYBIRD_PYTHON_EXECUTABLE)
+{
+    if (auto ladybird_source_dir = Core::Environment::get("LADYBIRD_SOURCE_DIR"sv); ladybird_source_dir.has_value())
+        test_root_path = LexicalPath::join(*ladybird_source_dir, "Tests"sv, "LibWeb"sv).string();
+
+    if (Core::Environment::has("CLAUDECODE"sv) || Core::Environment::has("CODEX_SANDBOX"sv))
+        quiet = true;
+
+    set_spell_checker(make<WebView::TestSpellChecker>());
+    set_translator(make<WebView::TestTranslator>());
+    WebView::GamepadManager::the().set_source(make<Gamepad::SDLGamepadSource>(Gamepad::IgnoreSystemGamepads::Yes));
+}
+
+Application::~Application()
+{
+    for (auto& fixture : Fixture::all())
+        fixture->teardown();
+}
+
+void Application::create_platform_arguments(Core::ArgsParser& args_parser)
+{
+    args_parser.add_option(test_root_path, "Path containing the tests to run", "test-path", 0, "path");
+    args_parser.add_option(results_directory, "Directory to store test results", "results-dir", 'R', "path");
+    args_parser.add_option(test_concurrency, "Maximum number of tests to run at once", "test-concurrency", 'j', "jobs");
+    args_parser.add_option(test_globs, "Only run tests matching the given glob", "filter", 'f', "glob");
+    args_parser.add_option(python_executable_path, "Path to python3", "python-executable", 'P', "path");
+    args_parser.add_option(dump_gc_graph, "Dump GC graph", "dump-gc-graph", 'G');
+    args_parser.add_option(fail_fast, "Abort on first failure/timeout/crash (offers debugger attach on timeout)", "fail-fast");
+
+    args_parser.add_option(repeat_count, "Repeat all matched tests N times", "repeat", 0, "n");
+
+    args_parser.add_option(test_dry_run, "List the tests that would be run, without running them", "dry-run");
+    args_parser.add_option(rebaseline, "Rebaseline any executed layout or text tests", "rebaseline");
+    args_parser.add_option(shuffle, "Shuffle the order of tests before running them", "shuffle", 's');
+    args_parser.add_option(run_ui_process_session_history_tests, "Run tests that require UI-process session history seeding",
+        "run-ui-process-session-history-tests");
+    args_parser.add_option(verify_style, "Enable all style engine verification modes", "verify-style");
+    args_parser.add_option(per_test_timeout_in_seconds, "Per-test timeout (default: 30)", "per-test-timeout", 't', "seconds");
+
+    args_parser.add_option(Core::ArgsParser::Option {
+        .argument_mode = Core::ArgsParser::OptionArgumentMode::Optional,
+        .help_string = "Log extra information about test results (use multiple times for more information)",
+        .long_name = "verbose",
+        .short_name = 'v',
+        .accept_value = [&](StringView value) -> ErrorOr<bool> {
+            if (value.is_empty() && verbosity < NumericLimits<u8>::max()) {
+                ++verbosity;
+                return true;
+            }
+
+            return false;
+        },
+    });
+}
+
+void Application::create_platform_options(WebView::BrowserOptions& browser_options, WebView::RequestServerOptions& request_server_options, WebView::WebContentOptions& web_content_options)
+{
+    if (verify_style) {
+        // NB: The style engine checks what it installed against a cold computation of the document.
+        MUST(Core::Environment::set("LIBWEB_STYLE_SELFCHECK"sv, "1"sv, Core::Environment::Overwrite::Yes));
+        // NB: The style engine compares each group an element takes with the one its values build.
+        MUST(Core::Environment::set("LIBWEB_VERIFY_STYLE_CHUNKS"sv, "1"sv, Core::Environment::Overwrite::Yes));
+        // NB: A cold computation per update takes a large document's test past the usual timeout.
+        per_test_timeout_in_seconds = max(per_test_timeout_in_seconds, 180);
+    }
+    browser_options.headless_mode = WebView::HeadlessMode::Test;
+    browser_options.disable_sql_database = WebView::DisableSQLDatabase::Yes;
+
+    request_server_options.http_disk_cache_mode = WebView::HTTPDiskCacheMode::Testing;
+
+    // Every test is served from a site of its own, so a site's RequestServer is never used again once its test is done.
+    request_server_options.idle_site_request_server_timeout = AK::Duration::zero();
+
+    // Trust the AIA integration test's root CA (written by the http-test-server fixture) — so its broken-chain HTTPS
+    // hosts validate once their intermediate is fetched. Must match the path passed in HttpEchoServerFixture::setup.
+    // Create the file before sandbox startup; the fixture must overwrite the same inode.
+    auto aia_test_ca_path = LexicalPath::join(Core::StandardPaths::tempfile_directory(), ByteString::formatted("ladybird-aia-test-ca-{}.pem", Core::System::getpid())).string();
+    if (auto file = Core::File::open(aia_test_ca_path, Core::File::OpenMode::Write); file.is_error())
+        warnln("Unable to create {}: {}", aia_test_ca_path, file.error());
+    request_server_options.certificates.append(move(aia_test_ca_path));
+
+    web_content_options.is_test_mode = WebView::IsTestMode::Yes;
+
+    // Allow window.open() to succeed for tests.
+    browser_options.allow_popups = WebView::AllowPopups::Yes;
+
+    // Ensure consistent font rendering between operating systems.
+    web_content_options.force_fontconfig = WebView::ForceFontconfig::Yes;
+    // NB: WPT's Ahem stylesheet prefers local('Ahem'). Make the test font available before
+    //     navigation so its metrics do not depend on an asynchronous font download.
+    auto font_directory = LexicalPath::join(test_root_path, "Ref/input/wpt-import/fonts"sv).string();
+    browser_options.additional_font_directories.append(MUST(String::from_byte_string(LexicalPath::absolute_path(MUST(Core::System::getcwd()), font_directory))));
+
+    // Ensure tests are resilient to minor changes to the viewport scrollbar.
+    web_content_options.paint_viewport_scrollbars = WebView::PaintViewportScrollbars::No;
+
+    // Ensure consistent time zone operations across different machine configurations.
+    web_content_options.default_time_zone = "UTC"sv;
+
+    if (dump_gc_graph) {
+        // Force all tests to run in serial if we are interested in the GC graph.
+        test_concurrency = 1;
+    }
+}
+
+ErrorOr<LexicalPath> Application::default_path_for_downloaded_file(ByteString const& file) const
+{
+    if (!downloads_directory.has_value())
+        return Error::from_errno(ECANCELED);
+    return LexicalPath::join(*downloads_directory, Web::sanitize_suggested_download_filename(file));
+}
+
+NonnullOwnPtr<WebView::NotificationBackend> Application::create_notification_backend()
+{
+    return make<WebView::RecordingNotificationBackend>();
+}
+
+void Application::focus_page_from_notification(WebView::WebContentPage& page)
+{
+    if (auto* recording_backend = WebView::NotificationManager::the().backend().as_recording_backend())
+        recording_backend->record_focus(page.id());
+}
+
+void Application::open_url_in_new_tab_from_notification(URL::URL const& url, Web::PageId originating_page, WebView::CanonicalTraversable*, WebView::IsPrivate)
+{
+    if (auto* recording_backend = WebView::NotificationManager::the().backend().as_recording_backend())
+        recording_backend->record_open(url, originating_page);
+}
+
+ErrorOr<void> Application::launch_test_fixtures()
+{
+    Fixture::initialize_fixtures();
+
+    // FIXME: Add option to only run specific fixtures from command line by name
+    //        And an option to not run any fixtures at all
+    for (auto const& fixture : Fixture::all()) {
+        if (auto result = fixture->setup(web_content_options()); result.is_error())
+            return result;
+    }
+
+    return {};
+}
+
+}

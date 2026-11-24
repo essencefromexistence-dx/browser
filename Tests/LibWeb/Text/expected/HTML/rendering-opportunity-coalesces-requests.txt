@@ -1,0 +1,7 @@
+callbacks after one opportunity: 20
+requests:
+  request
+  request, coalesced x19
+rendering:
+  opportunity
+  update

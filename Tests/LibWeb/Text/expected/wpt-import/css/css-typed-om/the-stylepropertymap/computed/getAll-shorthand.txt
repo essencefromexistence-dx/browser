@@ -1,0 +1,7 @@
+Harness status: OK
+
+Found 2 tests
+
+2 Pass
+Pass	StylePropertyMap.getAll() with a shorthand property set explicitly in computed style returns a list containing a base CSSStyleValue
+Pass	StylePropertyMap.getAll() with a shorthand property from initial computed style returns a list containing a base CSSStyleValue

@@ -1,0 +1,4 @@
+Empty inline: scrollHeight=0, scrollWidth=0
+Inline with text and padding: scrollHeight=0, scrollWidth=0
+Inline-block: scrollHeight=40, scrollWidth=60
+Changed to inline: scrollHeight=0, scrollWidth=0

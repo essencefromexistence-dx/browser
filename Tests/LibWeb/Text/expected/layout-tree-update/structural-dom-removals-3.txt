@@ -1,0 +1,23 @@
+PASS: remove leaf element from block
+PASS: remove leaf text from run-in
+PASS: remove shallow subtree from inline-flex
+PASS: remove deep subtree from inline-table
+PASS: remove first sibling from table-row-group
+PASS: remove middle sibling from table-cell
+PASS: remove last sibling from block flow
+PASS: remove first sibling run from block flex
+PASS: remove middle sibling run from block table
+PASS: remove last sibling run from none
+PASS: remove alternating siblings from flow-root
+PASS: remove all siblings forwards from inline list-item
+PASS: remove all siblings backwards from inline-grid
+PASS: Range delete first sibling run from -webkit-box
+PASS: Range delete middle sibling run from table-footer-group
+PASS: Range delete last sibling run from table-column
+PASS: replaceChildren removes subtree from block flow-root
+PASS: innerHTML removes subtree from block grid
+PASS: textContent removes subtree from block flow list-item
+PASS: remove generating parent from block
+PASS: remove block from inline run from run-in
+PASS: remove display contents subtree from inline-flex
+22 cases; 22 matched; 0 mismatched

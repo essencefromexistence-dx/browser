@@ -1,0 +1,4 @@
+a: roots=[PARTIAL BlockContainer<DIV>.child] reference=[FULL | FULL] matches-full-layout=false
+b: roots=[PARTIAL BlockContainer<DIV>.child] reference=[FULL | FULL] matches-full-layout=false
+c: roots=[PARTIAL BlockContainer<DIV>.child] reference=[FULL | FULL] matches-full-layout=false
+d: roots=[PARTIAL BlockContainer<DIV>.child] reference=[FULL | FULL] matches-full-layout=true

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    @keyframes move {
+        from { transform: translateX(0); }
+        to { transform: translateX(10000px); }
+    }
+
+    @keyframes leave-observation-root {
+        from { transform: translateX(0); }
+        25% { transform: translateX(0); }
+        26%, to { transform: translateX(30px); }
+    }
+
+    #target {
+        width: 20px;
+        height: 20px;
+        animation: move 100s linear infinite;
+    }
+</style>
+<div id="target"></div>
+<script>
+    function printCompositorAnimations(title) {
+        println(title);
+        for (const line of internals.dumpCompositorAnimations().split("\n").filter(Boolean))
+            println(`  ${line}`);
+    }
+
+    asyncTest(async done => {
+        internals.updateStyle();
+        const animation = document.getAnimations()[0];
+        animation.currentTime = 0;
+        for (let i = 0; i < 4; ++i)
+            await new Promise(requestAnimationFrame);
+
+        printCompositorAnimations("compositor animations initially:");
+
+        let resolveNextObservation;
+        let nextObservation = new Promise(resolve => resolveNextObservation = resolve);
+        const observer = new IntersectionObserver(entries => resolveNextObservation(entries.at(-1)));
+        observer.observe(document.querySelector("#target"));
+
+        const initialObservation = await nextObservation;
+        printCompositorAnimations("compositor animations with an observer:");
+        println(`initial position is intersecting: ${initialObservation.isIntersecting}`);
+
+        nextObservation = new Promise(resolve => resolveNextObservation = resolve);
+        animation.currentTime = 75000;
+        const movedObservation = await nextObservation;
+        println(`animated position leaves viewport: ${!movedObservation.isIntersecting}`);
+
+        observer.disconnect();
+        for (let i = 0; i < 4; ++i)
+            await new Promise(requestAnimationFrame);
+        printCompositorAnimations("compositor animations after disconnecting:");
+        animation.cancel();
+        for (let i = 0; i < 2; ++i)
+            await new Promise(requestAnimationFrame);
+
+        const spacer = document.createElement("div");
+        spacer.style.height = "100vh";
+        const clip = document.createElement("div");
+        clip.style.cssText = "width: 100px; height: 100px; overflow: hidden";
+        const clippedTarget = document.createElement("div");
+        clippedTarget.id = "clipped-target";
+        clippedTarget.style.cssText = "width: 20px; height: 20px; animation: move 100s linear infinite";
+        clip.append(clippedTarget);
+        document.body.append(spacer, clip);
+        const clippedAnimation = clippedTarget.getAnimations()[0];
+        clippedAnimation.currentTime = 0;
+        for (let i = 0; i < 4; ++i)
+            await new Promise(requestAnimationFrame);
+
+        let resolveClippedObservation;
+        let clippedObservation = new Promise(resolve => resolveClippedObservation = resolve);
+        const clippedObserver = new IntersectionObserver(entries => resolveClippedObservation(entries.at(-1)));
+        clippedObserver.observe(clippedTarget);
+        const initialClippedObservation = await clippedObservation;
+        printCompositorAnimations("compositor animations of an offscreen observed clip:");
+        println(`offscreen clipped target is not intersecting: ${!initialClippedObservation.isIntersecting}`);
+
+        clippedObservation = new Promise(resolve => resolveClippedObservation = resolve);
+        internals.beginRenderingTrace();
+        clip.scrollIntoView();
+        const scrolledObservation = await clippedObservation;
+        await new Promise(resolve => setTimeout(resolve, 120));
+        const pumpRequests = internals.takeRenderingTrace().split("\n").filter(line => line.startsWith("animation frame pump request"));
+        printCompositorAnimations("compositor animations after scrolling the observed clip:");
+        println(`observed compositor animation frame requests: [${[...new Set(pumpRequests.map(line => line.replace(/ x\d+$/, "")))].join(", ")}]`);
+        println(`scrolled clipped target enters viewport: ${scrolledObservation.isIntersecting}`);
+
+        clippedObservation = new Promise(resolve => resolveClippedObservation = resolve);
+        clippedAnimation.currentTime = 75000;
+        const movedClippedObservation = await clippedObservation;
+        println(`observed animation still updates intersection: ${!movedClippedObservation.isIntersecting}`);
+
+        const animatedAncestor = document.createElement("div");
+        animatedAncestor.style.cssText = "width: 20px; height: 20px; animation: move 100s linear infinite";
+        const descendantTarget = document.createElement("div");
+        descendantTarget.style.cssText = "width: 20px; height: 20px";
+        animatedAncestor.append(descendantTarget);
+        document.body.append(animatedAncestor);
+        animatedAncestor.scrollIntoView();
+        const ancestorAnimation = animatedAncestor.getAnimations()[0];
+        ancestorAnimation.currentTime = 0;
+        for (let i = 0; i < 4; ++i)
+            await new Promise(requestAnimationFrame);
+
+        let resolveDescendantObservation;
+        let descendantObservation = new Promise(resolve => resolveDescendantObservation = resolve);
+        const descendantObserver = new IntersectionObserver(entries => resolveDescendantObservation(entries.at(-1)));
+        descendantObserver.observe(descendantTarget);
+        await descendantObservation;
+        descendantObservation = new Promise(resolve => resolveDescendantObservation = resolve);
+        ancestorAnimation.currentTime = 75000;
+        const movedDescendantObservation = await descendantObservation;
+        println(`ancestor compositor motion updates descendant intersection: ${!movedDescendantObservation.isIntersecting}`);
+        descendantObserver.disconnect();
+
+        const observationRoot = document.createElement("div");
+        observationRoot.style.cssText = "width: 20px; height: 20px; overflow: hidden";
+        const leavingTarget = document.createElement("div");
+        leavingTarget.id = "leaving-target";
+        leavingTarget.style.cssText = "width: 20px; height: 20px; animation: leave-observation-root 400ms linear infinite";
+        observationRoot.append(leavingTarget);
+        document.body.append(observationRoot);
+        observationRoot.scrollIntoView();
+        leavingTarget.getBoundingClientRect();
+
+        let resolveInitialLeavingObservation;
+        const initialLeavingObservation = new Promise(resolve => resolveInitialLeavingObservation = resolve);
+        let resolveLeftObservation;
+        const leftObservation = new Promise(resolve => resolveLeftObservation = resolve);
+        const leavingObserver = new IntersectionObserver(entries => {
+            const entry = entries.at(-1);
+            resolveInitialLeavingObservation(entry);
+            if (!entry.isIntersecting)
+                resolveLeftObservation(true);
+        }, { root: observationRoot });
+        leavingObserver.observe(leavingTarget);
+        println(`leaving target starts inside root: ${(await initialLeavingObservation).isIntersecting}`);
+        await new Promise(requestAnimationFrame);
+        internals.beginStyleTrace();
+        const leftBeforeTimeout = await Promise.race([
+            leftObservation,
+            new Promise(resolve => setTimeout(() => resolve(false), 250)),
+        ]);
+        println(`observed compositor motion is sampled within 250ms: ${leftBeforeTimeout}`);
+        const sampled = parseStyleTrace(internals.takeStyleTrace()).filter(event => event.outcome?.startsWith("sampled"));
+        println(`observation timer samples: [${sampled.map(event => event.element).join(", ")}]`);
+        done();
+    });
+</script>

@@ -1,0 +1,2 @@
+PASS: inserting a clipping transformed child allocates its nodes in place (work + checks)
+PASS: removing it tombstones its nodes under a new epoch (work)

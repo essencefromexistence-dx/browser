@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<input id="time" type="time">
+<script src="include.js"></script>
+<script>
+    test(() => {
+        const input = document.getElementById("time");
+        input.focus();
+        // Each keystroke fills in a field of the time; the value stays empty until the day period is chosen too.
+        for (const ch of "12:30p") {
+            internals.sendText(input, ch);
+            println(`after '${ch}': value="${input.value}"`);
+        }
+    });
+</script>

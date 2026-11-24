@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<div id="sibling" style="width: 100px; height: 100px; transform: translateX(1px)"></div>
+<div id="parent" style="width: 100px; height: 100px"></div>
+<script>
+    let child;
+    visualContextTest({
+        setup: () => internals.forceIncompatibleVisualContextTreeRebuild(),
+        steps: [
+            {
+                name: "inserting a clipping transformed child allocates its nodes in place",
+                mutate: () => {
+                    child = document.createElement("div");
+                    child.id = "child";
+                    child.style.cssText = "width: 50px; height: 50px; overflow: hidden; transform: translateX(10px)";
+                    document.getElementById("parent").appendChild(child);
+                },
+                check: equal => equal(child.getBoundingClientRect().x, 18, "child rect x"),
+                expect: `
+                    update DIRTY-PATH
+                      div#child transform ALLOCATED
+                      div#child clip ALLOCATED
+                      recording NEEDED
+                `,
+            },
+            {
+                name: "removing it tombstones its nodes under a new epoch",
+                mutate: () => child.remove(),
+                expect: `
+                    update DIRTY-PATH
+                      (removed) transform RELEASED (removed box)
+                      (removed) clip RELEASED (removed box)
+                      epoch NEW
+                      recording NEEDED
+                `,
+            },
+        ],
+    });
+</script>

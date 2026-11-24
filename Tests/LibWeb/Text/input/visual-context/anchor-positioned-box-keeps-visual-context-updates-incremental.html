@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<script src="../include.js"></script>
+<script src="../work-test.js"></script>
+<style>
+    body { margin: 0; }
+    #scroller { width: 100px; height: 100px; overflow: scroll; }
+    #spacer { width: 200px; height: 500px; }
+    #anchor { anchor-name: --a; width: 20px; height: 20px; }
+    #target { position: absolute; position-anchor: --a; top: anchor(bottom); left: anchor(left); width: 20px; height: 20px; }
+    #other { width: 50px; height: 50px; }
+</style>
+<div id="scroller"><div id="anchor"></div><div id="spacer"></div></div>
+<div id="target"></div>
+<div id="other"></div>
+<script>
+    visualContextTest({
+        setup: async () => {
+            internals.forceIncompatibleVisualContextTreeRebuild();
+            while (internals.frameSchedulerState() !== "idle")
+                await new Promise(resolve => setTimeout(resolve, 0));
+        },
+        steps: [
+            {
+                name: "anchored box",
+                check: equal => equal(target.getBoundingClientRect().top, 20, "anchored box top"),
+                expect: ``,
+            },
+            {
+                name: "unrelated transform added",
+                mutate: () => { other.style.transform = "translateX(10px)"; },
+                expect: `
+                    update DIRTY-PATH
+                      div#other transform ALLOCATED
+                      recording NEEDED
+                `,
+            },
+            {
+                name: "unrelated opacity added",
+                mutate: () => { other.style.opacity = "0.5"; },
+                expect: `
+                    update DIRTY-PATH
+                      div#other effects ALLOCATED
+                      recording NEEDED
+                `,
+            },
+            {
+                name: "anchor scroller scrolled",
+                mutate: () => {
+                    scroller.scrollTop = 30;
+                    scroller.scrollLeft = 50;
+                },
+                check: equal => {
+                    equal(scroller.scrollTop, 30, "scrollTop");
+                    equal(scroller.scrollLeft, 50, "scrollLeft");
+                    equal(target.getBoundingClientRect().top, -10, "anchored box top");
+                    equal(target.getBoundingClientRect().left, -50, "anchored box left");
+                },
+                expect: ``,
+            },
+            {
+                name: "anchor resized",
+                mutate: () => { anchor.style.height = "40px"; },
+                check: equal => equal(target.getBoundingClientRect().top, 10, "anchored box top"),
+                expect: `
+                    update DIRTY-PATH
+                      div#scroller scroll UPDATED
+                `,
+            },
+            {
+                name: "anchor scroller removed",
+                mutate: () => { scroller.style.overflow = "visible"; },
+                check: equal => equal(target.getBoundingClientRect().top, 40, "anchored box top"),
+                expect: `
+                    update DIRTY-PATH
+                      div#scroller scroll RELEASED
+                      div#scroller clip RELEASED
+                      div#target anchor shift RELEASED
+                      epoch NEW
+                      recording NEEDED
+                `,
+            },
+        ],
+    });
+</script>

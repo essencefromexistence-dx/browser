@@ -1,0 +1,3 @@
+changed anchors gain the relational style: true
+unchanged anchors do not gain the relational style: true
+changed anchors lose the relational style: true

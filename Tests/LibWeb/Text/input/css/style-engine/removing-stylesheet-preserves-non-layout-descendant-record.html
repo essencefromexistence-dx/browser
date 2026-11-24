@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<script src="../../include.js"></script>
+<style>
+    #churn-target, #later-removal-link { color: attr(data-color type(<color>)); }
+    #pseudo-target::before { content: ""; display: none; color: rgb(7, 8, 9); }
+</style>
+<div id="churn-target" data-color="rgb(0, 0, 0)"></div>
+<script>
+    promiseTest(async () => {
+        const server = httpTestServer();
+        const token = crypto.randomUUID();
+        const fontUrl = await server.createEcho("GET", "/removing-stylesheet-preserves-non-layout-descendant-record.ttf", {
+            status: 200,
+            headers: { "Content-Type": "font/ttf" },
+            body: "blocked font response",
+            wait_for_unblock: token,
+        });
+
+        const stylesheetUrl = await server.createEcho("GET", "/removing-stylesheet-preserves-non-layout-descendant-record.css", {
+            status: 200,
+            headers: { "Content-Type": "text/css" },
+            body: `@font-face { font-family: SlowAhem; src: url("${fontUrl}"); }`,
+        });
+
+        const churnTarget = document.getElementById("churn-target");
+
+        const container = document.createElement("div");
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = stylesheetUrl;
+        const linkLoaded = new Promise(resolve => link.onload = resolve);
+        container.append(link);
+
+        const target = document.createElement("div");
+        target.textContent = "X";
+        target.style.fontFamily = "SlowAhem";
+        container.append(target);
+
+        const laterLink = document.createElement("link");
+        laterLink.id = "later-removal-link";
+        laterLink.dataset.color = "rgb(4, 5, 6)";
+        container.append(laterLink);
+
+        const pseudoTarget = document.createElement("div");
+        pseudoTarget.id = "pseudo-target";
+        container.append(pseudoTarget);
+
+        const shadowHost = document.createElement("div");
+        const shadowRoot = shadowHost.attachShadow({ mode: "closed" });
+        const shadowStyle = document.createElement("style");
+        shadowStyle.textContent = `#shadow-later-removal-link { color: rgb(10, 11, 12); }`;
+        const shadowLaterLink = document.createElement("link");
+        shadowLaterLink.id = "shadow-later-removal-link";
+        shadowRoot.append(shadowStyle, shadowLaterLink);
+        container.append(shadowHost);
+
+        document.body.append(container);
+        await linkLoaded;
+
+        const animation = target.animate({ opacity: [0, 1] }, { duration: 1000 });
+        animation.pause();
+        await animation.ready;
+        await new Promise(requestAnimationFrame);
+        internals.updateStyle();
+        target.offsetWidth;
+        const pseudoColor = getComputedStyle(pseudoTarget, "::before").color;
+        const fontLoadPromise = document.fonts.load("16px SlowAhem", "X").catch(() => {});
+
+        const hasStyleRecord = element => !internals.dumpStyleRecords(element).trimEnd().endsWith(" no record");
+        const hasBox = node => internals.dumpLayoutTree(node) !== "(no layout node)";
+        println(`font status before removal: ${document.fonts.status}`);
+        println(`later link has style record before removal: ${hasStyleRecord(laterLink)}`);
+        println(`later link has layout before removal: ${hasBox(laterLink)}`);
+        println(`non-layout pseudo-element has computed style before removal: ${pseudoColor === "rgb(7, 8, 9)"}`);
+        println(`shadow link has style record before removal: ${hasStyleRecord(shadowLaterLink)}`);
+        println(`shadow link has layout before removal: ${hasBox(shadowLaterLink)}`);
+
+        await new Promise(requestAnimationFrame);
+        churnTarget.dataset.color = "rgb(1, 2, 3)";
+        container.remove();
+        println("PASS (did not crash)");
+
+        await fetch(`${server.baseURL}/unblock/${token}`);
+        await fontLoadPromise;
+    });
+</script>

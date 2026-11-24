@@ -1,0 +1,38 @@
+PASS: display transition inline-block -> block
+PASS: display transition inline-block -> inline
+PASS: display transition inline-block -> flow-root
+PASS: display transition inline-block -> run-in
+PASS: display transition inline-block -> list-item
+PASS: display transition inline-block -> inline list-item
+PASS: display transition inline-block -> flex
+PASS: display transition table -> block flow-root
+PASS: display transition table -> inline flow-root
+PASS: display transition table -> block flex
+PASS: display transition table -> inline flex
+PASS: display transition table -> block grid
+PASS: display transition table -> inline grid
+PASS: display transition table -> block table
+PASS: display transition table -> inline table
+PASS: display transition table-row -> -webkit-box
+PASS: display transition table-row -> -webkit-inline-box
+PASS: display transition table-row -> table-row-group
+PASS: display transition table-row -> table-header-group
+PASS: display transition table-row -> table-footer-group
+PASS: display transition table-row -> table-cell
+PASS: display transition table-row -> table-column-group
+PASS: display transition inline flow-root -> flow-root
+PASS: display transition inline flow-root -> inline-block
+PASS: display transition inline flow-root -> run-in
+PASS: display transition inline flow-root -> list-item
+PASS: display transition inline flow-root -> inline list-item
+PASS: display transition inline flow-root -> flex
+PASS: display transition inline flow-root -> inline-flex
+PASS: display transition inline flow-root -> grid
+PASS: display transition inline flow list-item -> block flex
+PASS: display transition inline flow list-item -> inline flex
+PASS: display transition inline flow list-item -> block grid
+PASS: display transition inline flow list-item -> inline grid
+PASS: display transition inline flow list-item -> block table
+PASS: display transition inline flow list-item -> inline table
+PASS: display transition inline flow list-item -> block flow list-item
+37 cases; 37 matched; 0 mismatched

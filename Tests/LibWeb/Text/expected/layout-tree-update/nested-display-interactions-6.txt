@@ -1,0 +1,41 @@
+PASS: nested displays inline-block > block
+PASS: nested displays inline-block > inline
+PASS: nested displays inline-block > flow-root
+PASS: nested displays inline-block > inline-block
+PASS: nested displays inline-block > run-in
+PASS: nested displays inline-block > list-item
+PASS: nested displays inline-block > inline list-item
+PASS: nested displays inline-block > flex
+PASS: nested displays table > block flow-root
+PASS: nested displays table > inline flow-root
+PASS: nested displays table > block flex
+PASS: nested displays table > inline flex
+PASS: nested displays table > block grid
+PASS: nested displays table > inline grid
+PASS: nested displays table > block table
+PASS: nested displays table > inline table
+PASS: nested displays table-row > -webkit-box
+PASS: nested displays table-row > -webkit-inline-box
+PASS: nested displays table-row > table-row-group
+PASS: nested displays table-row > table-header-group
+PASS: nested displays table-row > table-footer-group
+PASS: nested displays table-row > table-row
+PASS: nested displays table-row > table-cell
+PASS: nested displays table-row > table-column-group
+PASS: nested displays inline flow-root > flow-root
+PASS: nested displays inline flow-root > inline-block
+PASS: nested displays inline flow-root > run-in
+PASS: nested displays inline flow-root > list-item
+PASS: nested displays inline flow-root > inline list-item
+PASS: nested displays inline flow-root > flex
+PASS: nested displays inline flow-root > inline-flex
+PASS: nested displays inline flow-root > grid
+PASS: nested displays inline flow list-item > block flex
+PASS: nested displays inline flow list-item > inline flex
+PASS: nested displays inline flow list-item > block grid
+PASS: nested displays inline flow list-item > inline grid
+PASS: nested displays inline flow list-item > block table
+PASS: nested displays inline flow list-item > inline table
+PASS: nested displays inline flow list-item > block flow list-item
+PASS: nested displays inline flow list-item > inline flow list-item
+40 cases; 40 matched; 0 mismatched

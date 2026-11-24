@@ -1,0 +1,14 @@
+<!doctype html>
+<svg width="200" height="120">
+    <defs>
+        <radialGradient id="gradient" cx="25%" cy="50%" r="50%"></radialGradient>
+    </defs>
+</svg>
+<script src="../../include.js"></script>
+<script src="../../work-test.js"></script>
+<script>
+    test(() => {
+        const work = styleWork(() => gradient.setAttribute("cx", "75%"));
+        println(`restyled: [${work.restyled().map(shortStyleName).join(", ")}]`);
+    });
+</script>
